@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>JavaScript Visualization Example</title>
+
+	<body>
+		<audio id="audio-element" src="./public/audio/xtcy.mp3" controls>
+		</audio>
+		<pre id="raw">hello</pre>
+		<script>
+			function audioAvailable(event) {
+				var frameBuffer = event.frameBuffer;
+				var t = event.time;
+				var text = "Samples at: " + t + "\n"
+				text += frameBuffer[0] + " " + frameBuffer[1]
+				raw.innerHTML = text;
+			}
+			var raw = document.getElementById('raw')
+			var audio = document.getElementById('audio-element');
+			audio.addEventListener('MozAudioAvailable', audioAvailable, false);
+		</script>
+	</body>
+
+</html>

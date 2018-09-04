@@ -1,0 +1,144 @@
+html{
+  display: flex;
+  height: 100%;
+  height: 100%;
+  align-items: stretch;
+}
+body {
+  height: 100%;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column ;
+  width: 100%;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  height: -webkit-calc(100% - 20px);
+}
+
+section#chatroom {
+  flex-direction: row-reverse;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  /* max-height: -webkit-calc(100% - 297px); */
+  background-color: #EFFFEC;
+}
+ul#list{
+  padding: 17px;
+  background: antiquewhite;
+}
+div#messages{
+  height: -webkit-calc(100% - 35px);
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+input#message{
+  width: -webkit-calc(100% - 80px);
+
+}
+
+input#send{
+  width: 74px;
+}
+
+header{
+  background-color: #4192c1;
+  /* text-align: right; */
+  margin-top: 15px;
+}
+
+header h1{
+  padding: 5px;
+  padding-right: 15px;
+  color: #FFFFFF;
+  margin: 0px;
+}
+
+footer{
+  padding: 6px;
+  background-color: #4192c1;
+  color: #FFFFFF;
+  bottom: 0;
+  /* position: absolute; */
+  width: 100%;
+  margin: 0px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+a {
+  color: #00B7FF;
+}
+
+
+.modal{
+  /* display: none; */
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: -moz-calc(100% - 102px);
+  height: -webkit-calc(100% - 102px);
+  height: calc(100% - 102px);
+  left: 0;
+  position: absolute;
+  top: 62px;
+  width: 100%;
+  z-index: 1000;
+  }
+  .backdrop{
+  width: 100%;
+  height:100%;
+  background-color: #777777;
+  }
+  .popup {
+  position: absolute;
+  height: 100px;
+  width: 300px;
+  left: -moz-calc(50% - 150px);
+  left: -webkit-calc(50% - 150px);
+  left: calc(50% - 150px);
+  top: -moz-calc(50% - 50px);
+  top: -webkit-calc(50% - 50px);
+  top: calc(50% - 50px);
+  background: #FFFFFF;
+  }
+  .pophead {
+  background-color: #4192C1;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 8px 3px;
+  vertical-align: middle;
+  }
+  .popbody {
+  padding: 10px 5px;
+  }
+
+  .serverMessage{
+    color: red;
+    font-family: monospace;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  span.name{
+    color: midnightblue;
+  }
+
+  div.myMessage{
+    background: #EFFFEC;
+  }
+
+  div.myMessage {
+    color: mediumvioletred;
+  }
+
+  .container{
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+    flex-direction: row-reverse;
+  }

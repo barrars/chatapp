@@ -1,0 +1,32 @@
+{
+  "name": "awesome-chat",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run nodemon && npm run reload",
+    "nodemon": "nodemon bin/www",
+    "reload": "gulp"
+  },
+  "dependencies": {
+    "browser-sync": "^2.24.7",
+    "chalk": "^2.4.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "gopdx": "^0.1.20",
+    "gulp": "^3.9.1",
+    "gulp-pug": "^4.0.1",
+    "gulp-sass": "^4.0.1",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "jquery": "^3.3.1",
+    "morgan": "~1.9.0",
+    "socket.io": "^2.1.1",
+    "tracer": "^0.9.1"
+  },
+  "devDependencies": {
+    "@types/socket.io": "^1.4.38",
+    "colors.css": "^3.0.0",
+    "gulp-nodemon": "^2.2.1"
+  }
+}

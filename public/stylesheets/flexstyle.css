@@ -1,0 +1,54 @@
+html{
+    height: 100vh;
+align-items: stretch;
+display: flex;
+background: chocolate;
+background-color: white;
+}
+
+body {
+    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    /* align-self: stretch; */
+    background: antiquewhite;
+}
+
+#bannner {
+    height: 50px;
+    flex-grow: 1;
+    background: aqua;
+}
+
+.player{
+    display: flex;
+    flex-grow: 1;
+    background: blue;
+    width: 100%
+}
+
+#chatroom{
+    width: 100%;
+    flex-grow: 3;
+}
+
+#footer{
+    flex-grow: 1;
+    background: cornflowerblue;
+}
+
+#nameform{
+    display: none;
+}
+
+.container{
+    flex-grow: 3;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.container{
+    height: 100%;
+}
