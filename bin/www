@@ -25,6 +25,8 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
+var socket = require('../routes/sockets').io()
+socket.listen(server)
 
 server.listen(port);
 server.on('error', onError);
@@ -92,5 +94,4 @@ function onListening() {
   
 }
 
-var socket = require('../routes/sockets')
-socket.initialize(server)
+

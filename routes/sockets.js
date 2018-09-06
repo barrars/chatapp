@@ -14,23 +14,29 @@ var logger = require('tracer').colorConsole({
     error: [colors.red, colors.bold]
   }
 })
-var io = require('socket.io');
+var io = require('socket.io')();
+
+// var io = null;
 
 
-//ytdl
-
-//get the files list
-
+var youtube = require('./myMod')
 
 
 const myClients = {}
-exports.initialize = function (server) {
-  io = io.listen(server);
+
+// io = io(server);
+exports.io = function () {
+    return io
+  };
+  
+  // module.exports = io
+
   var chatInfra = io.of("/chat_infra")
     .on("connection", function (socket) {
-      socket.on('getList', ()=>{
+
+      socket.on('getList', () => {
       })
-      socket.on('songClick', (data)=>{
+      socket.on('songClick', (data) => {
         console.log('alyica needs to focus!!!!!', data);
         socket.broadcast.emit('shareTrack', data)
       })
@@ -41,18 +47,18 @@ exports.initialize = function (server) {
           } else {
             // logger.log('readdir files list = ' + files)
             // socket.emit('files_data', files)
-             
-            console.log('Files ' , typeof files);
+
+            console.log('Files ', typeof files);
             socket.emit('files', files)
             files.forEach(file => {
-        
+
               // logger.log('file = ' + file )
             });
           }
         })
         socket.nickname = data.name
-        logger.log(socket.nickname)
-        myClients[socket.id]=socket.nickname
+        logger.log('nickname= ', socket.nickname)
+        myClients[socket.id] = socket.nickname
         logger.log(myClients)
         socket.emit('list', myClients)
         // logger.log('nick ', socket.nickname);
@@ -65,89 +71,86 @@ exports.initialize = function (server) {
             'chat room on earth!'
         }));
         socket.broadcast.emit('user_entered', data);
+        socket.on('disconnect', () => {
+          logger.log(socket.nickname, ' has left')
+        })
 
       });
-      socket.on('getsong', (data) => {
-        console.log('dirname = ' , __dirname);
+      socket.on('getsong', require('./myMod.js'))
+
+        // youtube.download(data)
+
         
-        // socket.emit('test_1', data);
-        logger.log(chalk.yellowBright('server received getsong event from client  ' + data));
-        // if (!song) {
-        //   logger.log('you didnt enter a url');
-        //   // socket.emit('done', undefined)
-        //   logger.log('getsong socket event ' + song.link)
-        //   // return
-        // } else{
-    
-        logger.log('else getsong socket event*** ' + data)
-        // var convert_mp3 = song.convert;
-        // song = song.link
-        // var youtubedl = exec('ls -al', ()=>{
-        var youtubedl = exec('youtube-dl --config-location . ' + data, ()=>{
-          console.log('##### ' , __dirname);
-          
-        })
-        youtubedl.stdout.on('data', function (stdout) {
-          var stdout = stdout.trim()
-          logger.log(chalk.blueBright('stdout = ') + stdout)
-          if (stdout.toLocaleLowerCase().indexOf('destination') > 0) {
-            logger.log('stdout.slice = ' + stdout.slice(41))
-            var name = logger.log(stdout.slice(41))
-            var songInfo = {
-              name
-            }
-            // logger.log('name = ' + chalk.blueBright(stdout.slice(41)).);
-            socket.emit('name', songInfo)
-            console.log('omg!' , songInfo);
-            
-    
-          }
-          // var d = c.match(/([a-z].*)(?=\.[A-z])/gim)
-    
-    
-          // var stdout = stdout.split('\n')
-          // var stdout = stdout[0].split(' ')
-          if (stdout.startsWith('[download]')) {
-            // var songName = stdout.substring(43, (stdout.length - 4))
-            logger.log('downloading');
-            logger.log(chalk.blueBright('stdout = ') + stdout)
-            var splitOut = stdout.split(' ')
-            // logger.log(splitOut);
-    
-            var percent 
-            // var total
-            if (splitOut[2].indexOf('of') !== -1) {
-              percent = splitOut[1]
-              logger.log('percent is a ' + typeof percent)
-              // total = splitOut[3]
-            } else {
-              percent = splitOut[2]
-              var total_size = splitOut[4]
-            }
-            var download_data = {
-              percent,total_size
-            }
-    
-            logger.log(chalk.blueBright('percent = ') + percent)
-            socket.emit('download_data', download_data)
-            if (stdout.toLocaleLowerCase().indexOf('already') > 0) {
-              socket.emit('already', data)
-            }
-          
-    
-            if (stdout.toLocaleLowerCase().indexOf('100') > 0) {
-    
-              socket.emit('done', data)
-              logger.log(chalk.green('we done at 100%%%%%%%%', data))
-            }
-          }
-    
-        })
-      })
-    
+      //   console.log('dirname = ', __dirname);
+
+      //   logger.log(chalk.yellowBright('server received getsong event from client  ' + data));
+
+
+      //   logger.log('else getsong socket event*** ' + data)
+
+      //   var youtubedl = exec('youtube-dl --config-location . ' + data, () => {
+      //     console.log('##### ', __dirname);
+
+      //   })
+      //   youtubedl.stdout.on('data', function (stdout) {
+      //     var stdout = stdout.trim()
+      //     logger.log(chalk.blueBright('stdout = ') + stdout)
+      //     if (stdout.toLocaleLowerCase().indexOf('destination') > 0) {
+      //       logger.log('stdout.slice = ' + stdout.slice(41))
+      //       var name = logger.log(stdout.slice(41))
+      //       var songInfo = {
+      //         name
+      //       }
+      //       socket.emit('name', songInfo)
+      //       console.log('omg!', songInfo);
+
+
+      //     }
+
+
+      //     if (stdout.startsWith('[download]')) {
+      //       // var songName = stdout.substring(43, (stdout.length - 4))
+      //       logger.log('downloading');
+      //       logger.log(chalk.blueBright('stdout = ') + stdout)
+      //       var splitOut = stdout.split(' ')
+      //       // logger.log(splitOut);
+
+      //       var percent
+      //       // var total
+      //       if (splitOut[2].indexOf('of') !== -1) {
+      //         percent = splitOut[1]
+      //         logger.log('percent is a ' + typeof percent)
+      //         // total = splitOut[3]
+      //       } else {
+      //         percent = splitOut[2]
+      //         var total_size = splitOut[4]
+      //       }
+      //       var download_data = {
+      //         percent, total_size
+      //       }
+
+      //       logger.log(chalk.blueBright('percent = ') + percent)
+      //       socket.emit('download_data', download_data)
+      //       if (stdout.toLocaleLowerCase().indexOf('already') > 0) {
+      //         socket.emit('already', data)
+      //       }
+
+
+      //       if (stdout.toLocaleLowerCase().indexOf('100') > 0) {
+
+      //         socket.emit('done', data)
+      //         logger.log(chalk.green('we done at 100%%%%%%%%', data))
+      //       }
+      //     }
+
+      //   })
+      // })
+
+
     });
   var chatCom = io.of("/chat_com")
     .on("connection", function (socket) {
+      logger.log(socket.nickname)
       // logger.log(socket)
       //playing
 
@@ -162,11 +165,22 @@ exports.initialize = function (server) {
       })
       socket.on('message', function (message) {
         message = JSON.parse(message);
-        logger.log(message);
+        logger.log('message is ', message, ' from ', 
+        '11111111111111111111111111',
+        socket.client.socket, 
+        '22222222222222222222222222',
+
+        socket.sockets, //undefined
+        '3333333333333333333333333333333333',
+         socket.Namespace,
+         '44444444444444444444444444444',
+          socket.nickname ); //undefined
+
 
         if (message.type == "userMessage") {
 
           socket.nickname = message.username
+          logger.log(message, socket.id);
           socket.broadcast.send(JSON.stringify(message));
           message.type = "myMessage";
           socket.send(JSON.stringify(message));
@@ -174,5 +188,6 @@ exports.initialize = function (server) {
         }
       });
     });
-}
+
+
 
