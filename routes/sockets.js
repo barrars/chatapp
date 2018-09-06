@@ -24,12 +24,10 @@ var youtube = require('./myMod')
 
 const myClients = {}
 
-// io = io(server);
 exports.io = function () {
     return io
   };
   
-  // module.exports = io
 
   var chatInfra = io.of("/chat_infra")
     .on("connection", function (socket) {
@@ -78,73 +76,7 @@ exports.io = function () {
       });
       socket.on('getsong', require('./myMod.js'))
 
-        // youtube.download(data)
-
-        
-      //   console.log('dirname = ', __dirname);
-
-      //   logger.log(chalk.yellowBright('server received getsong event from client  ' + data));
-
-
-      //   logger.log('else getsong socket event*** ' + data)
-
-      //   var youtubedl = exec('youtube-dl --config-location . ' + data, () => {
-      //     console.log('##### ', __dirname);
-
-      //   })
-      //   youtubedl.stdout.on('data', function (stdout) {
-      //     var stdout = stdout.trim()
-      //     logger.log(chalk.blueBright('stdout = ') + stdout)
-      //     if (stdout.toLocaleLowerCase().indexOf('destination') > 0) {
-      //       logger.log('stdout.slice = ' + stdout.slice(41))
-      //       var name = logger.log(stdout.slice(41))
-      //       var songInfo = {
-      //         name
-      //       }
-      //       socket.emit('name', songInfo)
-      //       console.log('omg!', songInfo);
-
-
-      //     }
-
-
-      //     if (stdout.startsWith('[download]')) {
-      //       // var songName = stdout.substring(43, (stdout.length - 4))
-      //       logger.log('downloading');
-      //       logger.log(chalk.blueBright('stdout = ') + stdout)
-      //       var splitOut = stdout.split(' ')
-      //       // logger.log(splitOut);
-
-      //       var percent
-      //       // var total
-      //       if (splitOut[2].indexOf('of') !== -1) {
-      //         percent = splitOut[1]
-      //         logger.log('percent is a ' + typeof percent)
-      //         // total = splitOut[3]
-      //       } else {
-      //         percent = splitOut[2]
-      //         var total_size = splitOut[4]
-      //       }
-      //       var download_data = {
-      //         percent, total_size
-      //       }
-
-      //       logger.log(chalk.blueBright('percent = ') + percent)
-      //       socket.emit('download_data', download_data)
-      //       if (stdout.toLocaleLowerCase().indexOf('already') > 0) {
-      //         socket.emit('already', data)
-      //       }
-
-
-      //       if (stdout.toLocaleLowerCase().indexOf('100') > 0) {
-
-      //         socket.emit('done', data)
-      //         logger.log(chalk.green('we done at 100%%%%%%%%', data))
-      //       }
-      //     }
-
-      //   })
-      // })
+       
 
 
     });
@@ -165,16 +97,6 @@ exports.io = function () {
       })
       socket.on('message', function (message) {
         message = JSON.parse(message);
-        logger.log('message is ', message, ' from ', 
-        '11111111111111111111111111',
-        socket.client.socket, 
-        '22222222222222222222222222',
-
-        socket.sockets, //undefined
-        '3333333333333333333333333333333333',
-         socket.Namespace,
-         '44444444444444444444444444444',
-          socket.nickname ); //undefined
 
 
         if (message.type == "userMessage") {
