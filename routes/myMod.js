@@ -27,15 +27,15 @@ module.exports = function (data) {
     // var socket = require('./sockets.js').io()
 
 
-    // console.log('dirname = ', __dirname);
+    console.log('dirname = ', __dirname);
 
-    // logger.log(chalk.yellowBright('server received getsong event from client  ' + data));
+    logger.log(chalk.yellowBright('server received getsong event from client  ' + data));
 
 
-    // logger.log('else getsong socket event*** ' + data)
+    logger.log('else getsong socket event*** ' + data)
 
     var youtubedl = exec('youtube-dl --config-location . ' + data, () => {
-        // console.log('##### ', __dirname);
+        console.log('##### ', __dirname);
 
     })
     youtubedl.stdout.on('data', function (stdout) {
@@ -43,7 +43,7 @@ module.exports = function (data) {
         var stdout = stdout.trim()
         
         if (stdout.toLocaleLowerCase().indexOf('download') > 0) {
-            // logger.log('stdout.slice = ' + stdout.slice(41))
+            logger.log('stdout.slice = ' + stdout.slice(41))
             songTitle = stdout.slice(41)
             if (songTitle.toLocaleLowerCase().indexOf('mp3')>0) {
                 console.log('index of mp3');

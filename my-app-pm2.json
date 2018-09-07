@@ -8,4 +8,4 @@
     ]
 }
 
-// ➜  chatty pm2 start npm --name=awesome-chat -- run launch
+// ➜  chatty pm2 start npm --name=awesompm2 start npm --name=e-chat -- run launch
