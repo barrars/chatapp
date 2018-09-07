@@ -142,3 +142,13 @@ a {
     align-items: stretch;
     flex-direction: row-reverse;
   }
+
+  .ytling_input_box:focus{
+    border: 4px solid goldenrod;
+
+  }
+
+  .message_input:focus{
+    border: 4px solid goldenrod;
+
+  }

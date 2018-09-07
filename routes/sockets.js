@@ -16,23 +16,41 @@ var logger = require('tracer').colorConsole({
 })
 var io = require('socket.io')();
 
+exports.io = function () {
+    return io
+  };
 // var io = null;
 
 
 var youtube = require('./myMod')
+let getSongList = fs.readdir(__dirname + '/../public/downloads', (err, files) => {
+  if (err) {
+    logger.log(err)
+  } else {
+    // logger.log('readdir files list = ' + files)
+    // socket.emit('files_data', files)
 
+    let filesList = []
+    files.forEach(file => {
+      filesList.push(file)
+
+      // logger.log('file = ' + file )
+    });
+    logger.log(filesList);
+    return filesList;
+    
+  }
+})
 
 const myClients = {}
 
-exports.io = function () {
-    return io
-  };
-  
+  fs.on
 
   var chatInfra = io.of("/chat_infra")
     .on("connection", function (socket) {
 
       socket.on('getList', () => {
+
       })
       socket.on('songClick', (data) => {
         console.log('alyica needs to focus!!!!!', data);

@@ -1,13 +1,7 @@
-var mynumb = 5
+var x = 4
 
-console.log(mynumb);
-
-function countem () {
-    // mynumb = 6
-    
-    console.log(mynumb);
-    
+if (x<5) {
+    x=6
 }
 
-countem()
-
+console.log(x);

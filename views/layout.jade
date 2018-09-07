@@ -9,11 +9,12 @@ html
     header#bannner
       .flex
         h1 Awesome Chat
-      input#ytlink(title="enter a YouTube link" type="text" placeholder="http://youtube.com/" )  
+      input#ytlink(class="ytling_input_box" title="enter a YouTube link" type="text" placeholder="http://youtube.com/" )  
       button#gobtn go
     block content
 
-script(src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js")
-script(src="/socket.io/socket.io.js")
-script(src="/javascripts/chat.js")
+    script(src="/socket.io/socket.io.js")
+    script(src="/javascripts/chat.js")
+    script(src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js")
+    
 
