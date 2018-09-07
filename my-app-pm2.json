@@ -1,0 +1,11 @@
+{
+    "apps": [
+        {
+            "name": "awesome-chat",
+            "script": "npm",
+            "args" : "launch"
+        }
+    ]
+}
+
+// ➜  chatty pm2 start npm --name=awesome-chat -- run launch
