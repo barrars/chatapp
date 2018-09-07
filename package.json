@@ -1,9 +1,11 @@
+
 {
   "name": "awesome-chat",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "npm run nodemon && npm run reload",
+    "launch": "sudo PORT=80 node bin/www",
     "nodemon": "nodemon bin/www",
     "reload": "gulp"
   },
@@ -12,7 +14,6 @@
     "chalk": "^2.4.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "eslint": "^5.5.0",
     "express": "~4.16.0",
     "gopdx": "^0.1.20",
     "gulp": "^3.9.1",
@@ -31,3 +32,4 @@
     "gulp-nodemon": "^2.2.1"
   }
 }
+
