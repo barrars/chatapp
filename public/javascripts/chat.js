@@ -50,7 +50,7 @@ $(function () {
     gobtn.innerText = percent   
   })
   socket.on('title', (data) => {
-    $('#songList').append(`<p> ${data} </p>`)
+    $('#songList').append(`<p>${data}</p>`)
     downloading = false
     gobtn.innerText = 'READY'
     activatePlaylist()
