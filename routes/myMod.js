@@ -39,6 +39,8 @@ module.exports = function (data) {
 
     })
     youtubedl.stdout.on('data', function (stdout) {
+        console.log(stdout);
+        
         var songTitle
         var stdout = stdout.trim()
         
