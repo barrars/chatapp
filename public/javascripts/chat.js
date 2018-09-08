@@ -1,5 +1,6 @@
 
 $(function () {
+  //variables
   var downloading = false
   var $window = $(window);
   var $ytdlinput = $("#ytlink")
@@ -17,12 +18,20 @@ $(function () {
   var $send = $("#send")
   var username = false
   var modal_display = $('#nameform').css('display')
-  console.log(modal_display)
-  console.log(modal_display)
   var socket = io()
-  if (!downloading) {
-    $gobtn.value='READY'
 
+  //onload fn
+  const activatePlaylist = function () {
+        
+    $('#songList').children().on('click', (e) => {
+      $('#audio-element').attr('src', '/downloads/' + e.target.innerHTML)
+      myPlayer.play()
+      chatInfra.emit('songClick', e.target.innerHTML)
+    })
+  }
+
+  if (!downloading) {
+    gobtn.innerText='READY'
   }
   console.log('username = ', username);
   $(window).keydown((e) => {
@@ -36,20 +45,15 @@ $(function () {
       }
     }
   })
-  socket.on('done', (data) => {
-    console.log('Done!!!!!', data);
-  })
   socket.on('percent', (percent) => {
     console.log('percent = ', percent);
-    $gobtn.innerText = percent
-    if (percent === '100%') {
-      gobtn.innerText = 'Ready'
-    }      
-    
+    gobtn.innerText = percent   
   })
   socket.on('title', (data) => {
     $('#songList').append(`<p> ${data} </p>`)
     downloading = false
+    gobtn.innerText = 'READY'
+    activatePlaylist()
     console.log(data);
   })
   var chatInfra = io.connect('/chat_infra'),
@@ -81,13 +85,10 @@ $(function () {
         $('#songList').append('<p>' + data[i] + '</p>')
       }
       console.log('files = ', data);
-      let list = document.getElementById('songList').children
-      $('#songList').children().on('click', (e) => {
-        $('#audio-element').attr('src', '/downloads/' + e.target.innerText)
-        myPlayer.play()
-        chatInfra.emit('songClick', e.target.innerText)
-      })
-
+      // let list = document.getElementById('songList').children
+      activatePlaylist()
+   
+        
       chatInfra.on('shareTrack', (data) => {
         console.log('share track = ', data);
         $('#audio-element').attr('src', '/downloads/' + data)
@@ -146,9 +147,7 @@ $(function () {
     chatInfra.emit('getSongs')
   })
   $('#gobtn').click(() => {
-    if (!downloading) {
-      gobtn.innerText = 'Ready'
-    }
+    
     if (ytlink.value.length == 0) {
       console.log('nope');
       // confirm dialog
@@ -212,14 +211,14 @@ $(function () {
 
   })
 
-  chatCom.on('play', () => {
-    console.log('play event');
+  // chatCom.on('play', () => {
+  //   console.log('play event');
 
-    // console.log(JSON.stringify(data));
-    // console.log(data.name, ' is playing');
-    currentTime = 0
-    myPlayer.play()
-  })
+  //   // console.log(JSON.stringify(data));
+  //   // console.log(data.name, ' is playing');
+  //   currentTime = 0
+  //   myPlayer.play()
+  // })
   let startPlay = () => {
     // /TODO
   }
@@ -228,10 +227,10 @@ $(function () {
     socket.emit('waiting', socket)
   }
 
-  myPlayer.onplay = (e) => {
-    console.log('myplayer.onplay');
+  // myPlayer.onplay = (e) => {
+  //   console.log('myplayer.onplay');
 
-    console.log(e);
+  //   console.log(e);
 
     // io.emit('slider',)
     // let stats = 
@@ -239,6 +238,7 @@ $(function () {
     //   user: socket,
     //   timeStamp: e.path[0].currentTime
     // }
+  // }
 
 
     chatCom.on('pong', (latency) => {
@@ -253,5 +253,4 @@ $(function () {
 
     })
 
-  }
 })

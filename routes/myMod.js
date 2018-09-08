@@ -21,7 +21,7 @@ module.exports = function (data) {
     logger.log(chalk.yellowBright('server received getsong event from client  ' + data));
     logger.log('else getsong socket event*** ' + data)
     var youtubedl = exec('youtube-dl --config-location . ' + data, () => {
-        // console.log('##### ', __dirname);
+        console.log('##### ', __dirname);
     })
     youtubedl.stdout.on('data', function (stdout) {
         logger.log('stdout = ', stdout);

@@ -46,8 +46,7 @@ const myClients = {}
 
   fs.on
 
-  var chatInfra = io.of("/chat_infra")
-    .on("connection", function (socket) {
+  var chatInfra = io.of("/chat_infra").on("connection", function (socket) {
 
       socket.on('getList', () => {
 
