@@ -9,3 +9,12 @@ authbind --deep pm2 update
 alias pm2='authbind --deep pm2'
 
 pm2 start --env production
+
+or disown the process
+
+run with: node bin/www &
+
+the & keeps it in the background
+
+then check background jobs with `jobs`
+and disown %[job]

@@ -1,32 +1,60 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <title>chat em up!!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="stylesheets/bulma.css" rel="stylesheet">
+    <link rel="stylesheet" href="stylesheets/style.css">
 </head>
 
-<body class="is-ancestor is-vertical tile">
-    <header class="is-12 is-horizontal is-parent tile" id="bannner">
-        <div class="is-3 tile">
-            <h1>Awesome Chat!!</h1>
-        </div><input class="is-7 tile ytling_input_box" id="ytlink" title="enter a YouTube link" type="text"
-            placeholder="http://youtube.com/"><button id="gobtn" class="is-1 tile">READY</button>
+<body class="hasGoogleVoiceExt">
+    <header id="bannner">
+        <div class="flex">
+            <h1>Awesome Chat</h1>
+        </div><input class="ytling_input_box" id="ytlink" title="enter a YouTube link" type="text" placeholder="http://youtube.com/"><button
+            id="gobtn">READY</button>
     </header>
-    <div class="container is-12 is-horizontal is-parent section tile">
-        <div class="is-3 is-parent is-vertical navbar panel tile" style=""><audio id="audio-element" controls="true"
-                src="" class=""></audio><button id="playButton" class="panel-block">play</button><button id="jumpButton"
-                class="">Jump In</button><button id="getSongs" class="">Get Songs!!</button>
-            <pre id="songList" class="is-overlay is-vertical tile"><code class="" html="">'Beetls' by Warpaint Live Session (Presented by Noisevox).mp3</code><p class="content">'Fake Palindromes'- Andrew Bird.mp!3</p><p>50 Cent - !Hit you up.mp3</p><p>50 Cent - We Gonna Hit Yo Ass Up (G-Unit Radio 10).mp3</p><p>50 Cent ft. Freeway- Hit You Up [Official Music].mp3</p><p>Beastie Boys - Sabotage.mp3</p><p>Bey@oncé - All Night (Lyrics).mp3</p><p>Bryce Vine - Drew Barrymore [Official Music Video].mp3</p><p>Deafheaven - 'Canary Yellow'.mp3</p><p>Dennis Lloyd - Nevermind (Official Video).mp3</p><p>Eminem - Fall.mp3</p><p>Eminem - My Name Is.mp3</p><p>F@@@uture - 'Trap Niggas' (Official Music Video).mp3</p><p>I Want To Fall In Love - Chris Isaak.mp3</p><p>Jay Rock - WIN.mp3</p><p>Lord Huron - Meet Me In The Woods.mp3</p><p>MUSE - Thought Contagion [Official Music Video].mp3</p><p>Mason ramsey – Lovesick blues (Edm Remix)( 3_56 Version ).mp3</p><p>Mikey Mike -  Cut My Hair.mp3</p><p>OutKast -- Hey Ya lyrics.mp3</p><p>People Under The Stairs - San Francisco Knights.mp3</p><p>SAINt JHN - 3 Below [Official Video].mp3</p><p>SAINt JHN - Reflex.mp3</p><p>SAINt JHN - Roses [Official Music Video].mp3</p><p>TOKiMONSTA - Steal My Attention.mp3</p><p>Tame Impala - Feels Like We Only Go Backwards.mp3</p><p>The Police - Don't Stand So Close To Me.mp3</p><p>The Strokes - Reptilia.mp3</p><p>_ B L U R S T - O F - T I M E S -.mp3</p></pre>
+    <div class="container">
+        <div class="player"><audio id="audio-element" controls="true" src=""></audio><button id="playButton">play</button><button
+                id="jumpButton">Jump In</button><button id="getSongs">Get Songs</button>
+            <div id="songList">
+                <p>'Beetls' by Warpaint Live Session (Presented by Noisevox).mp3</p>
+                <p>'Fake Palindromes'- Andrew Bird.mp!3</p>
+                <p>50 Cent - !Hit you up.mp3</p>
+                <p>50 Cent - We Gonna Hit Yo Ass Up (G-Unit Radio 10).mp3</p>
+                <p>50 Cent ft. Freeway- Hit You Up [Official Music].mp3</p>
+                <p>Beastie Boys - Sabotage.mp3</p>
+                <p>Bey@oncé - All Night (Lyrics).mp3</p>
+                <p>Bryce Vine - Drew Barrymore [Official Music Video].mp3</p>
+                <p>Deafheaven - 'Canary Yellow'.mp3</p>
+                <p>Dennis Lloyd - Nevermind (Official Video).mp3</p>
+                <p>Eminem - Fall.mp3</p>
+                <p>Eminem - My Name Is.mp3</p>
+                <p>F@@@uture - 'Trap Niggas' (Official Music Video).mp3</p>
+                <p>I Want To Fall In Love - Chris Isaak.mp3</p>
+                <p>Jay Rock - WIN.mp3</p>
+                <p>Lord Huron - Meet Me In The Woods.mp3</p>
+                <p>MUSE - Thought Contagion [Official Music Video].mp3</p>
+                <p>Mason ramsey – Lovesick blues (Edm Remix)( 3_56 Version ).mp3</p>
+                <p>Mikey Mike - Cut My Hair.mp3</p>
+                <p>OutKast -- Hey Ya lyrics.mp3</p>
+                <p>People Under The Stairs - San Francisco Knights.mp3</p>
+                <p>SAINt JHN - 3 Below [Official Video].mp3</p>
+                <p>SAINt JHN - Reflex.mp3</p>
+                <p>SAINt JHN - Roses [Official Music Video].mp3</p>
+                <p>TOKiMONSTA - Steal My Attention.mp3</p>
+                <p>Tame Impala - Feels Like We Only Go Backwards.mp3</p>
+                <p>The Police - Don't Stand So Close To Me.mp3</p>
+                <p>The Strokes - Reptilia.mp3</p>
+                <p>_ B L U R S T - O F - T I M E S -.mp3</p>
+            </div>
         </div>
-        <section class="container tile" id="chatroom">
-            <div id="messages" class="column">
-                <p>#messages</p>
+        <section class="flex" id="chatroom">
+            <div id="messages">
                 <div class="systemMessage">Hello orson!!</div>
                 <div class="serverMessage">Welcome to the most interesting chat room on earth!</div>
-                <div class="myMessage"><span class="name">orson</span><span> Sat Sep 08 2018</span>
-                    <p> = asdaddsadadddddddddddddddddddddddddddddddddddddddddddddddddd</p>
-                </div>
+                <div class="myMessage"><span class="name">orson</span> Sat Sep 08 2018 =
+                    asdaddsadadddddddddddddddddddddddddddddddddddddddddddddddddd</div>
                 <div class="myMessage"><span class="name">orson</span> Sat Sep 08 2018 = Lorem ipsum dolor sit amet
                     consectetur adipisicing elit. Numquam aspernatur aut commodi sequi, ducimus voluptas earum quis
                     voluptatem atque. Voluptatum commodi qui aliquam sint error saepe possimus totam expedita dolor!</div>
@@ -52,11 +80,6 @@
             <div class="list" id="users">
                 <ul id="list">
                     <li data-id="/chat_infra#OzmxaRqUFtKNNoqiAAAJ">scott</li>
-                    <li data-id="/chat_infra#OzmxaRqUFtKNNoqiAAAJ">scott</li>
-                    <li data-id="/chat_infra#OzmxaRqUFtKNNoqiAAAJ">scott</li>
-                    <li data-id="/chat_infra#OzmxaRqUFtKNNoqiAAAJ">scott</li>
-                    <li data-id="/chat_infra#OzmxaRqUFtKNNoqiAAAJ">scott</li>
-                    <li data-id="/chat_infra#OzmxaRqUFtKNNoqiAAAJ">scott</li>
                     <li data-id="/chat_infra#IffLM_oVBHQ-88WXAAAL">david</li>
                     <li data-id="/chat_infra#sbmCAN_pyLuu1Wj9AAAO">bob</li>
                     <li class="user" data-id="/chat_infra#yWrj6rtLFBSXtF7VAAAP">orson</li>
@@ -64,14 +87,13 @@
             </div>
         </section>
     </div>
-    <footer class="section"><input class="message_input" id="message" type="text" placeholder="Enter your message here"><input
-            id="send" type="button" value="Send"></footer>
+    <footer><input class="message_input" id="message" type="text" placeholder="Enter your message here"><input id="send"
+            type="button" value="Send"></footer>
     <section class="modal" id="nameform" style="display: none;">
         <div class="backdrop"></div>
         <div class="popup">
             <div class="pophead">AHH !P!le!!ase enter a nickname</div>
             <div class="popbody"><input id="nickname" type="text"><input id="setname" type="button" value="Set Name"></div>
-            <script src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"> </script>
         </div>
     </section>
 </body>

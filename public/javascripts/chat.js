@@ -1,11 +1,12 @@
-
 $(function () {
+  var myId
   //variables
   var downloading = false
   var $window = $(window);
   var $ytdlinput = $("#ytlink")
   var ytdl = document.getElementById('ytlink')
   var $gobtn = $("#gobtn")
+  var gobtn = $("#gobtn")
   var $lpayButton = $("#lpayButton")
   var $jumpButton = $("#jumpButton")
   var $getSongs = $("#getSongs")
@@ -18,23 +19,28 @@ $(function () {
   var $send = $("#send")
   var username = false
   var modal_display = $('#nameform').css('display')
-  var socket = io()
+  var socket = io('http://localhost:3001')
 
   //onload fn
   const activatePlaylist = function () {
-        
+
     $('#songList').children().on('click', (e) => {
       $('#audio-element').attr('src', '/downloads/' + e.target.innerHTML)
-      myPlayer.play()
-      chatInfra.emit('songClick', e.target.innerHTML)
+      // myPlayer.play()
+
+      chatInfra.emit('songClick', { song: e.target.innerHTML, name: myId })
+      //returns with share track
     })
   }
 
   if (!downloading) {
-    gobtn.innerText='READY'
+    gobtn.innerText = 'READY'
   }
-  console.log('username = ', username);
+  // console.log('username = ', username);
   $(window).keydown((e) => {
+    if (!username) {
+      return
+    }
     if (e.key === "Tab") {
       e.preventDefault()
       if (document.activeElement === ytdl) {
@@ -47,15 +53,22 @@ $(function () {
   })
   socket.on('percent', (percent) => {
     console.log('percent = ', percent);
-    gobtn.innerText = percent   
+    gobtn.innerText = percent
   })
   socket.on('title', (data) => {
-    $('#songList').append(`<p>${data}</p>`)
+    $('#songList').prepend(`<p>${data}</p>`)
     downloading = false
     gobtn.innerText = 'READY'
     activatePlaylist()
     console.log(data);
   })
+    // chatInfra.on('userLeft', (data)=>{
+    //   console.log('user left!!');
+      
+    //   $('#list').find('[data-id="' + data + '"]').hide()
+  
+    // })
+
   var chatInfra = io.connect('/chat_infra'),
     chatCom = io.connect('/chat_com');
   const getList = () => {
@@ -63,16 +76,34 @@ $(function () {
     chatInfra.emit('getList')
   }
   chatInfra.on('list', (data) => {
-    Object.keys(data).forEach(function (key) {
-      $("#list").append('<li>' + data[key] + '</li>')
-    })
     console.log('the list is ', data);
+    console.log('clients =', data.clients);
+    if (!data.clients) {
+      console.log('someone joined');
+      $("#list").append('<li data-id="'+data.id+'">' + data.name + '</li>')
+    } else
+    for (var key in data.clients) {
+    if (data.clients.hasOwnProperty(key)) {
+        if (key === chatInfra.id) {
+          $("#list").append('<li class="user" data-id="' + key + '">' + data.clients[key] + '</li>')
+        }else
+        $("#list").append('<li data-id="'+key+'">' + data.clients[key] + '</li>')
+          console.log(key + "-> " + data.clients[key])
+        }
+      }
+  })
+  chatInfra.on('userLeft', (data)=>{
+    console.log('user left!!');
+    
+    $('#list').find('[data-id="' + data + '"]').hide()
+
   })
   chatInfra.on('name_set', function (data) {
-    console.log(username);
     username = true
     user = data.name
     $('#playButton').click((e) => {
+      $('#audio-element').attr('src')
+
       console.log('e = ', e, 'data = ', data);
       hitPlay(e, data)
     })
@@ -84,16 +115,26 @@ $(function () {
       for (let i = 0; i < data.length; i++) {
         $('#songList').append('<p>' + data[i] + '</p>')
       }
-      console.log('files = ', data);
+      // console.log('files = ', data);
       // let list = document.getElementById('songList').children
       activatePlaylist()
-   
-        
+
+
       chatInfra.on('shareTrack', (data) => {
         console.log('share track = ', data);
-        $('#audio-element').attr('src', '/downloads/' + data)
+        $('#audio-element').attr('src', '/downloads/' + data.song)
+        $('#messages').append('<div class=" serverMessage">'
+          + data.name + 'started playing ' + data.song + ' </div>');
         myPlayer.play()
       })
+    })
+    chatInfra.on('play', function (message) {
+      // var message = JSON.parse(message);
+      console.log(message);
+
+      $('#messages').append('<div class="' + message.type + '">'
+        + message.name + 'started playing</div>');
+
     })
     //cleint geta system welcome message
     chatInfra.on('message', function (message) {
@@ -102,10 +143,7 @@ $(function () {
       $('#messages').append('<div class="' + message.type + '">'
         + message.message + '</div>');
     });
-    chatCom.on('name_set', function (data) {
-      username = true
-      console.log('name_set = ', data);
-    })
+ 
     //client gets chat message
     chatCom.on('message', function (message) {
       console.log(message);
@@ -140,14 +178,13 @@ $(function () {
 
     chatCom.emit('playing', data)
   }
-  console.log('Hiya!!');
   getList();
   var ytlink = document.getElementById('ytlink')
   $('#getSongs').click(() => {
     chatInfra.emit('getSongs')
   })
   $('#gobtn').click(() => {
-    
+
     if (ytlink.value.length == 0) {
       console.log('nope');
       // confirm dialog
@@ -186,7 +223,7 @@ $(function () {
       return
     }
     console.log('click setname');
-
+    myId = $('#nickname').val()
     $("#ytlink").focus();
     // $("#message").focus();
 
@@ -223,34 +260,34 @@ $(function () {
     // /TODO
   }
   var myPlayer = document.getElementById('audio-element')
-  myPlayer.waiting = () => {
-    socket.emit('waiting', socket)
-  }
+  // myPlayer.waiting = () => {
+  //   socket.emit('waiting', socket)
+  // }
 
   // myPlayer.onplay = (e) => {
   //   console.log('myplayer.onplay');
 
   //   console.log(e);
 
-    // io.emit('slider',)
-    // let stats = 
-    // {
-    //   user: socket,
-    //   timeStamp: e.path[0].currentTime
-    // }
+  // io.emit('slider',)
+  // let stats = 
+  // {
+  //   user: socket,
+  //   timeStamp: e.path[0].currentTime
+  // }
   // }
 
 
-    chatCom.on('pong', (latency) => {
-      console.log('PONG', latency);
+  chatCom.on('pong', (latency) => {
+    // console.log('PONG', latency);
 
-    })
-    chatCom.on('count', (total) => {
-      console.log('count event!');
+  })
+  chatCom.on('count', (total) => {
+    console.log('count event!');
 
-      console.log('count = ', total);
-      $('#count').text('total clients = ' + total.count)
+    console.log('count = ', total);
+    $('#count').text('total clients = ' + total.count)
 
-    })
+  })
 
 })

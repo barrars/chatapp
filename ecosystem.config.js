@@ -11,7 +11,14 @@ module.exports = {
         env_production: {
             "PORT": 80
             // "NODE_ENV": "production",
-        }
+        },
+        
+        ignore_watch : ["node_modules", "public/downloads", ".git/*"],
+        watch_options: {
+        followSymlinks: false
+            }
+          
+
       }
   ]
 }

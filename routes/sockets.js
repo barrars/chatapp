@@ -36,7 +36,7 @@ let getSongList = fs.readdir(__dirname + '/../public/downloads', (err, files) =>
 
       // logger.log('file = ' + file )
     });
-    logger.log(filesList);
+    // logger.log(filesList);
     return filesList;
     
   }
@@ -47,13 +47,16 @@ const myClients = {}
   fs.on
 
   var chatInfra = io.of("/chat_infra").on("connection", function (socket) {
-
+    // console.log('infra!!!!!!', io.of('chatInfra'));
+    
+// var allInfra = io.in('chatInfra')
       socket.on('getList', () => {
 
       })
       socket.on('songClick', (data) => {
         console.log('alyica needs to focus!!!!!', data);
-        socket.broadcast.emit('shareTrack', data)
+        chatInfra.emit('shareTrack', data)
+        // io.of('chatInfra').emit('shareTrack', data)
       })
       socket.on("set_name", function (data) {
         fs.readdir(__dirname + '/../public/downloads', (err, files) => {
@@ -72,10 +75,13 @@ const myClients = {}
           }
         })
         socket.nickname = data.name
-        logger.log('nickname= ', socket.nickname)
+        logger.log(data)
+        logger.log(socket.nickname)
+        logger.log('nickname= ', typeof socket.nickname)
         myClients[socket.id] = socket.nickname
         logger.log(myClients)
-        socket.emit('list', myClients)
+        socket.emit('list', {name:socket.nickname, id:socket.id, event:'set_name', clients:myClients})
+        socket.broadcast.emit('list', {name:socket.nickname, id:socket.id, event:'set_name'})
         // logger.log('nick ', socket.nickname);
 
         socket.emit('name_set', data);
@@ -87,7 +93,9 @@ const myClients = {}
         }));
         socket.broadcast.emit('user_entered', data);
         socket.on('disconnect', () => {
-          logger.log(socket.nickname, ' has left')
+          delete myClients[socket.id]
+          chatInfra.emit('userLeft', socket.id)
+          logger.log(socket.nickname,  socket.id, ' has left')
         })
 
       });
@@ -97,20 +105,20 @@ const myClients = {}
 
 
     });
-  var chatCom = io.of("/chat_com")
-    .on("connection", function (socket) {
-      logger.log(socket.nickname)
+  var chatCom = io.of("/chat_com").on("connection", function (socket) {
       // logger.log(socket)
       //playing
-
       socket.on('playing', (data) => {
+        // logger.log(socket)
+        data.type = 'serverMessage',
         logger.log(data);
 
-        logger.log(data, '  is playing!!!');
+        logger.log(data.name, '  is playing!!!');
         // logger.log('data == ', data);
 
         // socket.broadcast.emit('play')
-        chatCom.emit('play')
+        chatInfra.emit('play', data)
+
       })
       socket.on('message', function (message) {
         message = JSON.parse(message);

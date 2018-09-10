@@ -1,0 +1,23 @@
+html
+  block head
+    title chat em up!!
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href='stylesheets/bulma.css', rel='stylesheet')
+  body
+    .container.column.is-full(style="height: 100vh;")
+      .tile
+        block header
+
+
+    header#bannner
+      .flex
+        h1 Awesome Chat
+      input#ytlink(class="ytling_input_box" title="enter a YouTube link" type="text" placeholder="http://youtube.com/" )  
+      button#gobtn 
+    block content
+
+    script(src="socket.io/socket.io.js")
+    script(src="javascripts/chat.js")
+    script(src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js")
+    
+

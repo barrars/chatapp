@@ -1,0 +1,29 @@
+extends layout  
+  
+
+block content
+
+  .container
+    .player
+      audio#audio-element(controls="true"  src="")
+      button#playButton play
+      button#jumpButton Jump In
+      button#getSongs Get Songs!
+      #songList
+
+    section#chatroom.flex
+      div#messages
+      .list#users          
+          ul#list
+  footer
+    input#message(type='text', placeholder='Enter your message here' class="message_input")
+    input#send(type="button", value='Send')
+ 
+  section#nameform.modal
+    .backdrop
+             
+    .popup
+      .pophead AHH Please enter a nickname
+      .popbody  
+          input#nickname(type="text")
+          input#setname(type="button", value="Set Name")
