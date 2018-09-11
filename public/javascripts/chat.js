@@ -3,7 +3,7 @@ $(function () {
   var myId
   var downloading = false
   var $window = $(window);
-  var $ytdlineput = $("#ytlink")
+  var $ytdlinput = $("#ytlink")
   var ytdl = document.getElementById('ytlink')
   var gobtn = $("#gobtn")
   var $lpayButton = $("#lpayButton")
@@ -46,15 +46,15 @@ $(function () {
         $message.focus()
       }
       else {
-        $ytdlineput.focus()
+        $ytdlinput.focus()
       }
     }
   })
   socket.on('percent', (percent) => { 
     gobtn.text(percent)
     const width = ytdl.offsetWidth * (parseInt(percent) / 100)
-    $ytdlineput.append('<div class="scrollbar"></div>')
-    $ytdlineput.find('.scrollbar').css({'width': width, 'background': 'red'})
+    $ytdlinput.append('<div class="scrollbar"></div>')
+    $ytdlinput.find('.scrollbar').css({'width': width, 'background': 'red'})
     console.log(width);
     
     const that = ytdl
@@ -219,7 +219,7 @@ $(function () {
 
     // loader.style.display = 'block'
     console.log('downloading = ' + downloading);
-    $ytdlineput.val('')
+    $ytdlinput.val('')
 
   })
 
