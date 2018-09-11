@@ -32,6 +32,7 @@ module.exports = function (data) {
         }
         if (stdout.toLocaleLowerCase().indexOf('download') > 0) {
             songTitle = stdout.slice(41)
+            logger.log(songTitle.toLocaleLowerCase().indexOf('mp3'))
             if (songTitle.toLocaleLowerCase().indexOf('mp3') > 0) {
                 console.log('index of mp3');
                 console.log(
