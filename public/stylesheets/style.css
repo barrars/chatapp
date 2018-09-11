@@ -146,6 +146,6 @@ div.myMessage {
   border: 2px solid red;
 }
 #songList {
-  height: calc(100% - 169px);
+  height: calc(100% - 83);
   overflow: auto;
 }
