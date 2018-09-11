@@ -1,11 +1,10 @@
 $(function () {
-  var myId
   //variables
+  var myId
   var downloading = false
   var $window = $(window);
-  var $ytdlinput = $("#ytlink")
+  var $ytdlineput = $("#ytlink")
   var ytdl = document.getElementById('ytlink')
-  var $gobtn = $("#gobtn")
   var gobtn = $("#gobtn")
   var $lpayButton = $("#lpayButton")
   var $jumpButton = $("#jumpButton")
@@ -47,20 +46,30 @@ $(function () {
         $message.focus()
       }
       else {
-        $ytdlinput.focus()
+        $ytdlineput.focus()
       }
     }
   })
-  socket.on('percent', (percent) => {
-    console.log('percent = ', percent);
-    gobtn.innerText = percent
+  socket.on('percent', (percent) => { 
+    gobtn.text(percent)
+    const width = ytdl.offsetWidth * (parseInt(percent) / 100)
+    $ytdlineput.append('<div class="scrollbar"></div>')
+    $ytdlineput.find('.scrollbar').css({'width': width, 'background': 'red'})
+    console.log(width);
+    
+    const that = ytdl
+    // debugger;
+
   })
   socket.on('title', (data) => {
     $('#songList').prepend(`<p>${data}</p>`)
+    
     downloading = false
-    gobtn.innerText = 'READY'
+    gobtn.text('Download another song!')
+    alertify.logPosition("top left");
+    alertify.log("enter a YouTube link!");
+
     activatePlaylist()
-    console.log(data);
   })
     // chatInfra.on('userLeft', (data)=>{
     //   console.log('user left!!');
@@ -210,7 +219,7 @@ $(function () {
 
     // loader.style.display = 'block'
     console.log('downloading = ' + downloading);
-    $ytdlinput.val('')
+    $ytdlineput.val('')
 
   })
 
