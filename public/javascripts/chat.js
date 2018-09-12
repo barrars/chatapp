@@ -18,7 +18,7 @@ $(function () {
   var $send = $("#send")
   var username = false
   var modal_display = $('#nameform').css('display')
-  var socket = io('http://localhost:3001')
+  var socket = io()
 
   //onload fn
   const activatePlaylist = function () {
