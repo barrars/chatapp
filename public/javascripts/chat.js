@@ -1,4 +1,23 @@
 $(function () {
+
+  var COLORS = [
+    '#e21400', '#91580f', '#f8a700', '#f78b00',
+    '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+    '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+  ];
+  const getUsernameColor = (username) => {
+    myId = $('#nickname').val()
+
+    // Compute hash code
+    var hash = 7;
+    for (var i = 0; i < myId.length; i++) {
+       hash = myId.charCodeAt(i) + (hash << 5) - hash;
+    }
+    // Calculate color
+    var index = Math.abs(hash % COLORS.length);
+    return COLORS[index];
+  }
+
   //variables
   var myId
   var downloading = false
@@ -116,6 +135,11 @@ $(function () {
   chatInfra.on('name_set', function (data) {
     username = true
     user = data.name
+    color=data.color
+    console.log(color);
+    console.log(data);
+    
+    
     $('#playButton').click((e) => {
       $('#audio-element').attr('src')
 
@@ -123,7 +147,7 @@ $(function () {
       hitPlay(e, data)
     })
     chatInfra.on("user_entered", function (user) {
-      $('#messages').append('<div class="serverMessage">' + user.name
+      $('#messages').append('<div class="serverMessage">' + user.name + ' ' +user.color
         + ' has joined the room.' + '</div>');
     });
     chatInfra.on('files', (data) => {
@@ -140,6 +164,8 @@ $(function () {
         $('#audio-element').attr('src', '/downloads/' + data.song)
         $('#messages').append('<div class=" serverMessage"><span style="color: blue">'
           + data.name + ' <span style="color:red"> started playing <span style="color:black"> ' + data.song + '</span> </div>');
+          $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight;
+
         myPlayer.play()
       })
     })
@@ -165,7 +191,7 @@ $(function () {
       console.log(message);
       var message = JSON.parse(message);
       let time = new Date()
-      $('#messages').append('<div class ="' + message.type + '"><span class="name">' + message.name + "</span>" + '    ' + time.toLocaleString() + '  =  ' + message.message + '</div>')
+      $('#messages').append('<div style="box-shadow: 0px 2px 0 0 '+message.color+'" class ="' + message.type + '"><span class="name">' + message.name + "</span>" + '    ' + time.toLocaleString() + '  =   ' + message.message + '</span></div>')
       $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight;
 
     });
@@ -182,11 +208,12 @@ $(function () {
       console.log('clicky');
       var data = {
         name: user,
+        color:color,
         id: chatCom.nickname,
         message: $('#message').val(),
         type: 'userMessage'
       };
-      chatCom.send(JSON.stringify(data), 'hi');
+      chatCom.send(JSON.stringify(data));
       $('#message').val('');
     });
   });
@@ -246,10 +273,13 @@ $(function () {
     }
     console.log('click setname');
     myId = $('#nickname').val()
+    myColor = getUsernameColor(myId)
+    console.log(myColor);
+    
     $("#ytlink").focus();
     // $("#message").focus();
 
-    chatInfra.emit("set_name", { name: $('#nickname').val() });
+    chatInfra.emit("set_name", { name: $('#nickname').val(), color:myColor });
   });
   $("#nickname").keypress(function (e) {
     if (e.which == 13) {

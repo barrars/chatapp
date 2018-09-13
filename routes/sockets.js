@@ -75,13 +75,14 @@ const myClients = {}
           }
         })
         socket.nickname = data.name
+        socket.color = data.color
         logger.log(data)
         logger.log(socket.nickname)
-        logger.log('nickname= ', typeof socket.nickname)
+        // logger.log('nickname= ', typeof socket.nickname)
         myClients[socket.id] = socket.nickname
         logger.log(myClients)
-        socket.emit('list', {name:socket.nickname, id:socket.id, event:'set_name', clients:myClients})
-        socket.broadcast.emit('list', {name:socket.nickname, id:socket.id, event:'set_name'})
+        socket.emit('list', {name:socket.nickname, id:socket.id, event:'set_name', clients:myClients, color:socket.color})
+        socket.broadcast.emit('list', {name:socket.nickname, id:socket.id, event:'set_name', color:socket.color})
         // logger.log('nick ', socket.nickname);
 
         socket.emit('name_set', data);
@@ -122,6 +123,7 @@ const myClients = {}
       })
       socket.on('message', function (message) {
         message = JSON.parse(message);
+        logger.log(message)
 
 
         if (message.type == "userMessage") {
