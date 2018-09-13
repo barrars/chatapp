@@ -23,8 +23,11 @@ module.exports = function (data) {
     logger.log('else getsong socket event*** ' + data)
     const youtubedl = exec(`youtube-dl "ytsearch:${data}" --config-location . `, (error) => {
         // logger.log('##### ', __dirname);
-        logger.log(error);
-        io.emit('error')
+        if (!error === null) {
+            
+            logger.log(error);
+            io.emit('error')
+        }
     })
     youtubedl.stderr.on('data', (data) => {
         logger.log(`stderr: ${data}`);
