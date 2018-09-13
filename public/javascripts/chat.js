@@ -64,6 +64,8 @@ $(function () {
 
   })
   socket.on('title', (data) => {
+    console.log(data);
+    
     $('#songList').prepend(`<p>${data}</p>`)
     
     downloading = false
@@ -298,9 +300,12 @@ $(function () {
   // }
 
 
-  chatCom.on('error', () => {
+  socket.on('error', () => {
     alertify.log('something went wrong')
     downloading = false
+    ytlink.disabled = false
+    ytdl.placeholder = 'enter another link'
+    gobtn.text('READY')
   })
   chatCom.on('count', (total) => {
     console.log('count event!');
