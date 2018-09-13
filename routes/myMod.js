@@ -17,7 +17,7 @@ var logger = require('tracer').colorConsole({
 
 var io = require('../routes/sockets').io()
 module.exports = function (data) {
-    var songTitle
+    // var songTitle
     //gives the client
     logger.log(chalk.yellowBright('server received getsong event from' + data));
     logger.log('else getsong socket event*** ' + data)
@@ -28,7 +28,16 @@ module.exports = function (data) {
             logger.log(error);
             io.emit('error')
         }
+
     })
+
+    youtubedl.on('close', (code) => {
+        logger.log(code)
+        if (code === 1) {
+            io.emit('error')
+        }
+    })
+
     youtubedl.stderr.on('data', (data) => {
         logger.log(`stderr: ${data}`);
       });
@@ -45,7 +54,7 @@ module.exports = function (data) {
                 
             // }
 
-  var songTitle =  youtubedl.stdout.on('data', function (stdout) {
+  youtubedl.stdout.on('data', function (stdout) {
         logger.log('STDOUT = ', stdout);
         // var songTitle      
         if (stdout.toLocaleLowerCase().indexOf('%') > 0) {
@@ -61,6 +70,7 @@ module.exports = function (data) {
                 logger.log(chalk.blueBright('stdout length = ') + stdout.length)
                 // logger.log(songTitle)
                 youtubedl.on('close', (code) => {
+                    logger.log(code)
                     title = stdout.slice(41)
                     logger.log(`child process exited with code ${code}`);
                     logger.log(title)
