@@ -88,7 +88,7 @@ a {
   color: #00b7ff;
 }
 .modal {
-  transition: all 1s linear;
+  /* transition: all 1s linear; */
   /* box-sizing: border-box; */
   height: 100%;
   /* left: 0; */

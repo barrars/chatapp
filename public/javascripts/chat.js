@@ -169,7 +169,7 @@ $(function () {
     });
     const toggle = function () {
     }
-    $('#nameform').toggle(1000);
+    $('#nameform').hide();
     // $('#messages').append('<div class="systemMessage">Hello ' +
       // data.name + '</div>');
     $('#send').click(function () {
