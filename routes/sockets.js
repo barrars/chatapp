@@ -22,7 +22,7 @@ exports.io = function () {
 // var io = null;
 
 
-var youtube = require('./myMod')
+// var youtube = require('./myMod')
 let getSongList = fs.readdir(__dirname + '/../public/downloads', (err, files) => {
   if (err) {
     logger.log(err)
@@ -85,11 +85,11 @@ const myClients = {}
         // logger.log('nick ', socket.nickname);
 
         socket.emit('name_set', data);
+        logger.log(data)
         socket.send(JSON.stringify({
 
           type: 'serverMessage',
-          message: 'Welcome to the most interesting ' +
-            'chat room on earth!'
+          message: 'Welcome ' + data.name
         }));
         socket.broadcast.emit('user_entered', data);
         socket.on('disconnect', () => {

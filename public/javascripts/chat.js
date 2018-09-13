@@ -52,12 +52,14 @@ $(function () {
   })
   socket.on('percent', (percent) => { 
     gobtn.text(percent)
+    const $at = (ytdl.offsetWidth / 16) * ((parseInt(percent)/100))
+
     const width = ytdl.offsetWidth * (parseInt(percent) / 100)
-    $ytdlinput.append('<div class="scrollbar"></div>')
-    $ytdlinput.find('.scrollbar').css({'width': width, 'background': 'red'})
-    console.log(width);
-    
-    const that = ytdl
+    // $ytdlinput.append('<div class="scrollbar"></div>')
+    // $ytdlinput.find('.scrollbar').css({'width': width, 'background': 'red'})
+    console.log($at);
+    ytdl.placeholder = '@'.repeat(Math.ceil($at))    
+    // const that = ytdl
     // debugger;
 
   })
@@ -65,9 +67,11 @@ $(function () {
     $('#songList').prepend(`<p>${data}</p>`)
     
     downloading = false
-    gobtn.text('Download another song!')
+    ytlink.disabled = false
+    ytdl.placeholder = 'enter another link'
+    gobtn.text('READY')
     alertify.logPosition("top left");
-    alertify.log("enter a YouTube link!");
+    alertify.log(data ," Download complete");
 
     activatePlaylist()
   })
@@ -117,7 +121,7 @@ $(function () {
       hitPlay(e, data)
     })
     chatInfra.on("user_entered", function (user) {
-      $('#messages').append('<div class="systemMessage">' + user.name
+      $('#messages').append('<div class="serverMessage">' + user.name
         + ' has joined the room.' + '</div>');
     });
     chatInfra.on('files', (data) => {
@@ -132,8 +136,8 @@ $(function () {
       chatInfra.on('shareTrack', (data) => {
         console.log('share track = ', data);
         $('#audio-element').attr('src', '/downloads/' + data.song)
-        $('#messages').append('<div class=" serverMessage">'
-          + data.name + 'started playing ' + data.song + ' </div>');
+        $('#messages').append('<div class=" serverMessage"><span style="color: blue">'
+          + data.name + ' <span style="color:red"> started playing <span style="color:black"> ' + data.song + '</span> </div>');
         myPlayer.play()
       })
     })
@@ -147,24 +151,27 @@ $(function () {
     })
     //cleint geta system welcome message
     chatInfra.on('message', function (message) {
-      console.log(message);
       var message = JSON.parse(message);
+      console.log(message);
       $('#messages').append('<div class="' + message.type + '">'
         + message.message + '</div>');
     });
  
     //client gets chat message
     chatCom.on('message', function (message) {
+
       console.log(message);
       var message = JSON.parse(message);
       let time = new Date()
-      $('#messages').append('<div class ="' + message.type + '"><span class="name">' + message.name + "</span>" + '    ' + time.toDateString() + '  =  ' + message.message + '</div>')
+      $('#messages').append('<div class ="' + message.type + '"><span class="name">' + message.name + "</span>" + '    ' + time.toLocaleString() + '  =  ' + message.message + '</div>')
+      $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight;
+
     });
     const toggle = function () {
     }
-    $('#nameform').hide();
-    $('#messages').append('<div class="systemMessage">Hello ' +
-      data.name + '</div>');
+    $('#nameform').toggle(1000);
+    // $('#messages').append('<div class="systemMessage">Hello ' +
+      // data.name + '</div>');
     $('#send').click(function () {
       if ($('#message').val() == '') {
         console.log('enter text')
@@ -207,18 +214,22 @@ $(function () {
       return
     }
     downloading = true;
+    alertify.log("Starting Download");
+    
+
     // var song = {}
     var song = ytlink.value
+    ytlink.disabled = true
     // servermsg.innerText = ''
     // get(ytlink.value)
     chatInfra.emit('getsong', song)
-    console.log('get song ', song);
+    // console.log('get song ', song);
     // socket.emit('getsong', song)
     // servermsg.innerText = 'ok!'
     // console.log('SERVER MESSAGE = ' + servermsg.innerText);
 
     // loader.style.display = 'block'
-    console.log('downloading = ' + downloading);
+    // console.log('downloading = ' + downloading);
     $ytdlinput.val('')
 
   })
@@ -287,9 +298,9 @@ $(function () {
   // }
 
 
-  chatCom.on('pong', (latency) => {
-    // console.log('PONG', latency);
-
+  chatCom.on('error', () => {
+    alertify.log('something went wrong')
+    downloading = false
   })
   chatCom.on('count', (total) => {
     console.log('count event!');

@@ -17,14 +17,28 @@ var logger = require('tracer').colorConsole({
 
 var io = require('../routes/sockets').io()
 module.exports = function (data) {
-    console.log('dirname = ', __dirname);
-    logger.log(chalk.yellowBright('server received getsong event from client  ' + data));
+    //gives the client
+    logger.log(chalk.yellowBright('server received getsong event from' + data));
     logger.log('else getsong socket event*** ' + data)
-    var youtubedl = exec('youtube-dl --config-location . ' + data, () => {
-        console.log('##### ', __dirname);
+    var youtubedl = exec(`youtube-dl "ytsearch:${data}" --config-location . `, (error) => {
+        logger.log('##### ', __dirname);
+        logger.log(error);
+        if (error) {
+            logger.log(`exec error: ${error}`)
+            io.emit('error')
+
+        }
+        if (error === null) {
+            logger.log(`exec error: ${error}`)
+        }
     })
+
+    youtubedl.stderr.on('data', function (stderr) {
+        logger.log(stderr)
+})
+
     youtubedl.stdout.on('data', function (stdout) {
-        logger.log('stdout = ', stdout);
+        logger.log('STDOUT = ', stdout);
         var songTitle      
         if (stdout.toLocaleLowerCase().indexOf('%') > 0) {
             var percent = stdout.match(/(\d+).\d\%/g)[0]
@@ -32,15 +46,14 @@ module.exports = function (data) {
         }
         if (stdout.toLocaleLowerCase().indexOf('download') > 0) {
             songTitle = stdout.slice(41)
+            logger.log(songTitle)
             logger.log(songTitle.toLocaleLowerCase().indexOf('mp3'))
             if (songTitle.toLocaleLowerCase().indexOf('mp3') > 0) {
-                console.log('index of mp3');
-                console.log(
-                    songTitle.toLocaleLowerCase().indexOf('mp3')
-                );
-                logger.log(chalk.blueBright('stdout = ') + stdout.length)
+                logger.log(songTitle.toLocaleLowerCase().indexOf('mp3'))
+                logger.log(chalk.blueBright('stdout length = ') + stdout.length)
                 io.emit('title', songTitle)
                 logger.log(songTitle)
+                return
             }
             return songTitle
         }

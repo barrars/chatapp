@@ -43,7 +43,16 @@ ul#list {
   background: #faebd7;
   padding: 17px;
 }
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
 #messages {
+  height: 100%;
   border: 2px solid #0c1c77;
   box-sizing: border-box;
   display: flex;
@@ -79,13 +88,15 @@ a {
   color: #00b7ff;
 }
 .modal {
-  box-sizing: border-box;
-  height: calc(100% - 102px);
-  left: 0;
+  transition: all 1s linear;
+  /* box-sizing: border-box; */
+  height: 100%;
+  /* left: 0; */
   position: absolute;
-  top: 62px;
+  /* top: 62px; */
   width: 100%;
-  z-index: 1000;
+  opacity: 1;
+  /* z-index: 1000; */
 }
 .backdrop {
   background-color: #777;
@@ -116,17 +127,30 @@ a {
   font-size: 14px;
   text-align: center;
 }
+div#songList p:hover{
+  /* border-bottom: dashed lightseagreen; */
+  outline: dashed lightseagreen;
+  background: aliceblue;
+  color: #0c1c77;
+  cursor: pointer;
+}
 span.name {
   border-bottom-style: solid;
   color: #191970;
   font-style: oblique;
-  padding: 0 5px;
+  padding: 0 11px;
+  margin: 11px 6px;
 }
 div.myMessage {
+  opacity: 1;
+	animation-name: fadeInOpacity;
+	/* animation-iteration-count: 1; */
+	animation-timing-function: ease-in;
+	animation-duration: 1s;
   border-bottom-left-radius: 18px;
-  box-shadow: 1px 2px 0 0 grey;
-  margin: 0;
-  padding: 7px;
+  box-shadow: 0px 2px 0 0 grey;
+  margin: 7px 0;
+  padding: 7px 0;
 }
 .container {
   align-items: stretch;
@@ -138,6 +162,10 @@ div.myMessage {
 .message_input:focus,
 .ytling_input_box:focus {
   border: 4px solid #daa520;
+}
+#ytlink{
+  width: 320px;
+
 }
 #gobtn {
   width: 65px;

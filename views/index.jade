@@ -1,105 +1,14 @@
 extends layout  
+block head
+  title = title
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+  link(rel='stylesheet', href='/stylesheets/style.css')
+  script(src="javascripts/jquery.min.js")
+
+block scripts
+  script(src="socket.io/socket.io.js")
+  script(src="javascripts/chat.js")
+  script(src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js")
+
   
 
-block content
-
-  .container
-    .player
-      audio#audio-element(controls="true"  src="")
-      button#playButton play
-      button#jumpButton Jump In
-      button#getSongs Get Songs!
-      #songList
-
-    section#chatroom.flex
-      div#messages
-      .list#users          
-          ul#list
-  footer
-    input#message(type='text', placeholder='Enter your message here' class="message_input")
-    input#send(type="button", value='Send')
- 
-  section#nameform.modal
-    .backdrop
-             
-    .popup
-      .pophead AHH Please enter a nickname
-      .popbody  
-          input#nickname(type="text")
-          input#setname(type="button", value="Set Name")
-
-
-
-
-//- extends layout  
-  
-
-//- block content
-
-//- .tile
-//-   header#bannner.is-flex.navbar.tile.is-fix.is-fixed-top
-//-     div
-//-       h1 Awesome Chat SCott
-//-     input#ytlink.is-flex.ytling_input_box(title='enter a YouTube link', type='text', placeholder='http://youtube.com/')
-//-     button#gobtn READYZ!!!
-
-
-
-//- .tile.is-parent.is-vertical.is-3.box.is-block.is-paddingless
-//-   .tile.is-child
-//-     audio#audio-element(controls='true', src='')
-//-     .tile
-//-       button#playButton.button.is-small.tile.is-child play!!!!
-//-       button#jumpButton.button.is-small.tile.is-child Jump In
-//-       button#getSongs.button.is-small.tile.is-child Get Songs!!
-//-     #songList.tile.is-child
-//- section#chatroom.tile.is-12
-//-   #messages.tile.is-vertical.is-8(style="height:95vh; overflow-y:scroll; display:grid")
-
-
-//- section#nameform.modal
-//-   .backdrop        
-//-     .popup
-//-       .pophead AHH Please enter a nickname
-//-       .popbody  
-//-         input#nickname(type="text")
-//-         input#setname(type="button", value="Set Name")
-
-
-//- footer.is-fixed-bottom.navbar.tile.is-parent
-//-   input#message.is-6.tile.message_input(type='text', placeholder='Enter your message here')
-//-   input#send.tile.is-3.is-child(type='button', value='Send')          
-
-
-//-     //- include ./header
-//-     //- include ./player
-//-     //- include ./chatroom
-//-     //- include ./nameform
-//-     //- include ./footer
-
-
-
-//- //-   .container
-//- //-     .player
-//- //-       audio#audio-element(controls="true"  src="")
-//- //-       button#playButton play
-//- //-       button#jumpButton Jump In
-//- //-       button#getSongs Get Songs!
-//- //-       #songList
-
-//- //-     section#chatroom.flex
-//- //-       div#messages
-//- //-       .list#users          
-//- //-           ul#list
-//- //-   footer
-//- //-     input#message(type='text', placeholder='Enter your message here' class="message_input")
-//- //-     input#send(type="button", value='Send')
- 
-//- //-   section#nameform.modal
-//- //-     .backdrop
-             
-//- //-     .popup
-//- //-       .pophead AHH Please enter a nickname
-//- //-       .popbody  
-//- //-           input#nickname(type="text")
-//- //-           input#setname(type="button", value="Set Name")
