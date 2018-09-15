@@ -100,7 +100,7 @@ const myClients = {}
         })
 
       });
-      socket.on('getsong', require('./myMod.js'))
+      socket.on('getsong', require('./youtube.js'))
 
        
 
