@@ -13,7 +13,7 @@ $(function() {
     "#a700ff",
     "#d300e7"
   ];
-  const getUsernameColor = username => {
+  const getUsernameColor = myId => {
     myId = $("#nickname").val();
 
     // Compute hash code
@@ -56,7 +56,7 @@ $(function() {
         $("#audio-element").attr("src", "/downloads/" + e.target.innerHTML);
         // myPlayer.play()
 
-        chatInfra.emit("songClick", { song: e.target.innerHTML, name: myId });
+        chatInfra.emit("songClick", { song: e.target.textContent, name: myId });
         //returns with share track
       });
   };
@@ -72,7 +72,6 @@ const loadRandom = ()=>{
   if (!downloading) {
     gobtn.innerText = "READY";
   }
-  // console.log('username = ', username);
   $(window).keydown(e => {
     if (!username) {
       return;
@@ -112,12 +111,6 @@ const loadRandom = ()=>{
 
     activatePlaylist();
   });
-  // chatInfra.on('userLeft', (data)=>{
-  //   console.log('user left!!');
-
-  //   $('#list').find('[data-id="' + data + '"]').hide()
-
-  // })
 
   var chatInfra = io.connect("/chat_infra"),
     chatCom = io.connect("/chat_com");
@@ -343,34 +336,11 @@ const loadRandom = ()=>{
     }
   });
 
-  // chatCom.on('play', () => {
-  //   console.log('play event');
-
-  //   // console.log(JSON.stringify(data));
-  //   // console.log(data.name, ' is playing');
-  //   currentTime = 0
-  //   myPlayer.play()
-  // })
   let startPlay = () => {
     // /TODO
   };
   var myPlayer = document.getElementById("audio-element");
-  // myPlayer.waiting = () => {
-  //   socket.emit('waiting', socket)
-  // }
 
-  // myPlayer.onplay = (e) => {
-  //   console.log('myplayer.onplay');
-
-  //   console.log(e);
-
-  // io.emit('slider',)
-  // let stats =
-  // {
-  //   user: socket,
-  //   timeStamp: e.path[0].currentTime
-  // }
-  // }
 
   socket.on("error", () => {
     alertify.log("something went wrong");
