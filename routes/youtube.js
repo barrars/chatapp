@@ -55,7 +55,7 @@ module.exports = function(data) {
         title = stdout.slice(41).replace('.mp3', '');
         logger.log(`child process exited with code ${code}`);
         logger.log(title);
-        rename( __dirname +'/../public/downloads/', '.mp3', '')
+        // rename( __dirname +'/../public/downloads/', '.mp3', '')
         io.emit("title", title);
         return title;
       });

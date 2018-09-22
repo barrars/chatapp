@@ -81,7 +81,12 @@ const myClients = {}
         // logger.log('nickname= ', typeof socket.nickname)
         myClients[socket.id] = socket.nickname
         logger.log(myClients)
-        socket.emit('list', {name:socket.nickname, id:socket.id, event:'set_name', clients:myClients, color:socket.color})
+        socket.emit('list', {
+          name: socket.nickname,
+          id: socket.id,
+          event: 'set_name', 
+          clients: myClients, 
+          color: socket.color})
         socket.broadcast.emit('list', {name:socket.nickname, id:socket.id, event:'set_name', color:socket.color})
         // logger.log('nick ', socket.nickname);
 

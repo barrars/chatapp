@@ -61,6 +61,8 @@ $(function() {
       });
   };
 const loadRandom = ()=>{
+  console.log('loding random song');
+  
   let list = $("#songList").children()
   let nextIndex = Math.floor(Math.random()*$("#songList").children().length)
   $("#audio-element").attr("src", "/downloads/" + list[nextIndex].innerHTML);
@@ -69,6 +71,7 @@ const loadRandom = ()=>{
   audio.on('ended', ()=>{
     loadRandom()
   })
+  
   if (!downloading) {
     gobtn.innerText = "READY";
   }
@@ -119,7 +122,7 @@ const loadRandom = ()=>{
     chatInfra.emit("getList");
   };
   chatInfra.on("list", data => {
-    console.log("the list is ", data);
+    console.log("the user list is ", data);
     console.log("clients =", data.clients);
     if (!data.clients) {
       console.log("someone joined");
