@@ -52,7 +52,7 @@ module.exports = function (data) {
       logger.log(chalk.blueBright('stdout length = ') + stdout.length)
       youtubedl.on('close', code => {
         logger.log(code)
-        var title = stdout.slice(41).replace('.mp3', '')
+        var title = stdout.slice(41)
         logger.log(`child process exited with code ${code}`)
         logger.log(title)
         // rename( __dirname +'/../public/downloads/', '.mp3', '')
