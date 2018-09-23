@@ -144,7 +144,7 @@ $(function () {
                 '</li>'
             )
           } else {
-            $('#list').append(
+            $list.append(
               '<li data-id="' + key + '">' + data.clients[key] + '</li>'
             )
           }
@@ -154,9 +154,9 @@ $(function () {
     }
   })
   chatInfra.on('userLeft', data => {
-    console.log('user left!!')
+    console.log('user left!! ')
 
-    $('#list')
+    $list
       .find('[data-id="' + data + '"]')
       .hide()
   })
