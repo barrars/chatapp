@@ -39,6 +39,7 @@ section#chatroom {
   height: 100%;
   overflow: overlay;
   width: 100%;
+  min-width: 250px;
 }
 ul#list {
   background: #faebd7;
@@ -73,16 +74,18 @@ ul#list {
   font-family: 'Gloria Hallelujah';
   background-color: rgb(175, 175, 175);
   font-size: 1.5em;
-  border-radius: 25%;
+  /* border-radius: 25%; */
+  background-color: rgba(175, 175, 175, 0.42)
 
 }
 .message {
+  background-color: rgba(175, 175, 175, 0.42)
   padding: 0 18px;
   margin: 0;
   font-family: 'Gloria Hallelujah';
   background-color: rgb(175, 175, 175);
   font-size: 1.5em;
-  border-radius: 25%;
+  /* border-radius: 25%; */
 }
 .name{
   font-family: 'PT Mono';
@@ -91,7 +94,8 @@ ul#list {
   font-size: 1.25em
 }
 #messages {
-  word-break: break-all;
+  padding: 0 0 0 6px;
+  word-break: break-word;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
