@@ -6,12 +6,13 @@ block content
   .container
     .player
       audio#audio-element(controls="true"  src="")
-      button#playButton play
-      button#jumpButton Jump In
-      button#getSongs Get Songs!
+      #buttons
+        button#playButton play
+        button#jumpButton Jump In
+        button#getSongs Get Songs!
       #songList
 
-    section#chatroom.flex
+    section#chatroom
       div#messages
       .list#users          
           ul#list

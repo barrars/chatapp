@@ -131,7 +131,7 @@ $(function () {
     console.log('clients =', data.clients)
     if (!data.clients) {
       console.log('someone joined')
-      $users.append('<li data-id="' + data.id + '">' + data.name + '</li>')
+      $list.append('<li data-id="' + data.id + '">' + data.name + '</li>')
     } else {
       for (var key in data.clients) {
         if (data.clients.hasOwnProperty(key)) {
@@ -175,11 +175,9 @@ $(function () {
     })
     chatInfra.on('user_entered', function (user) {
       $messages.append(
-        '<div class="serverMessage">' +
+        '<div class="serverMessage"> <span style="color:' + user.color + ';border-bottom: solid 2px ' + user.color + ';">' +
           user.name +
-          ' ' +
-          user.color +
-          ' has joined the room.' +
+          '</span> has joined the room!' +
           '</div>'
       )
     })
@@ -233,16 +231,13 @@ $(function () {
       message = JSON.parse(message)
       let time = new Date()
       $('#messages').append(
-        '<div style="box-shadow: 0px 2px 0 0 ' +
+        '<div title="' + time + '"style="box-shadow: 0px 2px 0 0' +
           message.color +
-          '" class ="' +
+          '"class ="' +
           message.type +
           '"><span class="name">' +
           message.name +
-          '</span>' +
-          '    ' +
-          time.toLocaleString() +
-          '  =   ' +
+          '</span> <span class="message">' +
           message.message +
           '</span></div>'
       )

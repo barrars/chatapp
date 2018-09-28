@@ -1,3 +1,5 @@
+
+
 ::-webkit-input-placeholder {
   color: #3431d6;
 }
@@ -31,7 +33,7 @@ body {
   color: #00ced1;
 }
 section#chatroom {
-  background-color: #efffec;
+  /* background-color: #efffec; */
   display: flex;
   flex-direction: column-reverse;
   height: 100%;
@@ -57,6 +59,36 @@ ul#list {
   to {
     opacity: 1;
   }
+}
+#buttons{
+  display: flex;
+  width: 100%;
+}
+#audio-element{
+  width: 100%;
+}
+.mymessage{
+  padding: 0 18px;
+  margin: 0;
+  font-family: 'Gloria Hallelujah';
+  background-color: rgb(175, 175, 175);
+  font-size: 1.5em;
+  border-radius: 25%;
+
+}
+.message {
+  padding: 0 18px;
+  margin: 0;
+  font-family: 'Gloria Hallelujah';
+  background-color: rgb(175, 175, 175);
+  font-size: 1.5em;
+  border-radius: 25%;
+}
+.name{
+  font-family: 'PT Mono';
+  background-color: #171717;
+  color: white;
+  font-size: 1.25em
 }
 #messages {
   word-break: break-all;
@@ -153,6 +185,18 @@ div.myMessage {
   opacity: 1;
   padding: 7px 0;
 }
+div.userMessage {
+  -webkit-animation-duration: 1s;
+  -webkit-animation-name: fadeInOpacity;
+  -webkit-animation-timing-function: ease-in;
+  animation-duration: 1s;
+  animation-name: fadeInOpacity;
+  animation-timing-function: ease-in;
+  border-bottom-left-radius: 11px;
+  margin: 7px 0;
+  opacity: 1;
+  padding: 7px 0;
+}
 .container {
   align-items: stretch;
   display: flex;
@@ -177,3 +221,81 @@ div.myMessage {
 input#setname{
   width: 35%;
 }
+
+.font1{
+ font-family: 'Amatic SC';
+}
+.font2{
+
+ font-family:'Bad Script';
+}
+.font3{
+
+ font-family:'Caveat';
+}
+.font4{
+
+ font-family:'Cinzel';
+}
+.font5{
+
+ font-family:'EB Garamond';
+}
+.font6{
+
+ font-family:'Gloria Hallelujah';
+}
+.font7{
+
+ font-family:'Nothing You Could Do';
+}
+.font8{
+
+ font-family: 'PT Mono';
+}
+.font9{
+
+ font-family: 'Patrick Hand';
+}
+.font10{
+
+ font-family: 'Philosopher';
+}
+.font11{
+
+ font-family: 'Press Start 2P';
+}
+.font12{
+
+ font-family: 'Rancho';
+}
+.font13{
+
+ font-family: 'Shadows Into Light';
+}
+.font14{
+
+ font-family: 'Special Elite';
+}
+.font15{
+
+ font-family: 'Cedarville Cursive';
+}
+.font16{
+
+  font-family:'Cinzel';
+}
+.font17{
+
+  font-family:'Monoton';
+}
+.font18{
+
+  font-family:'Permanent Marker';
+}
+.font19{
+
+  font-family:'Shadows Into Light';
+}
+
+
