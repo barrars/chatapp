@@ -17,7 +17,6 @@ var port = normalizePort(process.env.PORT || '3001')
 app.set('port', port)
 app.enable('trust proxy')
 
-
 /**
  * Create HTTP server.
  */
