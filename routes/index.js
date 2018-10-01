@@ -5,7 +5,7 @@ const fs = require('fs')
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Chat Radio' })
 
-  fs.appendFile('ip.log', `${req.ip} connected at ${Date()} `, (err) => {
+  fs.appendFile('ip.log', `${req.ip} connected at ${Date()} \n`, (err) => {
     console.log(err)
   })
   console.log(req.ip)
