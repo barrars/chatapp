@@ -65,6 +65,9 @@ ul#list {
   display: flex;
   width: 100%;
 }
+audio#sound{
+  display: none;
+}
 #audio-element{
   width: 100%;
 }

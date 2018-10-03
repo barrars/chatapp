@@ -42,7 +42,7 @@ $(function () {
   // var $getSongs = $('#getSongs')
   var $songList = $('#songList')
   var $messages = $('#messages')
-  var $users = $('#users')
+  // var $users = $('#users')
   var $list = $('#list')
   var $message = $('#message')
   var audio = $('#audio-element')
@@ -53,6 +53,10 @@ $(function () {
   var io = window.io
 
   // onload fn
+  const playSound = function () {
+    console.log('play sound')
+    document.getElementById('sound').play()
+  }
   const activatePlaylist = function () {
     $songList
       .children()
@@ -219,7 +223,7 @@ $(function () {
     // cleint geta system welcome message
     chatInfra.on('message', function (message) {
       message = JSON.parse(message)
-      console.log(message)
+      console.log('infra ', message)
       $('#messages').append(
         '<div class="' + message.type + '">' + message.message + '</div>'
       )
@@ -227,7 +231,8 @@ $(function () {
 
     // client gets chat message
     chatCom.on('message', function (message) {
-      console.log(message)
+      playSound()
+      console.log('com ',message)
       message = JSON.parse(message)
       let time = new Date()
       $('#messages').append(
