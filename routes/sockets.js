@@ -1,5 +1,6 @@
 // const chalk = require('chalk');
 // var exec = require('child_process').exec
+
 var fs = require('fs')
 var path = require('path')
 var colors = require('colors')
@@ -16,7 +17,10 @@ var logger = require('tracer').colorConsole({
   }
 })
 var io = require('socket.io')()
+const unique = require('./is').uniqeVisits
+console.log(unique());
 
+let visits = 0
 exports.io = function () {
   return io
 }
@@ -42,16 +46,27 @@ exports.io = function () {
 // })
 
 const myClients = {}
-
+// function getVisits () {  
+//   if (visits === 0) {
+    
+//     visits = unique
+//     logger.log('if ', unique.uniqeVisits, visits);
+    
+//   } else {
+//     logger.log('holla ' , visits);
+//     logger.log('else ', unique, visits);
+//     return visits++
+//   }
+// }
 var chatInfra = io.of('/chat_infra').on('connection', function (socket) {
+  // getVisits()
   // console.log('infra!!!!!!', io.of('chatInfra'));
-
   // var allInfra = io.in('chatInfra')
   socket.on('getList', () => {
 
   })
   socket.on('songClick', (data) => {
-    console.log('alyica needs to focus!!!!!', data)
+    console.log(data)
     chatInfra.emit('shareTrack', data)
     // io.of('chatInfra').emit('shareTrack', data)
   })
