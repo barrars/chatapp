@@ -1,5 +1,6 @@
-
-
+.red{
+  color: red;
+}
 ::-webkit-input-placeholder {
   color: #3431d6;
 }
@@ -13,6 +14,7 @@
   color: #3431d6;
 }
 html {
+  overflow: hidden;
   height: 100%;
 }
 body,
@@ -24,7 +26,7 @@ body {
   flex-direction: column;
   font: 14px Lucida Grande, Helvetica, Arial, sans-serif;
   height: 100%;
-  height: calc(100% - 20px);
+  /* height: calc(100% - 20px); */
   margin: 0;
   padding: 0;
   width: 100%;
@@ -39,7 +41,7 @@ section#chatroom {
   height: 100%;
   overflow: overlay;
   width: 100%;
-  min-width: 250px;
+  /* min-width: 250px; */
 }
 ul#list {
   background: #faebd7;
@@ -61,15 +63,31 @@ ul#list {
     opacity: 1;
   }
 }
+.nowrap{
+  flex: 2;
+  white-space: nowrap;
+}
+.grow{
+  flex-grow: 1;
+}
 #buttons{
-  display: flex;
-  width: 100%;
+  white-space: nowrap;
+  border: solid 2px black;
+  padding: 5px;
+  /* display: flex; */
+  /* width: 100%; */
+  /* max-width: 50%; */
+  flex: 1;
+}
+.justify{
+  justify-content: space-between;
 }
 audio#sound{
   display: none;
 }
 #audio-element{
   width: 100%;
+  display: none;
 }
 .mymessage{
   padding: 0 18px;
@@ -82,7 +100,7 @@ audio#sound{
 
 }
 .message {
-  background-color: rgba(175, 175, 175, 0.42)
+  background-color: rgba(175, 175, 175, 0.42);
   padding: 0 18px;
   margin: 0;
   font-family: 'Gloria Hallelujah';
@@ -107,14 +125,15 @@ audio#sound{
   padding: 10px;
 }
 input#message {
-  width: calc(100% - 80px);
+  /* width: calc(100% - 80px); */
+  width: 50%;
 }
 input#send {
   width: 8%;
 }
 header {
-  background-color: #4192c1;
-  margin-top: 15px;
+  /* background-color: #4192c1;
+  margin-top: 15px; */
 }
 header h1 {
   color: #b60707;
@@ -128,7 +147,7 @@ footer {
   color: #fff;
   margin: 0 0 10px;
   padding: 6px;
-  width: 100%;
+  /* width: 100%; */
 }
 a {
   color: #00b7ff;
@@ -144,6 +163,14 @@ a {
 }
 .backdrop {
   background-color: #777;
+}
+.wrap-btn{
+  /* outline: solid gray 1px; */
+  padding: 0 5px;
+
+}
+.player{
+  overflow: hidden;
 }
 .popup {
   background: #fff;
@@ -162,6 +189,25 @@ a {
 }
 .popbody {
   padding: 10px 5px;
+}
+@keyframes scroll {
+  from {transform: translateX(100%)}
+  to {transform: translateX(-100%)}
+}
+.inline{
+  display: inline-block;
+}
+.scroll{
+
+  animation: scroll 7s steps(17)  infinite   ;
+}
+#currentSong{
+  width: 100%;
+  height: 30px;
+  font-size: 2em;
+  position: relative;
+
+  /* flex: 1; */
 }
 .serverMessage {
   color: red;
@@ -204,24 +250,38 @@ div.userMessage {
   opacity: 1;
   padding: 7px 0;
 }
+.overflow{
+
+  overflow: hidden;
+}
+.grid{
+  display: grid;
+}
 .container {
+  width: 100%;
   align-items: stretch;
   display: flex;
   flex-direction: row-reverse;
-  height: 100%;
+  height: 87%;
 }
 #ytlink:focus,
 .message_input:focus {
   border: 4px solid #daa520;
 }
 #ytlink {
-  width: 320px;
+  height: 100%;
+  width: 80%;
+}
+.pophead{
+  text-align: center;
+  display: flex;
 }
 #gobtn {
-  width: 65px;
+  height: 100%;
+  width: 20%;
 }
 #songList {
-  height: calc(100% - 83px);
+  height: 94% ;
   overflow: auto;
 }
 
@@ -306,3 +366,65 @@ input#setname{
 }
 
 
+
+/* $primary-color: #2ecc71; */
+
+#player {
+	/* width: 350px; */
+	/* height: 50px; */
+	/* position: relative; */
+  margin: 10px 8px;
+    /* top: 80px; */
+    display: flex;
+}
+	
+	/* i {
+		position: absolute;
+		margin-top: -6px;
+		color: #666;
+	} */
+/* 	
+	i.fa-volume-down {
+		margin-left: -8px;
+	}
+	
+	i.fa-volume-up {
+		margin-right: -8px;
+		right: 0;
+	}
+} */
+
+#volume {
+	/* position: relative; */
+	/* left: 24px; */
+	/* margin: 0 auto; */
+	height: 5px;
+	width: 80%;
+	background: #555;
+  border-radius: 15px;
+}
+	
+	.ui-slider-range-min {
+    height: 5px;
+    /* left: 50%; */
+		/* width: 300px; */
+		position: relative;
+		background: orange;
+		border: none;
+		border-radius: 10px;
+  	outline: none;
+}
+	
+	.ui-slider-handle {
+    display: inline-block;
+    top: -8px;
+		width: 15px;
+  	height: 15px;
+		border-radius: 20px;
+  	background:red;
+  	position: relative;
+  	margin-left: -8px;
+  	margin-top: -8px;
+  	cursor: pointer;
+  	outline: none;
+	}

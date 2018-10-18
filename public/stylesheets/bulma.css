@@ -5884,7 +5884,7 @@ a.dropdown-item.is-active {
 
 .modal {
   align-items: center;
-  display: none;
+  /* display: none; */
   justify-content: center;
   overflow: hidden;
   position: fixed;

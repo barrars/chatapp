@@ -16,6 +16,46 @@ $(function () {
     '#a700ff',
     '#d300e7'
   ]
+  var ytlink = document.getElementById('ytlink')
+  var myPlayer = document.getElementById('audio-element')
+  myPlayer.volume = 0.5
+  myPlayer.onpause = () => {
+    $('#play').removeClass('fa-play').addClass('fa-stop')
+  }
+  myPlayer.onplay = () => {
+    $('#play').removeClass('fa-stop').addClass('fa-play')
+  }
+  myPlayer.ontimeupdate = () => {
+    if (Math.floor(myPlayer.duration - myPlayer.currentTime) == isNaN) {
+      document.getElementsByClassName('time')[0].innerText = '___'
+    } else {
+      document.getElementsByClassName('time')[0].innerText = Math.floor(myPlayer.duration - myPlayer.currentTime) + 's'
+    }
+  }
+  $('#volume').slider({
+    min: 0,
+    max: 100,
+    value: 50,
+    range: 'min',
+    slide: function (event, ui) {
+      setVolume(ui.value / 100)
+    }
+  })
+  function setVolume (myVolume) {
+    var myMedia = document.getElementById('audio-element')
+    myMedia.volume = myVolume
+  }
+
+  // let current = #('#currentSong')
+  function currentSong () {
+    $('#currentSong')[0].innerHTML = $('audio:eq(0)').attr('src').split('/')[2].split('.').filter((str) => {
+      let name = ''
+      if (str !== 'mp3') {
+        name += str
+      }
+      return name
+    }).join()
+  }
 
   const getUsernameColor = myId => {
     myId = $('#nickname').val()
@@ -37,7 +77,7 @@ $(function () {
   var $ytdlinput = $('#ytlink')
   var ytdl = document.getElementById('ytlink')
   var gobtn = $('#gobtn')
-  var $playbutton = $('#playbutton')
+  var $playbutton = $('#play')
   // var $jumpButton = $('#jumpButton')
   // var $getSongs = $('#getSongs')
   var $songList = $('#songList')
@@ -52,21 +92,18 @@ $(function () {
   var socket = window.io()
   var io = window.io
 
-  // onload fn
-  const playSound = function () {
+  const playDrop = function () {
+    // drop
     console.log('play sound')
     document.getElementById('sound').play()
   }
-  const activatePlaylist = function () {
-    $songList
-      .children()
-      .on('click', e => {
-        $('#audio-element').attr('src', '/downloads/' + e.target.innerHTML)
-        // myPlayer.play()
+  const emitPlay = function () {
+    $songList.children().on('click', song => {
+      $('#audio-element').attr('src', '/downloads/' + song.target.innerHTML)
 
-        chatInfra.emit('songClick', { song: e.target.textContent, name: myId })
-        // returns with share track
-      })
+      chatInfra.emit('songClick', { song: song.target.textContent, name: myId })
+      // returns with share track
+    })
   }
   const loadRandom = () => {
     console.log('loding random song')
@@ -75,6 +112,7 @@ $(function () {
     let nextIndex = Math.floor(Math.random() * $('#songList').children().length)
     $('#audio-element').attr('src', '/downloads/' + list[nextIndex].innerHTML)
     document.getElementById('audio-element').play()
+    currentSong()
   }
   audio.on('ended', () => {
     loadRandom()
@@ -120,7 +158,7 @@ $(function () {
     alertify.logPosition('top left')
     alertify.log(data, ' Download complete')
 
-    activatePlaylist()
+    emitPlay()
   })
 
   var chatInfra = io.connect('/chat_infra')
@@ -191,10 +229,11 @@ $(function () {
       }
       // console.log('files = ', data);
       // let list = document.getElementById('songList').children
-      activatePlaylist()
+      emitPlay()
 
       chatInfra.on('shareTrack', data => {
         console.log('share track = ', data)
+        currentSong()
         $('#audio-element').attr('src', '/downloads/' + data.song)
         $('#messages').append(
           '<div class=" serverMessage"><span style="color: blue">' +
@@ -231,8 +270,8 @@ $(function () {
 
     // client gets chat message
     chatCom.on('message', function (message) {
-      playSound()
-      console.log('com ',message)
+      playDrop()
+      console.log('com ', message)
       message = JSON.parse(message)
       let time = new Date()
       $('#messages').append(
@@ -275,7 +314,25 @@ $(function () {
     chatCom.emit('playing', data)
   }
   getList()
-  var ytlink = document.getElementById('ytlink')
+
+  $('#play').click(() => {
+    console.log('play')
+    if (!myPlayer.paused) {
+      myPlayer.play()
+    } else { myPlayer.pause() }
+  })
+  $('#pause').click(() => {
+    console.log('pause')
+    document.getElementById('audio-element').pause()
+  })
+  $('#forward').click(() => {
+    console.log('forward')
+    document.getElementById('audio-element').currentTime += 15.0
+  })
+  $('#backward').click(() => {
+    console.log('backward')
+    document.getElementById('audio-element').currentTime -= 15.0
+  })
   $('#getSongs').click(() => {
     chatInfra.emit('getSongs')
   })
@@ -346,7 +403,6 @@ $(function () {
   })
 
   // let startPlay = () => {    // /TODO  }
-  var myPlayer = document.getElementById('audio-element')
 
   socket.on('error', () => {
     alertify.log('something went wrong')

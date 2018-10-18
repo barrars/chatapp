@@ -1,19 +1,9 @@
-//- Declaration (player-mixin.pug)
-//- block player 
-//- .tile.is-parent.is-vertical.is-3.box.is-block.is-paddingless
-//-   .tile.is-child
-//-     audio#audio-element(controls='true', src='')
-//-     .tile
-//-       button#playButton.button.is-small.tile.is-child play!!!!
-//-       button#jumpButton.button.is-small.tile.is-child Jump In
-//-       button#getSongs.button.is-small.tile.is-child Get Songs!!
-//-     #songList.tile.is-child
-
 .player
-  audio#audio-element(controls="true"  src="")
-  #buttons
-    i.fas.fa-stroopwafel
-    //- button#playButton Jump Back
-    //- button#jumpButton Jump Forward
-    //- button#getSongs Next
+  #player
+    //- i.fas.fa-volume-down
+    #volume
+    .ico
+      i.fas.fa-volume-up
+    .time 55s
   #songList
+  audio#audio-element(controls="true"  src="")

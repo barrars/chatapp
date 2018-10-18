@@ -2,8 +2,26 @@ block header
  
 
 header#bannner
-  div
-    h1 CHAT RADIO
-    #currentSong current song!!
-  input#ytlink(title='enter a YouTube link', type='text', placeholder='http://youtube.com/')
-  button#gobtn READY
+  .overflow
+    #currentSong.font11.grow.nowrap.scroll
+      p.inline  .......Play Some Muzik........
+    //- h1 CHAT RADIO!! 
+    //- .nowrap.grow.font11
+          //- .currentsong
+  
+  div.is-flex
+    .nowrap
+      input#ytlink(title='enter a YouTube link', type='text', placeholder='http://youtube.com/')
+      button#gobtn WIN
+    #buttons
+      .is-flex.justify
+        .wrap-btn
+          i#play.fas.fa-play
+        #pause.wrap-btn
+          i.fas.fa-pause
+        #stop.wrap-btn
+          i.fas.fa-square
+        #backward.wrap-btn(title="rewind")
+          i.fas.fa-angle-double-left
+        #forward.wrap-btn(title="fast forward")
+          i.fas.fa-angle-double-right

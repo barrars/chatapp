@@ -1,55 +1,51 @@
-var gulp = require("gulp");
-var pug = require("gulp-pug");
-var browserSync = require("browser-sync");
-var reload = browserSync.reload;
-var postcss = require("gulp-postcss");
-var autoprefixer = require("autoprefixer");
-var cssnano = require("cssnano");
+var gulp = require('gulp')
+var pug = require('gulp-pug')
+var browserSync = require('browser-sync')
+var reload = browserSync.reload
+var postcss = require('gulp-postcss')
+var autoprefixer = require('autoprefixer')
+var cssnano = require('cssnano')
 var prettyCSS = require('postcss-prettify')
 
-
-gulp.task("pug", function() {
+gulp.task('pug', function () {
   return gulp
-    .src("pug/*.pug")
+    .src('pug/*.pug')
     .pipe(
       pug({
-        doctype: "html",
+        doctype: 'html',
         pretty: false
       })
     )
-    .pipe(gulp.dest("./build"))
-    .pipe(reload({ stream: true }));
-});
+    .pipe(gulp.dest('./build'))
+    .pipe(reload({ stream: true }))
+})
 
-gulp.task(
-  "serve",
-  gulp.series("pug", function() {
-    browserSync({
-      server: {
-        baseDir: "build",
-        directory: true
-      }
-    });
-    gulp.watch("pug/*", gulp.series("pug"));
-    gulp.watch("public/stylesheets/*", gulp.series("css"));
+gulp.task('serve', gulp.series('pug', function () {
+  browserSync({
+    server: {
+      baseDir: 'build',
+      directory: true
+    }
   })
-);
+  gulp.watch('pug/*', gulp.series('pug'))
+  gulp.watch('public/stylesheets/*', gulp.series('css'))
+})
+)
 /*  */
-gulp.task("css", function() {
+gulp.task('css', function () {
   var plugins = [
-    autoprefixer({browsers: ["last 1 version"] }), 
-    cssnano({
-      preset: 'default',
-    })];
+    autoprefixer({ browsers: ['last 1 version'] }),
+    cssnano({ preset: 'advanced' })
+  ]
   return gulp
-    .src("./public/stylesheets/*.css")
+    .src('./public/stylesheets/*.css')
     .pipe(postcss(plugins))
-    .pipe(gulp.dest("./build/stylesheets"))
+    .pipe(gulp.dest('./public/build/stylesheets'))
     .pipe(
       browserSync.reload({
         stream: true
       })
-    );
-});
+    )
+})
 /*  */
 /*  */
