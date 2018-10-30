@@ -14,23 +14,23 @@ var logger = require('tracer').colorConsole({
   }
 })
 var io = require('socket.io')()
-const unique = require('./is').uniqeVisits
-console.log(unique())
+require('./is').uniqeVisits()
 
-let visits = 0
 exports.io = function () {
   return io
 }
 
 const myClients = {}
-var chatInfra = io.of('/chat_infra').on('connection', function (socket) {
-  socket.on('getList', () => {
-
+io.on('connection', function (socket) {
+  socket.emit('fuck')
+  socket.on('sup', () => {
+    console.log('sup!!!!!!!!!!!!!!!!!!!!!!!!!')
   })
+  // socket.on('getList', () => {
+  // })
   socket.on('songClick', (data) => {
-    console.log(data)
-    chatInfra.emit('shareTrack', data)
-    // io.of('chatInfra').emit('shareTrack', data)
+    logger.log(data)
+    socket.emit('shareTrack', data)
   })
   socket.on('set_name', function (data) {
     fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
@@ -40,7 +40,7 @@ var chatInfra = io.of('/chat_infra').on('connection', function (socket) {
         // logger.log('readdir files list = ' + files)
         // socket.emit('files_data', files)
 
-        console.log('Files ', typeof files)
+        logger.log('Files ', typeof files)
         socket.emit('files', files)
         files.forEach(file => {
 
@@ -74,15 +74,12 @@ var chatInfra = io.of('/chat_infra').on('connection', function (socket) {
     socket.broadcast.emit('user_entered', data)
     socket.on('disconnect', () => {
       delete myClients[socket.id]
-      chatInfra.emit('userLeft', socket.id)
+      socket.emit('userLeft', socket.id)
       logger.log(socket.nickname, socket.id, ' has left')
     })
   })
   socket.on('getsong', require('./youtube.js'))
-})
-io.of('/chat_com').on('connection', function (socket) {
-  // logger.log(socket)
-  // playing
+
   socket.on('playing', (data) => {
     // logger.log(socket)
     // data.type = 'serverMessage',
@@ -92,7 +89,7 @@ io.of('/chat_com').on('connection', function (socket) {
     // logger.log('data == ', data);
 
     // socket.broadcast.emit('play')
-    chatInfra.emit('play', data)
+    socket.emit('play', data)
   })
   socket.on('message', function (message) {
     message = JSON.parse(message)
