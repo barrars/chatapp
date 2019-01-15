@@ -45,12 +45,11 @@ $(function () {
     console.log('fuck')
     socket.emit('sup')
   })
-  socket.on('fuck', () => {
-    console.log('fuck')
-  })
+
   const playDrop = function () {
     // drop
-    console.log('play sound')
+    // console.log('play sound')
+    document.getElementById('sound').load()
     document.getElementById('sound').play()
   }
   const getUsernameColor = myId => {
@@ -71,7 +70,7 @@ $(function () {
       let tune = list[i]
       tune.onclick = song => {
         console.log('click', { song: song.target.textContent, name: myId })
-        myPlayer.setAttribute('src', '/downloads/' + song.target.innerText)
+        // myPlayer.setAttribute('src', '/downloads/' + song.target.innerText)
         socket.emit('songClick', { song: song.target.textContent, name: myId })
         // returns with share track
       }
@@ -177,31 +176,25 @@ $(function () {
   socket.emit('hi')
 
   emitPlay()
-  const getList = () => {
-    console.log('getlist')
-    socket.emit('getList')
-  }
+  // const getList = () => {
+  //   console.log('getlist')
+  //   socket.emit('getList')
+  // }
   socket.on('list', data => {
     console.log('the user list is ', data)
     console.log('clients =', data.clients)
     if (!data.clients) {
       console.log('someone joined')
-      $list.append('<li data-id="' + data.id + '">' + data.name + '</li>')
+      $list.innerHTML += '<li data-id="' + data.id + '">' + data.name + '</li>'
     } else {
       for (var key in data.clients) {
         if (data.clients.hasOwnProperty(key)) {
           if (key === socket.id) {
-            $list.append(
-              '<li class="user" data-id="' +
-              key +
-                '">' +
-                data.clients[key] +
-                '</li>'
-            )
+            $list.innerHTML +=
+            '<li class="user" data-id="' + key + '">' + data.clients[key] + '</li>'
           } else {
-            $list.append(
+            $list.innerHTML +=
               '<li data-id="' + key + '">' + data.clients[key] + '</li>'
-            )
           }
           console.log(key + '-> ' + data.clients[key])
         }
@@ -209,18 +202,20 @@ $(function () {
     }
   })
   socket.on('userLeft', data => {
-    console.log('user left!! ')
-
-    $list
-      .find('[data-id="' + data + '"]')
-      .hide()
+    console.log('user left!!  ', data)
+    if ($list
+      .querySelector('[data-id="' + data + '"]')) {
+      $list
+        .querySelector('[data-id="' + data + '"]')
+        .style.display = 'none'
+    }
   })
   socket.on('name_set', function (data) {
     username = true
     var user = data.name
     var color = data.color
-    console.log(color)
-    console.log(data)
+    // console.log(color)
+    // console.log(data)
 
     $playbutton.onclick = e => {
       // $('#audio-element').attr('src')
@@ -229,25 +224,23 @@ $(function () {
       hitPlay(e, data)
     }
     socket.on('user_entered', function (user) {
-      $messages.append(
+      $messages.innerHTML +=
         '<div class="serverMessage"> <span style="color:' + user.color + ';border-bottom: solid 2px ' + user.color + ';">' +
           user.name +
           '</span> has joined the room!' +
           '</div>'
-      )
     })
     socket.on('files', data => {
       for (let i = 0; i < data.length; i++) {
         $songList.innerHTML += ('<p>' + data[i] + '</p>')
       }
-      // console.log('files = ', data);
-      // let list = document.getElementById('songList').children
       emitPlay()
 
       socket.on('shareTrack', data => {
         console.log('share track = ', data)
-        currentSong()
         $('#audio-element').attr('src', '/downloads/' + data.song)
+        let trackMessage = document.createElement
+        currentSong()
         $('#messages').append(
           '<div class=" serverMessage"><span style="color: blue">' +
             data.name +
@@ -283,12 +276,14 @@ $(function () {
 
     // client gets chat message
     socket.on('message', function (message) {
-      playDrop()
-      console.log('com ', message)
       message = JSON.parse(message)
-      let time = new Date()
-      $('#messages').append(
-        '<div title="' + time + '"style="box-shadow: 0px 2px 0 0' +
+      if (message.type !== 'serverMessage') {
+        // console.log('heyoooo')
+        playDrop()
+        console.log('com ', message)
+        let time = new Date()
+        $('#messages').append(
+          '<div title="' + time + '"style="box-shadow: 0px 2px 0 0' +
           message.color +
           '"class ="' +
           message.type +
@@ -297,18 +292,19 @@ $(function () {
           '</span> <span class="message">' +
           message.message +
           '</span></div>'
-      )
-      $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+        )
+        $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+      }
     })
     $nameform.style.display = 'none'
     // $('#messages').append('<div class="systemMessage">Hello ' +
     // data.name + '</div>');
     $send.onclick = function () {
       if ($message.value === '') {
-        console.log('enter text')
+        alertify.log('enter text')
         return
       }
-      console.log('clicky')
+      // console.log('clicky')
       var data = {
         name: user,
         color: color,
@@ -326,7 +322,6 @@ $(function () {
 
     socket.emit('playing', data)
   }
-  getList()
 
   $playbutton.onclick = () => {
     console.log('play')
@@ -379,10 +374,10 @@ $(function () {
 
       return
     }
-    console.log('click setname')
+    // console.log('click setname')
     myId = myId.value
     const myColor = getUsernameColor(myId)
-    console.log(myColor)
+    // console.log(myColor)
 
     ytlink.focus()
 
@@ -400,7 +395,7 @@ $(function () {
   }
   $message.onkeypress = function (e) {
     if (e.which === 13 && $message.value !== '') {
-      console.log('enter')
+      // console.log('enter')
 
       $send.click()
     }

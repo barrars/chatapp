@@ -1,7 +1,7 @@
 //- Declaration (chatroom-mixin.pug)
 
 section#chatroom
-  audio#sound(src='/audio/drop.mp3' preload='auto')
   #messages
+  audio#sound(autoplay controls='true' src='/audio/drop.mp3' preload='auto')
   #users.list
     ul#list

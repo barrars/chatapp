@@ -13,6 +13,8 @@ var logger = require('tracer').colorConsole({
     error: [colors.red, colors.bold]
   }
 })
+// rename( __dirname +'/../public/downloads/', '.mp3', '')
+
 module.exports = function renameExt (dir, oldExt, newExt) {
   logger.log('!!!!!!!!!!!!!!' + dir)
 

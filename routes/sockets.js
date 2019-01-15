@@ -22,6 +22,12 @@ exports.io = function () {
 
 const myClients = {}
 io.on('connection', function (socket) {
+  socket.on('disconnect', () => {
+    // logger.log(socket)
+    delete myClients[socket.id]
+    io.emit('userLeft', socket.id)
+    logger.log(socket.nickname, socket.id, ' has left')
+  })
   socket.emit('fuck')
   socket.on('sup', () => {
     console.log('sup!!!!!!!!!!!!!!!!!!!!!!!!!')
@@ -30,6 +36,7 @@ io.on('connection', function (socket) {
   // })
   socket.on('songClick', (data) => {
     logger.log(data)
+    socket.broadcast.emit('shareTrack', data)
     socket.emit('shareTrack', data)
   })
   socket.on('set_name', function (data) {
@@ -42,16 +49,15 @@ io.on('connection', function (socket) {
 
         logger.log('Files ', typeof files)
         socket.emit('files', files)
-        files.forEach(file => {
-
-          // logger.log('file = ' + file )
-        })
+        // files.forEach(file => {
+        //   logger.log('file = ' + file)
+        // })
       }
     })
     socket.nickname = data.name
     socket.color = data.color
-    logger.log(data)
-    logger.log(socket.nickname)
+    // logger.log(data)
+    // logger.log(socket.nickname)
     // logger.log('nickname= ', typeof socket.nickname)
     myClients[socket.id] = socket.nickname
     logger.log(myClients)
@@ -63,20 +69,13 @@ io.on('connection', function (socket) {
       color: socket.color })
     socket.broadcast.emit('list', { name: socket.nickname, id: socket.id, event: 'set_name', color: socket.color })
     // logger.log('nick ', socket.nickname);
-
     socket.emit('name_set', data)
     logger.log(data)
     socket.send(JSON.stringify({
-
       type: 'serverMessage',
       message: 'Welcome ' + data.name
     }))
     socket.broadcast.emit('user_entered', data)
-    socket.on('disconnect', () => {
-      delete myClients[socket.id]
-      socket.emit('userLeft', socket.id)
-      logger.log(socket.nickname, socket.id, ' has left')
-    })
   })
   socket.on('getsong', require('./youtube.js'))
 
