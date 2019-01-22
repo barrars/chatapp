@@ -28,9 +28,17 @@ io.on('connection', function (socket) {
     io.emit('userLeft', socket.id)
     logger.log(socket.nickname, socket.id, ' has left')
   })
-  socket.emit('fuck')
-  socket.on('sup', () => {
+  // socket.emit('fuck')
+  socket.on('rename', (data) => {
     console.log('sup!!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.log(data)
+    fs.rename(path.join(__dirname, '/../public/downloads/' + data.oldName), path.join(__dirname, '/../public/downloads/' + data.newName), (err) => {
+      if (err) {
+        throw err
+      }
+      console.log(`${data.oldName} has been renamed to ${data.newName}`)
+
+    })
   })
   // socket.on('getList', () => {
   // })

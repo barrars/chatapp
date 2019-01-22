@@ -1,4 +1,4 @@
-// const $ = window.$
+const $ = window.$
 
 $(function () {
   // const $ = function (selector) {
@@ -21,6 +21,7 @@ $(function () {
     '#a700ff',
     '#d300e7'
   ]
+  const $rename = document.getElementById('rename')
   const ytlink = document.getElementById('ytlink')
   const pause = document.getElementById('pause')
   const myPlayer = document.getElementById('audio-element')
@@ -35,6 +36,8 @@ $(function () {
   const $list = document.getElementById('list')
   const $message = document.getElementById('message')
   const $send = document.getElementById('send')
+  const renameInput = document.getElementById('rename')
+
   const $nameform = document.getElementById('nameform')
   const socket = window.io()
   let username = false
@@ -64,14 +67,68 @@ $(function () {
     var index = Math.abs(hash % COLORS.length)
     return COLORS[index]
   }
+  function submitRename (oldName, newName) {
+    let data = { oldName, newName }
+    socket.emit('rename', data)
+    console.log(data)
+  }
+
+  function renameSong (e) {
+    renameInput.classList.remove('hidden')
+    renameInput.style.left = (e.clientX - 200) + 'px'
+    renameInput.style.top = e.clientY + 'px'
+    let oldName = e.path[1].innerText
+    renameInput.value = oldName
+    renameInput.onkeydown = e => {
+      // console.log(e)
+      if (e.key === 'Enter') {
+        renameInput.classList.add('hidden')
+        renameInput.classList.remove('show')
+
+        submitRename(oldName, renameInput.value)
+        // $rename.style.display = 'none'
+      }
+    }
+    // rename.classList.add('show')
+    // let input = document.createElement('input')
+
+    e.stopPropagation()
+  }
   const emitPlay = function () {
     let list = $songList.getElementsByTagName('p')
     for (let i = 0; i < list.length; i++) {
       let tune = list[i]
+      tune.onmouseover = icon => {
+        let xicon = icon.target.children[0]
+        if (xicon) {
+          xicon.classList.remove('hidden')
+          xicon.classList.add('show')
+          // icon.stopPropagation()
+        }
+      }
+      tune.onmouseleave = icon => {
+        let xicon = icon.target.children[0]
+        xicon.classList.remove('show')
+        xicon.classList.add('hidden')
+        // icon.stopPropagation()
+        // console.log(xicon)
+      }
       tune.onclick = song => {
         console.log('click', { song: song.target.textContent, name: myId })
         // myPlayer.setAttribute('src', '/downloads/' + song.target.innerText)
         socket.emit('songClick', { song: song.target.textContent, name: myId })
+        // returns with share track
+      }
+    }
+    let icons = $songList.getElementsByTagName('i')
+    for (let i = 0; i < icons.length; i++) {
+      let icon = icons[i]
+      icon.onclick = e => {
+        renameSong(e)
+        // e.stopPropagation()
+        console.log('icon!!')
+        // myPlayer.setAttribute('src', '/downloads/' + song.target.innerText)
+        // socket.emit('songClick', { song: song.target.textContent, name: myId })
         // returns with share track
       }
     }
@@ -160,8 +217,11 @@ $(function () {
   })
   socket.on('title', data => {
     console.log(data)
+    let newSong = document.createElement('P')
+    newSong.innerText = data
 
-    $songList.prepend(`<p>${data}</p>`)
+    $songList.prepend(newSong)
+    // $songList.prepend(`<p>${data}</p>`)
 
     downloading = false
     ytlink.disabled = false
@@ -232,14 +292,14 @@ $(function () {
     })
     socket.on('files', data => {
       for (let i = 0; i < data.length; i++) {
-        $songList.innerHTML += ('<p>' + data[i] + '</p>')
+        $songList.innerHTML += ('<p>' + data[i] + '<i class="hidden far fa-times-circle"></i> </p> ')
       }
       emitPlay()
 
       socket.on('shareTrack', data => {
         console.log('share track = ', data)
         $('#audio-element').attr('src', '/downloads/' + data.song)
-        let trackMessage = document.createElement
+        // let trackMessage = document.createElement
         currentSong()
         $('#messages').append(
           '<div class=" serverMessage"><span style="color: blue">' +

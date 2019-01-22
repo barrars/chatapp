@@ -181,6 +181,7 @@ a {
 }
 
 .player {
+  height: 100%;
   overflow: hidden
 }
 
@@ -232,6 +233,9 @@ a {
 .inline {
   display: inline-block
 }
+.fixed{
+  position: fixed;
+}
 
 .scroll {
   -webkit-animation: b 7s steps(17) infinite;
@@ -257,6 +261,30 @@ div#songList p:hover {
   color: #0c1c77;
   cursor: pointer;
   outline: dashed #20b2aa
+}
+
+#rename{
+  z-index: 1;
+  /* display: none; */
+  /* position: relative; */
+}
+/* div#songList i {
+  visibility: hidden;
+} */
+div#songList i:hover {
+  border-radius: 50%;
+  /* display: inline; */
+  background: #d40000;
+  color: #b4be1a;
+  cursor: pointer;
+  /* outline: dashed #040808 */
+}
+.hidden{
+  visibility: hidden;
+}
+.show{
+  display: inline;
+  visibility: visible;
 }
 
 span.name {
@@ -316,12 +344,16 @@ div.userMessage {
 }
 
 #songList {
-  height: 94%;
+  height: 90%;
   overflow: auto
 }
 
 input#setname {
   width: 35%
+}
+.flex{
+  display: flex;
+  width: 100%;
 }
 
 .font1 {
