@@ -70,8 +70,15 @@ $(function () {
   function submitRename (oldName, newName) {
     let data = { oldName, newName }
     socket.emit('rename', data)
-    console.log(data)
+    console.log(`submitting rename with ${data}`)
   }
+
+  socket.on('renamed', data => {
+    Array.from($songList.children).find(p => {
+      return p.innerText == data.oldName
+    }).innerText = data.newName
+    console.log(`its been renamed ${data}`)
+  })
 
   function renameSong (e) {
     renameInput.classList.remove('hidden')

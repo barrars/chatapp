@@ -32,12 +32,14 @@ io.on('connection', function (socket) {
   socket.on('rename', (data) => {
     console.log('sup!!!!!!!!!!!!!!!!!!!!!!!!!')
     console.log(data)
+    // let data
     fs.rename(path.join(__dirname, '/../public/downloads/' + data.oldName), path.join(__dirname, '/../public/downloads/' + data.newName), (err) => {
       if (err) {
         throw err
       }
       console.log(`${data.oldName} has been renamed to ${data.newName}`)
-
+      socket.broadcast.emit('renamed', data)
+      socket.emit('renamed', data)
     })
   })
   // socket.on('getList', () => {
