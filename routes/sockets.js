@@ -14,7 +14,7 @@ var logger = require('tracer').colorConsole({
   }
 })
 var io = require('socket.io')()
-require('./is').uniqeVisits()
+require('./ip').uniqeVisits()
 
 exports.io = function () {
   return io

@@ -1,4 +1,4 @@
-import { playDrop, play, iconSetClick, hideInput, getUsernameColor, showInput, title, hitPlay } from './export.js'
+import { playDrop, play, iconSetClick, hideInput, getUsernameColor, showInput, hitPlay } from './export.js'
 document.addEventListener('DOMContentLoaded', (event) => {
   console.log('DOM fully loaded and parsed')
 
@@ -89,12 +89,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
   })
   function setVolume (myVolume) {
-    var myMedia = document.getElementById('audio-element')
-    myMedia.volume = myVolume
+    myPlayer.volume = myVolume
   }
 
   function currentSong () {
-    current.innerHTML = $('audio:eq(0)').attr('src').split('/')[2].split('.').filter((str) => {
+    current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2].split('.').filter((str) => {
       let name = ''
       if (str !== 'mp3') {
         name += str
@@ -141,7 +140,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     newSong.innerText = data + '<i class="hidden fas fa-pen" title="edit title"></i>'
 
     $songList.prepend(newSong)
-    // $songList.prepend(`<p>${data}</p>`)
 
     downloading = false
     ytlink.disabled = false
@@ -368,11 +366,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
     gobtn.innerText = 'Win!'
-  })
-  socket.on('count', total => {
-    console.log('count event!')
-
-    console.log('count = ', total)
-    // $('#count').text('total clients = ' + total.count)
   })
 })
