@@ -5,6 +5,8 @@ const alertify = window.alertify
 const ytlink = document.getElementById('ytlink')
 const gobtn = document.getElementById('gobtn')
 const myId = document.getElementById('nickname')
+const myPlayer = document.getElementById('audio-element')
+const current = document.getElementById('currentSong')
 
 const COLORS = [
   '#e21400',
@@ -26,6 +28,15 @@ const play = function () {
   document.getElementById('audio-element').load()
   document.getElementById('audio-element').play()
 }
+const currentSong = function () {
+  current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2].split('.').filter((str) => {
+    let name = ''
+    if (str !== 'mp3') {
+      name += str
+    }
+    return name
+  }).join()
+}
 const emitPlay = function () {
   let list = $songList.getElementsByTagName('p')
   for (let i = 0; i < list.length; i++) {
@@ -46,6 +57,15 @@ const emitPlay = function () {
     }
   }
   iconSetClick()
+}
+const loadRandom = () => {
+  console.log('loding random song')
+
+  let list = $songList.children
+  let nextIndex = Math.floor(Math.random() * list.length)
+  myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].innerText)
+  play()
+  currentSong()
 }
 const getUsernameColor = myId => {
   let hash = 7
@@ -134,4 +154,7 @@ const hitPlay = (e, data) => {
 
   socket.emit('playing', data)
 }
-export { playDrop, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }
+const setVolume = function (myVolume) {
+  myPlayer.volume = myVolume
+}
+export { playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }

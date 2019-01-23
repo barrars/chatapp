@@ -1,9 +1,8 @@
-import { playDrop, play, iconSetClick, hideInput, getUsernameColor, showInput, hitPlay } from './export.js'
+import { playDrop, setVolume, currentSong, iconSetClick, loadRandom, emitPlay, getUsernameColor, hitPlay } from './export.js'
 document.addEventListener('DOMContentLoaded', (event) => {
   console.log('DOM fully loaded and parsed')
 
   const alertify = window.alertify
-  const current = document.getElementById('currentSong')
 
   const ytlink = document.getElementById('ytlink')
   const pause = document.getElementById('pause')
@@ -25,6 +24,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let downloading = false
   let myId = document.getElementById('nickname')
 
+  emitPlay()
+  if (!downloading) {
+    gobtn.innerText = 'Win!'
+  }
   socket.on('renamed', data => {
     let renamedSong = Array.from($songList.children).find(p => {
       return p.innerText === data.oldName
@@ -33,39 +36,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     iconSetClick()
     console.log(`its been renamed ${data}`)
   })
-
-  const emitPlay = function () {
-    let list = $songList.getElementsByTagName('p')
-    for (let i = 0; i < list.length; i++) {
-      let tune = list[i]
-      tune.onmouseover = e => {
-        let xicon = e.target.children[0]
-        if (xicon) {
-          showInput(xicon)
-        }
-      }
-      tune.onmouseleave = e => {
-        let xicon = e.target.children[0]
-        hideInput(xicon)
-      }
-      tune.onclick = song => {
-        console.log('click', { song: song.target.textContent, name: myId })
-        socket.emit('songClick', { song: song.target.textContent, name: myId })
-      }
-    }
-    iconSetClick()
-  }
-
-  const loadRandom = () => {
-    console.log('loding random song')
-
-    let list = $songList.children
-    let nextIndex = Math.floor(Math.random() * list.length)
-    myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].innerText)
-    play()
-    currentSong()
-  }
-  myPlayer.volume = 0.5
   myPlayer.onpause = () => {
     $playbutton.classList.add('fa-stop')
   }
@@ -76,7 +46,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (Math.floor(myPlayer.duration - myPlayer.currentTime) === isNaN) {
       document.getElementsByClassName('time')[0].innerText = '___'
     } else {
-      document.getElementsByClassName('time')[0].innerText = Math.floor(myPlayer.duration - myPlayer.currentTime) + 's'
+      document.getElementsByClassName('time')[0].innerText = Math.floor(myPlayer.duration - myPlayer.currentTime) + ' s'
     }
   }
   $('#volume').slider({
@@ -88,27 +58,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
       setVolume(ui.value / 100)
     }
   })
-  function setVolume (myVolume) {
-    myPlayer.volume = myVolume
-  }
-
-  function currentSong () {
-    current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2].split('.').filter((str) => {
-      let name = ''
-      if (str !== 'mp3') {
-        name += str
-      }
-      return name
-    }).join()
-  }
 
   myPlayer.onended = () => {
     loadRandom()
   }
 
-  if (!downloading) {
-    gobtn.innerText = 'Win!'
-  }
   $window.onkeydown = (e) => {
     if (!username) {
       return
@@ -125,19 +79,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
   socket.on('percent', (percent) => {
     gobtn.innerText = percent
     const $at = (ytlink.offsetWidth / 16) * (parseInt(percent) / 100)
-
-    // const width = ytdl.offsetWidth * (parseInt(percent) / 100)
-    // $ytdlinput.append('<div class="scrollbar"></div>')
-    // $ytdlinput.find('.scrollbar').css({'width': width, 'background': 'red'})
     console.log($at)
     ytlink.placeholder = '@'.repeat(Math.ceil($at))
-    // const that = ytdl
-    // debugger;
   })
   socket.on('title', data => {
     console.log(data)
     let newSong = document.createElement('P')
-    newSong.innerText = data + '<i class="hidden fas fa-pen" title="edit title"></i>'
+    newSong.innerHTML = data + '<i class="hidden fas fa-pen" title="edit title"></i>'
 
     $songList.prepend(newSong)
 
@@ -150,8 +98,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     emitPlay()
   })
-
-  emitPlay()
 
   socket.on('list', data => {
     if (!data.clients) {
@@ -184,12 +130,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     username = true
     var user = data.name
     var color = data.color
-    // console.log(color)
-    // console.log(data)
 
     $playbutton.onclick = e => {
-      // $('#audio-element').attr('src')
-
       console.log('e = ', e, 'data = ', data)
       hitPlay(e, data)
     }
@@ -209,7 +151,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
       socket.on('shareTrack', data => {
         console.log('share track = ', data)
         $('#audio-element').attr('src', '/downloads/' + data.song)
-        // let trackMessage = document.createElement
         currentSong()
         $('#messages').append(
           '<div class=" serverMessage"><span style="color: blue">' +
@@ -224,7 +165,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
       })
     })
     socket.on('play', function (message) {
-      // var message = JSON.parse(message);
       console.log(message)
 
       $('#messages').append(
@@ -235,7 +175,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
           'started playing</div>'
       )
     })
-    // cleint geta system welcome message
     socket.on('message', function (message) {
       message = JSON.parse(message)
       console.log('infra ', message)
@@ -244,11 +183,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       )
     })
 
-    // client gets chat message
     socket.on('message', function (message) {
       message = JSON.parse(message)
       if (message.type !== 'serverMessage') {
-        // console.log('heyoooo')
         playDrop()
         console.log('com ', message)
         let time = new Date()
@@ -267,14 +204,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
       }
     })
     $nameform.style.display = 'none'
-    // $('#messages').append('<div class="systemMessage">Hello ' +
-    // data.name + '</div>');
     $send.onclick = function () {
       if ($message.value === '') {
+        alertify.logPosition('bottom-left')
         alertify.log('enter text')
         return
       }
-      // console.log('clicky')
       var data = {
         name: user,
         color: color,
@@ -302,9 +237,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   backward.onclick = () => {
     document.getElementById('audio-element').currentTime -= 15.0
   }
-  // $('#getSongs').click(() => {
-  //   socket.emit('getSongs')
-  // })
+
   gobtn.onclick = () => {
     if (ytlink.value.length === 0) {
       alertify.logPosition('top left')
@@ -331,10 +264,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
       return
     }
-    // console.log('click setname')
     myId = myId.value
     const myColor = getUsernameColor(myId)
-    // console.log(myColor)
 
     ytlink.focus()
 
@@ -353,9 +284,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
   }
   $message.onkeypress = function (e) {
-    if (e.which === 13 && $message.value !== '') {
-      // console.log('enter')
-
+    if (e.which === 13) {
       $send.click()
     }
   }
