@@ -1,27 +1,10 @@
-const $ = window.$
-
-$(function () {
-  // const $ = function (selector) {
-  //   return document.querySelector(selector)
-  // }
-  // const io = window.io
+import { playDrop, play, iconSetClick, hideInput, getUsernameColor, showInput, title, hitPlay } from './export.js'
+document.addEventListener('DOMContentLoaded', (event) => {
+  console.log('DOM fully loaded and parsed')
 
   const alertify = window.alertify
-  const COLORS = [
-    '#e21400',
-    '#91580f',
-    '#f8a700',
-    '#f78b00',
-    '#58dc00',
-    '#287b00',
-    '#a8f07a',
-    '#4ae8c4',
-    '#3b88eb',
-    '#3824aa',
-    '#a700ff',
-    '#d300e7'
-  ]
-  const $rename = document.getElementById('rename')
+  const current = document.getElementById('currentSong')
+
   const ytlink = document.getElementById('ytlink')
   const pause = document.getElementById('pause')
   const myPlayer = document.getElementById('audio-element')
@@ -36,118 +19,50 @@ $(function () {
   const $list = document.getElementById('list')
   const $message = document.getElementById('message')
   const $send = document.getElementById('send')
-  const renameInput = document.getElementById('rename')
-
   const $nameform = document.getElementById('nameform')
   const socket = window.io()
   let username = false
   let downloading = false
   let myId = document.getElementById('nickname')
 
-  socket.on('fuck', () => {
-    console.log('fuck')
-    socket.emit('sup')
-  })
-
-  const playDrop = function () {
-    // drop
-    // console.log('play sound')
-    document.getElementById('sound').load()
-    document.getElementById('sound').play()
-  }
-  const getUsernameColor = myId => {
-    // myId = $('#nickname').val()
-
-    // Compute hash code
-    let hash = 7
-    for (var i = 0; i < myId.length; i++) {
-      hash = myId.charCodeAt(i) + (hash << 5) - hash
-    }
-    // Calculate color
-    var index = Math.abs(hash % COLORS.length)
-    return COLORS[index]
-  }
-  function submitRename (oldName, newName) {
-    let data = { oldName, newName }
-    socket.emit('rename', data)
-    console.log(`submitting rename with ${data}`)
-  }
-
   socket.on('renamed', data => {
-    Array.from($songList.children).find(p => {
-      return p.innerText == data.oldName
-    }).innerText = data.newName
+    let renamedSong = Array.from($songList.children).find(p => {
+      return p.innerText === data.oldName
+    })
+    renamedSong.innerHTML = data.newName + '<i class="hidden fas fa-pen" title="edit title"></i> '
+    iconSetClick()
     console.log(`its been renamed ${data}`)
   })
 
-  function renameSong (e) {
-    renameInput.classList.remove('hidden')
-    renameInput.style.left = (e.clientX - 200) + 'px'
-    renameInput.style.top = e.clientY + 'px'
-    let oldName = e.path[1].innerText
-    renameInput.value = oldName
-    renameInput.onkeydown = e => {
-      // console.log(e)
-      if (e.key === 'Enter') {
-        renameInput.classList.add('hidden')
-        renameInput.classList.remove('show')
-
-        submitRename(oldName, renameInput.value)
-        // $rename.style.display = 'none'
-      }
-    }
-    // rename.classList.add('show')
-    // let input = document.createElement('input')
-
-    e.stopPropagation()
-  }
   const emitPlay = function () {
     let list = $songList.getElementsByTagName('p')
     for (let i = 0; i < list.length; i++) {
       let tune = list[i]
-      tune.onmouseover = icon => {
-        let xicon = icon.target.children[0]
+      tune.onmouseover = e => {
+        let xicon = e.target.children[0]
         if (xicon) {
-          xicon.classList.remove('hidden')
-          xicon.classList.add('show')
-          // icon.stopPropagation()
+          showInput(xicon)
         }
       }
-      tune.onmouseleave = icon => {
-        let xicon = icon.target.children[0]
-        xicon.classList.remove('show')
-        xicon.classList.add('hidden')
-        // icon.stopPropagation()
-        // console.log(xicon)
+      tune.onmouseleave = e => {
+        let xicon = e.target.children[0]
+        hideInput(xicon)
       }
       tune.onclick = song => {
         console.log('click', { song: song.target.textContent, name: myId })
-        // myPlayer.setAttribute('src', '/downloads/' + song.target.innerText)
         socket.emit('songClick', { song: song.target.textContent, name: myId })
-        // returns with share track
       }
     }
-    let icons = $songList.getElementsByTagName('i')
-    for (let i = 0; i < icons.length; i++) {
-      let icon = icons[i]
-      icon.onclick = e => {
-        renameSong(e)
-        // e.stopPropagation()
-        console.log('icon!!')
-        // myPlayer.setAttribute('src', '/downloads/' + song.target.innerText)
-        // socket.emit('songClick', { song: song.target.textContent, name: myId })
-        // returns with share track
-      }
-    }
+    iconSetClick()
   }
 
   const loadRandom = () => {
     console.log('loding random song')
 
     let list = $songList.children
-    let nextIndex = Math.floor(Math.random() * $songList.children().length)
-    myPlayer.getAttribute('src', '/downloads/' + list[nextIndex].innerHTML)
-    document.getElementById('audio-element').play()
+    let nextIndex = Math.floor(Math.random() * list.length)
+    myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].innerText)
+    play()
     currentSong()
   }
   myPlayer.volume = 0.5
@@ -155,7 +70,6 @@ $(function () {
     $playbutton.classList.add('fa-stop')
   }
   myPlayer.onplay = () => {
-    // $playbutton.classList.remove('fa-stop')
     $playbutton.classList.add('fa-play')
   }
   myPlayer.ontimeupdate = () => {
@@ -179,7 +93,6 @@ $(function () {
     myMedia.volume = myVolume
   }
 
-  let current = $('#currentSong')[0]
   function currentSong () {
     current.innerHTML = $('audio:eq(0)').attr('src').split('/')[2].split('.').filter((str) => {
       let name = ''
@@ -197,7 +110,7 @@ $(function () {
   if (!downloading) {
     gobtn.innerText = 'Win!'
   }
-  $window.onkeydown = e => {
+  $window.onkeydown = (e) => {
     if (!username) {
       return
     }
@@ -210,7 +123,7 @@ $(function () {
       }
     }
   }
-  socket.on('percent', percent => {
+  socket.on('percent', (percent) => {
     gobtn.innerText = percent
     const $at = (ytlink.offsetWidth / 16) * (parseInt(percent) / 100)
 
@@ -225,7 +138,7 @@ $(function () {
   socket.on('title', data => {
     console.log(data)
     let newSong = document.createElement('P')
-    newSong.innerText = data
+    newSong.innerText = data + '<i class="hidden fas fa-pen" title="edit title"></i>'
 
     $songList.prepend(newSong)
     // $songList.prepend(`<p>${data}</p>`)
@@ -240,18 +153,10 @@ $(function () {
     emitPlay()
   })
 
-  socket.emit('hi')
-
   emitPlay()
-  // const getList = () => {
-  //   console.log('getlist')
-  //   socket.emit('getList')
-  // }
+
   socket.on('list', data => {
-    console.log('the user list is ', data)
-    console.log('clients =', data.clients)
     if (!data.clients) {
-      console.log('someone joined')
       $list.innerHTML += '<li data-id="' + data.id + '">' + data.name + '</li>'
     } else {
       for (var key in data.clients) {
@@ -299,7 +204,7 @@ $(function () {
     })
     socket.on('files', data => {
       for (let i = 0; i < data.length; i++) {
-        $songList.innerHTML += ('<p>' + data[i] + '<i class="hidden far fa-times-circle"></i> </p> ')
+        $songList.innerHTML += ('<p>' + data[i] + '<i class="hidden fas fa-pen" title="edit title"></i> </p> ')
       }
       emitPlay()
 
@@ -383,12 +288,6 @@ $(function () {
       $('#message').val('')
     }
   })
-  const hitPlay = (e, data) => {
-    console.log('playbutton event', e)
-    console.log('playbutton data', data)
-
-    socket.emit('playing', data)
-  }
 
   $playbutton.onclick = () => {
     console.log('play')
@@ -397,15 +296,12 @@ $(function () {
     } else { myPlayer.pause() }
   }
   pause.onclick = () => {
-    console.log('pause')
     document.getElementById('audio-element').pause()
   }
   forward.onclick = () => {
-    console.log('forward')
     document.getElementById('audio-element').currentTime += 15.0
   }
   backward.onclick = () => {
-    console.log('backward')
     document.getElementById('audio-element').currentTime -= 15.0
   }
   // $('#getSongs').click(() => {
@@ -413,20 +309,16 @@ $(function () {
   // })
   gobtn.onclick = () => {
     if (ytlink.value.length === 0) {
-      console.log('nope')
-      // confirm dialog
       alertify.logPosition('top left')
       alertify.log('enter a YouTube link!')
       return
     } else if (downloading === true) {
-      // alertify.logPosition("top left");
       alertify.log('Please wait for the current download to finish')
       return
     }
     downloading = true
     alertify.log('Starting Download')
 
-    // var song = {}
     var song = ytlink.value
     ytlink.disabled = true
     socket.emit('getsong', song)
@@ -435,7 +327,7 @@ $(function () {
   }
 
   myId.focus()
-  setname.onclick = function () {
+  setname.onclick = () => {
     if (myId.value === '') {
       console.log('enter text')
 
@@ -452,6 +344,8 @@ $(function () {
   }
   myId.onkeypress = function (e) {
     if (e.which === 13) {
+      console.log(this)
+
       setname.click()
     }
   }
