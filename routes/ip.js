@@ -10,7 +10,7 @@ const uniqeVisits = () => {
     }
     // console.log(data)
 
-    console.log(`# of uniqve IP affresses ${_.uniq(data.match(ipRegex())).length}`)
+    logger.log(`# of uniqve IP addresses ${_.uniq(data.match(ipRegex())).length}`)
     let abc = _.uniq(data.match(ipRegex())).length
     return abc
   })

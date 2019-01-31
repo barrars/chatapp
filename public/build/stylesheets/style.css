@@ -230,9 +230,6 @@ a {
   }
 }
 
-.inline {
-  display: inline-block
-}
 .fixed{
   position: fixed;
 }
@@ -244,9 +241,13 @@ a {
 
 #currentSong {
   width: 100%;
-  height: 30px;
+  /* height: 30px; */
   font-size: 2em;
   position: relative
+}
+.nomargin{
+  margin: 0;
+
 }
 
 .serverMessage {
@@ -328,19 +329,23 @@ div.userMessage {
   border: 4px solid #daa520
 }
 
-#ytlink {
-  height: 100%;
-  width: 80%
-}
 
 .pophead {
   text-align: center;
   display: flex
 }
 
+#ytlink {
+  height: 100%;
+  width: 60%
+}
+#open_playlist_modal{
+  height: 100%;
+  width: 25%;
+}
 #gobtn {
   height: 100%;
-  width: 20%
+  width: 10%
 }
 
 #songList {
@@ -465,4 +470,8 @@ input#setname {
   margin-top: -8px;
   cursor: pointer;
   outline: none
+}
+
+.inline{
+  display:inline;
 }

@@ -1,23 +1,29 @@
-extends layout  
+extends layout.jade
 block head
   title #{title}
   link(rel="shortcut icon", href="", type="image/x-icon")
   meta(name="viewport", content="width=device-width, initial-scale=1.0")
+  link(rel='stylesheet', href='/boots/bootstrap-reboot.css')
   link(rel='stylesheet', href='/stylesheets/normalize.css')
-  link(rel='stylesheet', href='/stylesheets/bulma.css')
-  //- link(rel='stylesheet', href='/stylesheets/style.css')
+  link(rel='stylesheet', href='/bulma/bulma.min.css')
+  
   link(rel='stylesheet', href='/build/stylesheets/style.css')
-  //- link(rel='stylesheet', href='/stylesheets/buiild/sylesheets/style.css')
+  link(rel='stylesheet', href='/build/stylesheets/bootstrap.css')
+  //- link(rel='stylesheet', href='/build/stylesheets/build.css')
   link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Amatic+SC|Bad+Script|Caveat|Cinzel|EB+Garamond|Gloria+Hallelujah|Nothing+You+Could+Do|PT+Mono|Patrick+Hand|Philosopher|Press+Start+2P|Rancho|Shadows+Into+Light|Special+Elite|Cedarville+Cursive|Cinzel|Monoton|Permanent+Marker|Shadows+Into+Light")
   link(rel="stylesheet", href="https://use.fontawesome.com/releases/v5.3.1/css/all.css")
-  script(src="javascripts/jquery.min.js")
+  script(src="/jquery/jquery.min.js")
   script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.js")
 
 
 block scripts
   script(src="socket.io/socket.io.js")
+  
   //- script(type='module' src="javascripts/export.js")
-  script( src="javascripts/chat.js" type="module")
+  script( src="javascripts/chat.js" )
+  script( src="javascripts/export.js" )
+  script( src="javascripts/Create_Playlist.js")
+  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js")
   script(src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js")
 
   

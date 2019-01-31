@@ -1,0 +1,16 @@
+block create_playlist_modal
+#create_playlist_modal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='create_playlist_modal', aria-hidden='true')
+  .modal-dialog(role='document')
+    .modal-content
+      .modal-header
+        h5#exampleModalLabel.modal-title Enter Name of Playlist
+        button.close(type='button', data-dismiss='modal', aria-label='Close')
+          span(aria-hidden='true') ×
+      .modal-body
+        .form-group
+          label(for='playlist_name') Playlist Name
+          input#create_playlist_name_input.form-control( type='email', name="playlist_name" aria-describedby='playlist name', placeholder='Playlist Name')
+          small#emailHe
+      .modal-footer
+        button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+        button#create_playlist_now_btn.btn.btn-primary(type='button', data-dismiss='modal') Create Playlist

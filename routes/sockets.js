@@ -19,17 +19,23 @@ require('./ip').uniqeVisits()
 exports.io = function () {
   return io
 }
+// run this to cache scotts gay songs on startup
 
+function logFiles () {
+  logger.log('Caching scotts songs yay!'.red)
+  fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
+    if (err) {
+      logger.log(err)
+    }
+    ALL_SCOTTS_GAY_SONGS = files
+  })
+}
+let ALL_SCOTTS_GAY_SONGS = logFiles()
 const myClients = {}
 io.on('connection', function (socket) {
-  socket.on('disconnect', () => {
-    // logger.log(socket)
-    delete myClients[socket.id]
-    io.emit('userLeft', socket.id)
-    logger.log(socket.nickname, socket.id, ' has left')
-  })
+  // socket.emit('gay', ALL_SCOTTS_GAY_SONGS)
   socket.on('rename', (data) => {
-    console.log(data)
+    logger.log(data)
     // let data
     fs.rename(path.join(__dirname, '/../public/downloads/' + data.oldName), path.join(__dirname, '/../public/downloads/' + data.newName), (err) => {
       if (err) {
@@ -42,27 +48,28 @@ io.on('connection', function (socket) {
   })
   // socket.on('getList', () => {
   // })
-  socket.on('songClick', (data) => {
-    logger.log(data)
-    socket.broadcast.emit('shareTrack', data)
-    socket.emit('shareTrack', data)
-  })
   socket.on('set_name', function (data) {
-    fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
-      if (err) {
-        logger.log(err)
-      } else {
-        // logger.log('readdir files list = ' + files)
-        // socket.emit('files_data', files)
+    logger.log('SET NAME'.green)
+    logger.log(data)
+    socket.emit('name_set', data)
 
-        logger.log('Files ', typeof files)
-        socket.emit('files', files)
-        // files.forEach(file => {
-        //   logger.log('file = ' + file)
-        // })
-      }
-    })
+    // fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
+    // if (err) {
+    // logger.log(err)
+    // } else {
+    // logger.log('readdir files list = ' + files)
+    // socket.emit('files_data', files)
+
+    // logger.log('Files ', typeof files)
+    logger.log('Emiting a socke of scotts songs!!'.magenta)
+    socket.emit('files', ALL_SCOTTS_GAY_SONGS)
+    // files.forEach(file => {
+    //   logger.log('file = ' + file)
+    // })
+    // }
+    // })
     socket.nickname = data.name
+    logger.log(socket.nickname)
     socket.color = data.color
     // logger.log(data)
     // logger.log(socket.nickname)
@@ -76,17 +83,28 @@ io.on('connection', function (socket) {
       clients: myClients,
       color: socket.color })
     socket.broadcast.emit('list', { name: socket.nickname, id: socket.id, event: 'set_name', color: socket.color })
-    // logger.log('nick ', socket.nickname);
-    socket.emit('name_set', data)
+    logger.log('nick ', socket.nickname)
     logger.log(data)
     socket.send(JSON.stringify({
       type: 'serverMessage',
       message: 'Welcome ' + data.name
     }))
+    socket.on('disconnect', () => {
+      logger.log(myClients)
+      // logger.log(socket)
+      socket.broadcast.emit('userLeft', socket.id)
+      logger.log(socket.nickname, socket.id, ' has left')
+      delete myClients[socket.id]
+    })
     socket.broadcast.emit('user_entered', data)
   })
   socket.on('getsong', require('./youtube.js'))
 
+  socket.on('songClick', (data) => {
+    logger.log(data)
+    socket.broadcast.emit('shareTrack', data)
+    socket.emit('shareTrack', data)
+  })
   socket.on('playing', (data) => {
     // logger.log(socket)
     // data.type = 'serverMessage',
