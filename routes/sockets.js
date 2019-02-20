@@ -20,8 +20,9 @@ exports.io = function () {
   return io
 }
 // run this to cache scotts gay songs on startup
-
-function logFiles () {
+let ALL_SCOTTS_GAY_SONGS// var holds the gay songs dont touch
+logFiles()// call the function to get the songs, maybe thats abetter name for this function as thats what is does // except it doesnt log files so maybe it's not a great name
+function logFiles () { // this function gets the songs and sets them to the variable above meant for saving the list of songs we are getting
   logger.log('Caching scotts songs yay!'.red)
   fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
     if (err) {
@@ -30,7 +31,6 @@ function logFiles () {
     ALL_SCOTTS_GAY_SONGS = files
   })
 }
-let ALL_SCOTTS_GAY_SONGS = logFiles()
 const myClients = {}
 io.on('connection', function (socket) {
   // socket.emit('gay', ALL_SCOTTS_GAY_SONGS)

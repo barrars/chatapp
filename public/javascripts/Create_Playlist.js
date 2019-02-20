@@ -1,7 +1,13 @@
-var My_Playlist = (function () {
+var My_Playlist = (async function () {
+  const my_playlist = await $.get('/playlist/my_playlists')
+  console.log({ my_playlist })//this line has you data
+  const all_playlist = await $.get('/playlist')
+  console.log({ all_playlist })//this too
   const open_create_playlist_modal_btn = document.getElementById('open_playlist_modal')
   let playlist_name_input = $('#create_playlist_name_input')
   let create_playlist_now_btn = $('#create_playlist_now_btn')
+
+  
 
   /* Create playlsit button */
   open_create_playlist_modal_btn.addEventListener('click', (event) => {

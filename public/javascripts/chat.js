@@ -3,7 +3,7 @@
 // var testVar = 'This is a test!@@'
 // export { testVar }
 
-let myId = document.getElementById('nickname') || myId
+let myId = document.getElementById('nickname')
 document.addEventListener('DOMContentLoaded', (event) => {
   const socket = window.io()
   const $ = window.$
@@ -166,31 +166,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
         '</span> has joined the room!' +
         '</div>'
   })
-  socket.on('files', data => {
-    console.log(data)// is not logging??
+  socket.on('shareTrack', data => {
+    console.log('share track = ', data)
+    $('#audio-element').attr('src', '/downloads/' + data.song)
+    My_Exports.currentSong()
+    console.log(data)
 
+    $('#messages').append(
+      '<div class=" serverMessage"><span style="color: blue">' +
+        data.name +
+        ' <span style="color:red"> started playing <span style="color:black"> ' +
+        data.song +
+        '</span> </div>'
+    )
+    $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+
+    myPlayer.play()
+  })
+  socket.on('files', data => {
     for (let i = 0; i < data.length; i++) {
       $songList.innerHTML += ('<div><p data-song-title="' + data[i] + '"class="inline">' + data[i] + '</p>' + icons(data[i]) + '<div>')
     }
     My_Exports.emitPlay()
-
-    socket.on('shareTrack', data => {
-      console.log('share track = ', data)
-      $('#audio-element').attr('src', '/downloads/' + data.song)
-      My_Exports.currentSong()
-      console.log(data)
-
-      $('#messages').append(
-        '<div class=" serverMessage"><span style="color: blue">' +
-          data.name +
-          ' <span style="color:red"> started playing <span style="color:black"> ' +
-          data.song +
-          '</span> </div>'
-      )
-      $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
-
-      myPlayer.play()
-    })
   })
   socket.on('play', function (message) {
     console.log(message)

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const mongoose = require('mongoose')
 
 const playlist_schema = mongoose.Schema({
@@ -8,6 +9,8 @@ const playlist_schema = mongoose.Schema({
 
 const Playlist = module.exports = mongoose.model('Playlist', playlist_schema)
 Playlist.create_new_playlist = create_new_playlist
+Playlist.get_all_playlists = get_all_playlists
+Playlist.get_my_playlists = get_my_playlists
 
 async function create_new_playlist ({ playlist_name, created_by }) {
   let new_playlist = await new Playlist({
@@ -22,3 +25,13 @@ async function create_new_playlist ({ playlist_name, created_by }) {
 }
 
 // Get all playlist, or get only users playlist
+async function get_all_playlists () {
+  let playlists = await Playlist.find().limit(15)
+  return playlists
+}
+
+async function get_my_playlists (req) {
+  let created_by = req.session.id
+  let my_playlists = await Playlist.find({ created_by }).limit(15)
+  return my_playlists
+}

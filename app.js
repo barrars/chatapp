@@ -1,4 +1,4 @@
-// GLOBAL
+// GLOBALS
 
 require('dotenv').config()
 
@@ -6,23 +6,23 @@ colors = require('colors')
 logger = require('tracer').colorConsole({
   format: '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
   dateformat: 'HH:MM:ss.L'
-})// GLOBAL
+})
+// GLOBALS
+
 require('./models/db.js')
 const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
-// const logger = require('morgan')
-// require('./hello').hi()
+
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const playlistRouter = require('./routes/playlistRouter')
 const chalk = require('chalk')
-// var exec = require('child_process').exec
-// var fs = require('fs');
+
 const session = require('express-session')
-const cookie = require('cookie-parser')
-const mongoose = require('mongoose')
+// const cookie = require('cookie-parser')
+// const mongoose = require('mongoose')
 const mongoStore = require('connect-mongo')(session)
 const app = express()
 
