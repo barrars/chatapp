@@ -37,7 +37,7 @@ io.on('connection', function (socket) {
   console.log('socket on connection')
   cache((data) => {
     logger.log(data.length)
-    logger.log(data)
+    // logger.log(data)
     socket.emit('files', data)
     songs = data
 
