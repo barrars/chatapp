@@ -29,8 +29,7 @@ exports.add_song_to_cache = (new_song) => {
   logger.log(songs.length)
 
   songs.push(new_song)
-  logger.log(songs.length)
-  logger.log(songs)
+  // logger.log(songs)
 }
 
 const myClients = {}
