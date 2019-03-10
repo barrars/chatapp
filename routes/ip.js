@@ -1,5 +1,5 @@
 const ipRegex = require('ip-regex')
-const fs = require('fs')
+const fs = require('fs-extra')
 const path = require('path')
 const _ = require('lodash')
 

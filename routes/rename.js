@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('fs-extra')
 var colors = require('colors')
 var logger = require('tracer').colorConsole({
   format:

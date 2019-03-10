@@ -1,10 +1,7 @@
-// console.log('Top of chat.js')
-
-// var testVar = 'This is a test!@@'
-// export { testVar }
-
 let myId = document.getElementById('nickname')
 document.addEventListener('DOMContentLoaded', (event) => {
+  // console.log(event)
+
   const socket = window.io()
   const $ = window.$
 
@@ -39,31 +36,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log(myId)
 
       const myColor = My_Exports.getUsernameColor(myId)
-      socket.emit('set_name', { name: myId, color: myColor })
+      socket.emit('set_name', {
+        name: myId,
+        color: myColor
+      })
     }
   })
 
-  My_Exports.emitPlay()
+  My_Exports.emitPlay(myId)
   if (!downloading) {
     gobtn.innerText = 'Win!'
   }
-  // socket.on('gay', (data) => {
-  //   console.log(data)
-  // })
+
   socket.on('renamed', data => {
-    let p_song_title = document.querySelectorAll(`[data-song-title="${data.oldName}"]`)[0]/* is an array-like-object */
+    console.log('socket on renamed')
+    console.log(data)
+
+    let p_song_title = document.querySelectorAll(`[data-song-title="${data.id}"]`)[0] /* is an array-like-object */
     // let renamedSong = Array.from($songList.children).find(p => {
     //   return p.innerText === data.oldName
     // })
-    console.log(p_song_title)
+    // console.log(p_song_title)
     // let p_tag = $(song_title_div, 'p')
-    let iconTEst = document.querySelectorAll(`[data-name="${data.oldName}"]`)/* array of icons */
-    console.log(iconTEst)
+    let iconTEst = document.querySelectorAll(`[data-name="${data.oldName}"]`) /* array of icons */
+    // console.log(iconTEst)
     // console.log(renamedSong)
 
     p_song_title.innerHTML = data.newName /* + '<i class="hidden fas fa-pen edit_icon" title="edit title"></i><i class="add_song fas fa-plus"></i> ' */
     // iconSetClick()
-    console.log(`its been renamed ${data}`)
+    // console.log(`its been renamed ${JSON.stringify(data)}`)
   })
   myPlayer.onpause = () => {
     $playbutton.classList.add('fa-stop')
@@ -106,30 +107,41 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
   }
   socket.on('percent', (percent) => {
+    console.log('socket on percent')
+
     gobtn.innerText = percent
     const $at = (ytlink.offsetWidth / 16) * (parseInt(percent) / 100)
     console.log($at)
     ytlink.placeholder = '@'.repeat(Math.ceil($at))
   })
-  socket.on('title', data => {
-    console.log(data)
-    let newSong = document.createElement('p')
-    newSong.classList.add('inline')
-    newSong.innerHTML = data
+  socket.on('title', song_title => {
+    console.log('socket on title')
 
-    $songList.prepend(newSong)
+    var song_title = song_title.trim()
+    console.log(song_title)
+    // console.log(song_title.trim())
+    $($songList).append('<div><p data-song-title="' + song_title + '"class="inline">' + song_title + '</p>' + icons(song_title) + '<div>')
+
+    let newSong_dom_element = document.querySelector(`[data-song-title="${song_title}"]`).parentElement
+    // newSong_dom_element.classList.add('inline')
+    // newSong_dom_element.innerHTML = song_title
+    console.log(newSong_dom_element)
+
+    // $songList.prepend(newSong_dom_element)
 
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
     gobtn.innerText = 'Win!'
     alertify.logPosition('top left')
-    alertify.log(data, ' Download complete')
+    alertify.log(song_title, ' Download complete')
 
-    My_Exports.emitPlay()
+    My_Exports.addEventHandlersToSong(newSong_dom_element, song_title, myId)
   })
 
   socket.on('list', data => {
+    console.log('socket on list')
+
     console.log(data)
 
     if (!data.clients) {
@@ -139,10 +151,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (data.clients.hasOwnProperty(key)) {
           if (key === socket.id) {
             $list.innerHTML +=
-            '<li class="user" data-id="' + key + '">' + data.clients[key] + '</li>'
+							'<li class="user" data-id="' + key + '">' + data.clients[key] + '</li>'
           } else {
             $list.innerHTML +=
-              '<li data-id="' + key + '">' + data.clients[key] + '</li>'
+							'<li data-id="' + key + '">' + data.clients[key] + '</li>'
           }
           console.log(key + '---> ' + data.clients[key])
         }
@@ -150,6 +162,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
   })
   socket.on('userLeft', data => {
+    console.log('socket on userLeft')
+
     console.log('user left!!  ', data)
     if ($list
       .querySelector('[data-id="' + data + '"]')) {
@@ -159,14 +173,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
   })
   socket.on('user_entered', function (user) {
+    console.log('socket on user_entered')
+
     console.log('USER ENTERED')
     $messages.innerHTML +=
-      '<div class="serverMessage"> <span style="color:' + user.color + ';border-bottom: solid 2px ' + user.color + ';">' +
-        user.name +
-        '</span> has joined the room!' +
-        '</div>'
+			'<div class="serverMessage"> <span style="color:' + user.color + ';border-bottom: solid 2px ' + user.color + ';">' +
+			user.name +
+			'</span> has joined the room!' +
+			'</div>'
   })
   socket.on('shareTrack', data => {
+    console.log('sock on shareTrack')
+
     console.log('share track = ', data)
     $('#audio-element').attr('src', '/downloads/' + data.song)
     My_Exports.currentSong()
@@ -174,33 +192,39 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     $('#messages').append(
       '<div class=" serverMessage"><span style="color: blue">' +
-        data.name +
-        ' <span style="color:red"> started playing <span style="color:black"> ' +
-        data.song +
-        '</span> </div>'
+			data.name +
+			' <span style="color:red"> started playing <span style="color:black"> ' +
+			data.song +
+			'</span> </div>'
     )
     $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
 
     myPlayer.play()
   })
   socket.on('files', data => {
+    console.log('socket on files')
+
     for (let i = 0; i < data.length; i++) {
       $songList.innerHTML += ('<div><p data-song-title="' + data[i] + '"class="inline">' + data[i] + '</p>' + icons(data[i]) + '<div>')
     }
-    My_Exports.emitPlay()
+    My_Exports.emitPlay(myId)
   })
   socket.on('play', function (message) {
+    console.log('socket on play')
+
     console.log(message)
 
     $('#messages').append(
       '<div class="' +
-        message.type +
-        '">' +
-        message.name +
-        'started playing</div>'
+			message.type +
+			'">' +
+			message.name +
+			'started playing</div>'
     )
   })
   socket.on('message', function (message) {
+    console.log('socket on message ')
+
     message = JSON.parse(message)
     if (message.type !== 'serverMessage') {
       My_Exports.playDrop()
@@ -208,14 +232,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
       let time = new Date()
       $('#messages').append(
         '<div title="' + time + '"style="box-shadow: 0px 2px 0 0' +
-        message.color +
-        '"class ="' +
-        message.type +
-        '"><span class="name">' +
-        message.name +
-        '</span> <span class="message">' +
-        message.message +
-        '</span></div>'
+				message.color +
+				'"class ="' +
+				message.type +
+				'"><span class="name">' +
+				message.name +
+				'</span> <span class="message">' +
+				message.message +
+				'</span></div>'
       )
       $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
     }
@@ -225,16 +249,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
     My_Exports.hitPlay(e, data)
   }
   socket.on('name_set', function (data) {
+    console.log('socket on name_set')
+
     console.log('NAME_SET')
 
     username = true
     user = data.name
     color = data.color
 
-    console.log('display before')
-
     $nameform.style.display = 'none'
-    console.log('display after')
   })
   $send.onclick = function () {
     if ($message.value === '') {
@@ -257,7 +280,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log('play')
     if (!myPlayer.paused) {
       myPlayer.play()
-    } else { myPlayer.pause() }
+    } else {
+      myPlayer.pause()
+    }
   }
   pause.onclick = () => {
     document.getElementById('audio-element').pause()
@@ -306,7 +331,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // http://localhost:3001/users/set_name/myname
     // window.$.post(`/users/set_name`, {name:myId})
 
-    socket.emit('set_name', { name: myId, color: myColor })
+    socket.emit('set_name', {
+      name: myId,
+      color: myColor
+    })
   }
   myId.onkeypress = function (e) {
     if (e.which === 13) {
@@ -327,6 +355,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
 
   socket.on('error', () => {
+    console.log('socket on error')
+
     alertify.log('something went wrong')
     downloading = false
     ytlink.disabled = false

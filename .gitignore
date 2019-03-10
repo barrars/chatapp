@@ -3,3 +3,5 @@ public/downloads/*
 ip.log
 todo
 .env
+server.cert
+server.key

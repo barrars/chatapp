@@ -1,5 +1,4 @@
-const fs = require('fs')
-
+const fs = require('fs-extra')
 fs.readdir('.', (err, files) => {
   if (err) {
     console.log(err)

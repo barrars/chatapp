@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-const fs = require('fs')
+const fs = require('fs-extra')
 /* GET home page. */
 router.get('/', function (req, res, next) {
   // logger.log('test seession'.green)

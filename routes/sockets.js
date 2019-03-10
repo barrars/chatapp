@@ -1,7 +1,7 @@
-var fs = require('fs')
-var path = require('path')
-var colors = require('colors')
-var logger = require('tracer').colorConsole({
+const fs = require('fs-extra')
+const path = require('path')
+const colors = require('colors')
+const logger = require('tracer').colorConsole({
   format: '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
   dateformat: 'HH:MM:ss.L',
   filters: {
@@ -13,30 +13,42 @@ var logger = require('tracer').colorConsole({
     error: [colors.red, colors.bold]
   }
 })
-var io = require('socket.io')()
+let songs
+const io = require('socket.io')()
 require('./ip').uniqeVisits()
+// let songCache = require('./cache').songList
+const cache = require('./cache').cacheSongs
 
 exports.io = function () {
   return io
 }
-// run this to cache scotts gay songs on startup
-let ALL_SCOTTS_GAY_SONGS// var holds the gay songs dont touch
-logFiles()// call the function to get the songs, maybe thats abetter name for this function as thats what is does // except it doesnt log files so maybe it's not a great name
-function logFiles () { // this function gets the songs and sets them to the variable above meant for saving the list of songs we are getting
-  logger.log('Caching scotts songs yay!'.red)
-  fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
-    if (err) {
-      logger.log(err)
-    }
-    ALL_SCOTTS_GAY_SONGS = files
+exports.add_song_to_cache = (new_song) => {
+  logger.log({
+    new_song
   })
+  logger.log(songs.length)
+
+  songs.push(new_song)
+  logger.log(songs.length)
+  logger.log(songs)
 }
+
 const myClients = {}
 io.on('connection', function (socket) {
-  // socket.emit('gay', ALL_SCOTTS_GAY_SONGS)
-  socket.on('rename', (data) => {
+  console.log('socket on connection')
+  cache((data) => {
+    logger.log(data.length)
     logger.log(data)
-    // let data
+    socket.emit('files', data)
+    songs = data
+
+    logger.log(songs)
+  })
+
+  socket.on('rename', (data) => {
+    console.log('socket on rename')
+
+    logger.log(data)
     fs.rename(path.join(__dirname, '/../public/downloads/' + data.oldName), path.join(__dirname, '/../public/downloads/' + data.newName), (err) => {
       if (err) {
         throw err
@@ -46,34 +58,18 @@ io.on('connection', function (socket) {
       socket.emit('renamed', data)
     })
   })
-  // socket.on('getList', () => {
-  // })
   socket.on('set_name', function (data) {
-    logger.log('SET NAME'.green)
+    logger.log('socket on SET NAME'.green)
     logger.log(data)
     socket.emit('name_set', data)
 
-    // fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
-    // if (err) {
-    // logger.log(err)
-    // } else {
-    // logger.log('readdir files list = ' + files)
-    // socket.emit('files_data', files)
-
-    // logger.log('Files ', typeof files)
     logger.log('Emiting a socke of scotts songs!!'.magenta)
-    socket.emit('files', ALL_SCOTTS_GAY_SONGS)
-    // files.forEach(file => {
-    //   logger.log('file = ' + file)
-    // })
-    // }
-    // })
+    // socket.emit('files', songCache)
+
     socket.nickname = data.name
     logger.log(socket.nickname)
     socket.color = data.color
-    // logger.log(data)
-    // logger.log(socket.nickname)
-    // logger.log('nickname= ', typeof socket.nickname)
+
     myClients[socket.id] = socket.nickname
     logger.log(myClients)
     socket.emit('list', {
@@ -81,8 +77,14 @@ io.on('connection', function (socket) {
       id: socket.id,
       event: 'set_name',
       clients: myClients,
-      color: socket.color })
-    socket.broadcast.emit('list', { name: socket.nickname, id: socket.id, event: 'set_name', color: socket.color })
+      color: socket.color
+    })
+    socket.broadcast.emit('list', {
+      name: socket.nickname,
+      id: socket.id,
+      event: 'set_name',
+      color: socket.color
+    })
     logger.log('nick ', socket.nickname)
     logger.log(data)
     socket.send(JSON.stringify({
@@ -90,6 +92,8 @@ io.on('connection', function (socket) {
       message: 'Welcome ' + data.name
     }))
     socket.on('disconnect', () => {
+      console.log('socket on disconnect')
+
       logger.log(myClients)
       // logger.log(socket)
       socket.broadcast.emit('userLeft', socket.id)
@@ -98,14 +102,19 @@ io.on('connection', function (socket) {
     })
     socket.broadcast.emit('user_entered', data)
   })
-  socket.on('getsong', require('./youtube.js'))
+  socket.on('getsong', require('./youtube.js').download)
+  // console.log('socket on getsong')
 
   socket.on('songClick', (data) => {
+    console.log('socket on songClick')
+
     logger.log(data)
     socket.broadcast.emit('shareTrack', data)
     socket.emit('shareTrack', data)
   })
   socket.on('playing', (data) => {
+    console.log('socket on playing')
+
     // logger.log(socket)
     // data.type = 'serverMessage',
     // logger.log(data)
@@ -117,6 +126,8 @@ io.on('connection', function (socket) {
     socket.emit('play', data)
   })
   socket.on('message', function (message) {
+    console.log('socket on message')
+
     message = JSON.parse(message)
     logger.log(message)
 
