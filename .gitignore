@@ -1,5 +1,6 @@
 node_modules
 public/downloads/*
+public/downloads1/*
 ip.log
 todo
 .env
