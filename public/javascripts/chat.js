@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 let myId = document.getElementById('nickname')
 document.addEventListener('DOMContentLoaded', (event) => {
   // console.log(event)
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       })
     }
   })
-
+  /* global My_Exports */
   My_Exports.emitPlay(myId)
   if (!downloading) {
     gobtn.innerText = 'Win!'
@@ -58,7 +59,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // })
     // console.log(p_song_title)
     // let p_tag = $(song_title_div, 'p')
-    let iconTEst = document.querySelectorAll(`[data-name="${data.oldName}"]`) /* array of icons */
+    // let iconTEst = document.querySelectorAll(`[data-name="${data.oldName}"]`) /* array of icons */
     // console.log(iconTEst)
     // console.log(renamedSong)
 
@@ -114,10 +115,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log($at)
     ytlink.placeholder = '@'.repeat(Math.ceil($at))
   })
-  socket.on('title', song_title => {
+  socket.on('title', data => {
     console.log('socket on title')
 
-    var song_title = song_title.trim()
+    var song_title = data.trim()
     console.log(song_title)
     // console.log(song_title.trim())
     $($songList).append('<div><p data-song-title="' + song_title + '"class="inline">' + song_title + '</p>' + icons(song_title) + '<div>')
@@ -151,10 +152,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (data.clients.hasOwnProperty(key)) {
           if (key === socket.id) {
             $list.innerHTML +=
-							'<li class="user" data-id="' + key + '">' + data.clients[key] + '</li>'
+'<li class="user" data-id="' + key + '">' + data.clients[key] + '</li>'
           } else {
             $list.innerHTML +=
-							'<li data-id="' + key + '">' + data.clients[key] + '</li>'
+'<li data-id="' + key + '">' + data.clients[key] + '</li>'
           }
           console.log(key + '---> ' + data.clients[key])
         }
@@ -174,13 +175,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   })
   socket.on('user_entered', function (user) {
     console.log('socket on user_entered')
-
     console.log('USER ENTERED')
     $messages.innerHTML +=
-			'<div class="serverMessage"> <span style="color:' + user.color + ';border-bottom: solid 2px ' + user.color + ';">' +
-			user.name +
-			'</span> has joined the room!' +
-			'</div>'
+    '<div class="serverMessage"> <span style="color:' + user.color + ';border-bottom: solid 2px ' + user.color + ';">' +
+    user.name +
+    '</span> has joined the room!' +
+    '</div>'
   })
   socket.on('shareTrack', data => {
     console.log('sock on shareTrack')
@@ -192,10 +192,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     $('#messages').append(
       '<div class=" serverMessage"><span style="color: blue">' +
-			data.name +
-			' <span style="color:red"> started playing <span style="color:black"> ' +
-			data.song +
-			'</span> </div>'
+      data.name +
+      ' <span style="color:red"> started playing <span style="color:black"> ' +
+      data.song +
+      '</span> </div>'
     )
     $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
 
@@ -215,12 +215,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log(message)
 
     $('#messages').append(
-      '<div class="' +
-			message.type +
-			'">' +
-			message.name +
-			'started playing</div>'
-    )
+      '<div class="' + message.type + '">' + message.name + 'started playing</div>')
   })
   socket.on('message', function (message) {
     console.log('socket on message ')
@@ -232,14 +227,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       let time = new Date()
       $('#messages').append(
         '<div title="' + time + '"style="box-shadow: 0px 2px 0 0' +
-				message.color +
-				'"class ="' +
-				message.type +
-				'"><span class="name">' +
-				message.name +
-				'</span> <span class="message">' +
-				message.message +
-				'</span></div>'
+      message.color + '"class ="' + message.type + '"><span class="name">' +
+      message.name + '</span> <span class="message">' +
+      message.message + '</span></div>'
       )
       $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
     }
@@ -277,8 +267,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
 
   $playbutton.onclick = () => {
-    console.log('play')
-    if (!myPlayer.paused) {
+    console.log('play!!')
+    if (myPlayer.paused) {
       myPlayer.play()
     } else {
       myPlayer.pause()

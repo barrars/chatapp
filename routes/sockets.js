@@ -22,13 +22,13 @@ const cache = require('./cache').cacheSongs
 exports.io = function () {
   return io
 }
-exports.add_song_to_cache = (new_song) => {
+exports.add_song_to_cache = (newSong) => {
   logger.log({
-    new_song
+    newSong
   })
   logger.log(songs.length)
 
-  songs.push(new_song)
+  songs.push(newSong)
   // logger.log(songs)
 }
 
@@ -41,7 +41,7 @@ io.on('connection', function (socket) {
     socket.emit('files', data)
     songs = data
 
-    // logger.log(songs)
+    logger.log(songs)
   })
 
   socket.on('rename', (data) => {
