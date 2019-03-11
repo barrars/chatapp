@@ -46,7 +46,7 @@ module.exports = {
     })
 
     youtubedl.stdout.on('data', function (stdout) {
-      // logger.log('STDOUT = ', stdout)
+      logger.log('STDOUT = ', stdout)
       if (stdout.toLocaleLowerCase().indexOf('%') > 0) {
         var percent = stdout.match(/(\d+).\d%/g)[0]
         io.emit('percent', percent)
@@ -57,6 +57,14 @@ module.exports = {
           let title = stdout.slice(41)
           require('./sockets').add_song_to_cache(title)
           io.emit('title', title)
+        })
+      }
+      if (stdout.toLocaleLowerCase().indexOf('archive') > 0) {
+        youtubedl.on('close', code => {
+          logger.log(code)
+          if (code === 0) {
+            io.emit('archive')
+          }
         })
       }
     })

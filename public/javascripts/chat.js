@@ -1,8 +1,6 @@
 /* eslint-disable camelcase */
 let myId = document.getElementById('nickname')
 document.addEventListener('DOMContentLoaded', (event) => {
-  // console.log(event)
-
   const socket = window.io()
   const $ = window.$
 
@@ -19,6 +17,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const setname = document.getElementById('setname')
   const forward = document.getElementById('forward')
   const $playbutton = document.getElementById('play')
+  const $find = document.getElementById('find')
   const $songList = document.getElementById('songList')
   const $messages = document.getElementById('messages')
   const $list = document.getElementById('list')
@@ -49,6 +48,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
     gobtn.innerText = 'Win!'
   }
 
+  $find.onkeyup = (e) => {
+    var songs = document.querySelectorAll('.song')
+    console.log(songs)
+
+    var txtValue, song
+    for (i = 0; i < songs.length; i++) {
+      console.log('for loop running')
+
+      song = songs[i].getElementsByTagName('p')[0]
+      txtValue = song.textContent || song.innerText
+      if (txtValue.toUpperCase().indexOf(e.target.value.toUpperCase()) < 0) {
+        songs[i].style.display = 'none'
+      }else {
+        songs[i].style.display = ''
+      }
+    }
+    // console.log('keyup')
+    // console.log(e.key)
+    console.log(e.target.value.toUpperCase())
+  }
   socket.on('renamed', data => {
     console.log('socket on renamed')
     console.log(data)
@@ -85,7 +104,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     max: 100,
     value: 50,
     range: 'min',
-    slide: function (event, ui) {
+    slide: function (e, ui) {
       My_Exports.setVolume(ui.value / 100)
     }
   })
@@ -121,7 +140,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var song_title = data.trim()
     console.log(song_title)
     // console.log(song_title.trim())
-    $($songList).append('<div><p data-song-title="' + song_title + '"class="inline">' + song_title + '</p>' + icons(song_title) + '<div>')
+    $($songList).append('<div class="song"><p data-song-title="' + song_title + '"class="inline">' + song_title + '</p>' + icons(song_title) + '<div>')
 
     let newSong_dom_element = document.querySelector(`[data-song-title="${song_title}"]`).parentElement
     // newSong_dom_element.classList.add('inline')
@@ -138,6 +157,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
     alertify.log(song_title, ' Download complete')
 
     My_Exports.addEventHandlersToSong(newSong_dom_element, song_title, myId)
+  })
+  socket.on('archive', () => {
+    console.log('archived')
+    downloading = false
+    ytlink.disabled = false
+    ytlink.placeholder = 'enter another link'
+    gobtn.innerText = 'Win!'
+    alertify.logPosition('top left')
+    alertify.log(' This song has already been downloaded')
   })
 
   socket.on('list', data => {
@@ -205,7 +233,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log('socket on files')
 
     for (let i = 0; i < data.length; i++) {
-      $songList.innerHTML += ('<div><p data-song-title="' + data[i] + '"class="inline">' + data[i] + '</p>' + icons(data[i]) + '<div>')
+      $songList.innerHTML += ('<div class="song"><p data-song-title="' + data[i] + '"class="inline">' + data[i] + '</p>' + icons(data[i]) + '<div>')
     }
     My_Exports.emitPlay(myId)
   })
@@ -234,10 +262,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
       $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
     }
   })
-  $playbutton.onclick = e => {
-    console.log('e = ', e, 'data = ', data)
-    My_Exports.hitPlay(e, data)
-  }
+  // $playbutton.onclick = e => {
+  //   console.log('e = ', e, 'data = ', data)
+  //   My_Exports.hitPlay(e, data)
+  // }
   socket.on('name_set', function (data) {
     console.log('socket on name_set')
 
