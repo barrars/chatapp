@@ -43,7 +43,16 @@ io.on('connection', function (socket) {
 
     logger.log(songs)
   })
+  socket.on('delete', data => {
+    console.log(`delete ${data}`)
+    fs.move(path.join(__dirname, '/../public/downloads/' + data), path.join(__dirname, '/../public/deleted/' + data), (err, suc) => {
+      if (err) return err
 
+      console.log('deleted ', data)
+      socket.broadcast.emit('deleted', data)
+      socket.emit('deleted', data)
+    })
+  })
   socket.on('rename', (data) => {
     console.log('socket on rename')
 

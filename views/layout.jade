@@ -1,23 +1,24 @@
 doctype html
 html
   block head
-    
-body  
+
+body
   input#rename.fixed.hidden
+  //- iframe#audio(src='/audio/drop.mp3', allow='autoplay', style='display:none')
   include header.jade
   include container.jade
   include footer.jade
   include nameform.jade
   include  create_playlist_modal.jade
-  
+
   //- include modal
-  
 
-block scripts    
-    
-    
 
-    
+block scripts
+
+
+
+
 //- html
 //-   block head
 //-     title chat em up!!!
@@ -35,6 +36,6 @@ block scripts
 //-     script(src="socket.io/socket.io.js")
 //-     script(src="javascripts/chat.js")
 //-     script(src="https://cdn.rawgit.com/alertifyjs/alertify.js/v1.0.10/dist/js/alertify.js")
-    
+
 
 

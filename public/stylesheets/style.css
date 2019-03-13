@@ -266,7 +266,7 @@ div.userMessage {
 }
 #ytlink:focus,
 .message_input:focus {
-  border: 4px solid #daa520;
+  border: 4px solid #da2058;
 }
 #ytlink {
   height: 100%;
@@ -377,17 +377,17 @@ input#setname{
     /* top: 80px; */
     display: flex;
 }
-	
+
 	/* i {
 		position: absolute;
 		margin-top: -6px;
 		color: #666;
 	} */
-/* 	
+/*
 	i.fa-volume-down {
 		margin-left: -8px;
 	}
-	
+
 	i.fa-volume-up {
 		margin-right: -8px;
 		right: 0;
@@ -403,7 +403,7 @@ input#setname{
 	background: #555;
   border-radius: 15px;
 }
-	
+
 	.ui-slider-range-min {
     height: 5px;
     /* left: 50%; */
@@ -414,7 +414,7 @@ input#setname{
 		border-radius: 10px;
   	outline: none;
 }
-	
+
 	.ui-slider-handle {
     display: inline-block;
     top: -8px;

@@ -1,8 +1,10 @@
 node_modules
 public/downloads/*
+public/deleted/*
 public/downloads1/*
 ip.log
 todo
 .env
 server.cert
 server.key
+archive

@@ -99,7 +99,7 @@ audio#sound {
 display: none;
   height: 100px;
   width: 500px;
-  
+
 }
 
 #audio-element {
@@ -326,10 +326,17 @@ div.userMessage {
 
 #ytlink:focus,
 .message_input:focus {
-  border: 4px solid #daa520
+  border: 4px solid #da2058
 }
+.song {
+  transition: all .2s;
 
-
+}
+.houdini{
+    /* display: none; */
+    transform: rotateX(90deg);
+    /* visibility: hidden; */
+}
 .pophead {
   text-align: center;
   display: flex
@@ -459,6 +466,8 @@ input#setname {
 }
 
 .ui-slider-handle {
+  position: relative;
+  top: -11px;
   display: inline-block;
   top: -8px;
   width: 15px;

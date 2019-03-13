@@ -1,5 +1,6 @@
 
 var My_Exports = (function () {
+  const $ = window.$
   const socket = window.io()
   const $songList = document.getElementById('songList')
   // const alertify = window.alertify
@@ -8,6 +9,7 @@ var My_Exports = (function () {
   // let myId
   const renameInput = document.getElementById('rename')
   const edit_icons = $songList.getElementsByClassName('edit_icon')
+  const deleteIcon = $songList.getElementsByClassName(' fa-trash-alt')
   const editFunc = (e) => {
     // console.log(e.target.attributes[0].nodeValue)
     let dataAtrribute = e.target.attributes[0].nodeValue
@@ -27,6 +29,24 @@ var My_Exports = (function () {
     }
     e.stopPropagation()
   }
+  const deleteFunc = (e) => {
+    console.log(e)
+
+    console.log(e.target.parentElement.innerText)
+
+    // console.log(e.target.attributes[0].nodeValue)
+    let dataAtrribute = e.target.parentElement.innerText
+    socket.emit('delete', dataAtrribute)
+    e.stopPropagation()
+  }
+
+  socket.on('deleted', data => {
+    document.querySelectorAll(`[data-song-title="${data.trim()}"]`)[0].parentElement.remove()
+    // console.log(deleteMe)
+
+    console.log(`the song ${data} has been deleted`)
+  })
+
   const submitRename = function (oldName, newName, id) {
     let data = { oldName, newName, id }
     socket.emit('rename', data)
@@ -60,24 +80,33 @@ var My_Exports = (function () {
   }
 
   const addEventHandlersToSong = (tune, title, id) => {
-    let editIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[0]
+    console.log('addEventHandlersToSong')
 
+    let editIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[0]
     let addIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[1]
+    let deleteIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[2]
 
     console.log(editIcon)
 
     editIcon.onclick = e => {
       editFunc(e)
     }
+    deleteIcon.onclick = e => {
+      deleteFunc(e)
+    }
     tune.onmouseover = () => {
       // let editIcon = e.target.children[0]
       if (editIcon) { showInput(editIcon) }
       if (addIcon) { showInput(addIcon) }
+      if (deleteIcon) {
+      }
+      showInput(deleteIcon)
     }
     tune.onmouseleave = () => {
       // let editIcon = e.target.children[0]
       hideInput(editIcon)
       hideInput(addIcon)
+      hideInput(deleteIcon)
     }
     tune.onclick = song => {
       console.log('click', { song: song.target.textContent, name: id })
@@ -100,22 +129,31 @@ var My_Exports = (function () {
         editFunc(e)
       }
     }
+    for (let i = 0; i < deleteIcon.length; i++) {
+      let icon = deleteIcon[i]
+      icon.onclick = e => {
+        deleteFunc(e)
+      }
+    }
     let songDivList = $songList.getElementsByTagName('div')
     for (let i = 0; i < songDivList.length; i++) {
       let tune = songDivList[i]
       let xicon = $(tune).find('.edit_icon')[0]
       let eicon = $(tune).find('.add_song')[0]
+      let dicon = $(tune).find('.fa-trash-alt')[0]
       tune.onmouseover = () => {
         showInput(xicon)
         showInput(eicon)
+        showInput(dicon)
       }
       tune.onmouseleave = e => {
         hideInput(xicon)
+        hideInput(dicon)
         hideInput(eicon)
       }
       tune.onclick = song => {
         console.log('click', { song: song.target.textContent, name: id })
-        socket.emit('songClick', { song: song.target.textContent, name: id })
+        socket.emit('songClick', { song: song.target.textContent.trim(), name: id })
       }
     }
     // iconSetClick()
@@ -168,9 +206,6 @@ var My_Exports = (function () {
     /* add click to edit icon */
     for (let i = 0; i < edit_icons.length; i++) {
       let eicon = edit_icons[i]
-      // let song_name = master_song_list[i]
-      // console.log(song_name)
-
       eicon.onclick = e => {
         editFunc(e)
       }
@@ -201,6 +236,6 @@ var My_Exports = (function () {
   const setVolume = function (myVolume) {
     myPlayer.volume = myVolume
   }
-  return { addEventHandlersToSong, playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, hitPlay }
+  return { deleteFunc, addEventHandlersToSong, playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, hitPlay }
 })()
 // export { playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }

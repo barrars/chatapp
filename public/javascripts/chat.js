@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
+
 let myId = document.getElementById('nickname')
+
 document.addEventListener('DOMContentLoaded', (event) => {
   const socket = window.io()
   const $ = window.$
@@ -7,7 +9,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const alertify = window.alertify
   let user
   let color
-  const icons = (name) => `<i data-name="${name}"class="hidden fas fa-pen edit_icon" title="edit title"></i><i data-name="${name}"class="add_song hidden fas fa-plus"></i>`
+  const icons = (name) => `<i data-name="${name.trim()}"class="hidden fas fa-pen edit_icon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
   const ytlink = document.getElementById('ytlink')
   const pause = document.getElementById('pause')
   const myPlayer = document.getElementById('audio-element')
@@ -42,37 +44,42 @@ document.addEventListener('DOMContentLoaded', (event) => {
       })
     }
   })
-  /* global My_Exports */
   My_Exports.emitPlay(myId)
   if (!downloading) {
     gobtn.innerText = 'Win!'
   }
 
   $find.onkeyup = (e) => {
-    var songs = document.querySelectorAll('.song')
-    console.log(songs)
-
+    const songs = document.querySelectorAll('.song')
     var txtValue, song
-    for (i = 0; i < songs.length; i++) {
-      console.log('for loop running')
-
+    for (let i = 0; i < songs.length; i++) {
+      // (function (i) {
+      // setTimeout(() => {
       song = songs[i].getElementsByTagName('p')[0]
       txtValue = song.textContent || song.innerText
       if (txtValue.toUpperCase().indexOf(e.target.value.toUpperCase()) < 0) {
+        // (function (i) {
+        // setTimeout(() => {
+        // songs[i].classList.add('houdini')
         songs[i].style.display = 'none'
-      }else {
+        // }, 2 * i)
+        // })(i)
+      } else {
         songs[i].style.display = ''
+        // songs[i].classList.remove('houdini')
       }
+      // }, 2 * i)
+      // })(i)
     }
     // console.log('keyup')
     // console.log(e.key)
-    console.log(e.target.value.toUpperCase())
+    // console.log(e.target.value.toUpperCase())
   }
   socket.on('renamed', data => {
     console.log('socket on renamed')
     console.log(data)
 
-    let p_song_title = document.querySelectorAll(`[data-song-title="${data.id}"]`)[0] /* is an array-like-object */
+    let p_song_title = document.querySelectorAll(`[data-song-title="${data.id.trim()}"]`)[0] /* is an array-like-object */
     // let renamedSong = Array.from($songList.children).find(p => {
     //   return p.innerText === data.oldName
     // })
@@ -82,7 +89,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // console.log(iconTEst)
     // console.log(renamedSong)
 
-    p_song_title.innerHTML = data.newName /* + '<i class="hidden fas fa-pen edit_icon" title="edit title"></i><i class="add_song fas fa-plus"></i> ' */
+    p_song_title.innerHTML = data.newName
+    /* + '<i class="hidden fas fa-pen edit_icon" title="edit title"></i><i class="add_song fas fa-plus"></i> ' */
     // iconSetClick()
     // console.log(`its been renamed ${JSON.stringify(data)}`)
   })
@@ -112,11 +120,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
   myPlayer.onended = () => {
     My_Exports.loadRandom()
   }
+  console.log(username)
 
   $window.onkeydown = (e) => {
-    if (!username) {
-      return
-    }
+    console.log(e.key)
+    // if (!username) {
+    //   return
+    // }
     if (e.key === 'Tab') {
       e.preventDefault()
       if (document.activeElement === ytlink) {
@@ -124,6 +134,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
       } else {
         ytlink.focus()
       }
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault()
+      forward.click()
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault()
+      backward.click()
     }
   }
   socket.on('percent', (percent) => {
@@ -140,9 +158,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var song_title = data.trim()
     console.log(song_title)
     // console.log(song_title.trim())
-    $($songList).append('<div class="song"><p data-song-title="' + song_title + '"class="inline">' + song_title + '</p>' + icons(song_title) + '<div>')
+    $($songList).append('<div class="song"><p data-song-title="' + song_title.trim() + '"class="inline">' + song_title + '</p>' + icons(song_title) + '<div>')
 
-    let newSong_dom_element = document.querySelector(`[data-song-title="${song_title}"]`).parentElement
+    let newSong_dom_element = document.querySelector(`[data-song-title="${song_title.trim()}"]`).parentElement
     // newSong_dom_element.classList.add('inline')
     // newSong_dom_element.innerHTML = song_title
     console.log(newSong_dom_element)
@@ -233,7 +251,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log('socket on files')
 
     for (let i = 0; i < data.length; i++) {
-      $songList.innerHTML += ('<div class="song"><p data-song-title="' + data[i] + '"class="inline">' + data[i] + '</p>' + icons(data[i]) + '<div>')
+      $songList.innerHTML += ('<div class="song"><p data-song-title="' + data[i].trim() + '"class="inline">' + data[i].trim() + '</p>' + icons(data[i].trim()) + '<div>')
     }
     My_Exports.emitPlay(myId)
   })
@@ -293,7 +311,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     socket.send(JSON.stringify(data))
     $('#message').val('')
   }
-
+  if (forward) {
+    console.log('forwRD$$$$$$$$')
+  }
   $playbutton.onclick = () => {
     console.log('play!!')
     if (myPlayer.paused) {
@@ -302,14 +322,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
       myPlayer.pause()
     }
   }
-  pause.onclick = () => {
-    document.getElementById('audio-element').pause()
-  }
+  // pause.onclick = () => {
+  //   myPlayer.pause()
+  // }
   forward.onclick = () => {
-    document.getElementById('audio-element').currentTime += 15.0
+    myPlayer.currentTime += 15.0
   }
   backward.onclick = () => {
-    document.getElementById('audio-element').currentTime -= 15.0
+    myPlayer.currentTime -= 15.0
   }
 
   gobtn.onclick = () => {
