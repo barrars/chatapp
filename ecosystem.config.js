@@ -13,7 +13,7 @@ module.exports = {
         // "NODE_ENV": "production",
       },
 
-      ignore_watch: ['node_modules', 'public/downloads', '.git/*', 'ip.log'],
+      ignore_watch: ['node_modules', 'public/downloads', '.git/*', 'ip.log', 'archive', 'public/deleted'],
       watch_options: {
         followSymlinks: false
       }
