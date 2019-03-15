@@ -127,10 +127,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   $window.onkeydown = (e) => {
     // e.preventDefault()
     let key = e.keyCode
-    console.log(username)
-    if (key === 39 && e.altKey) {
-      console.log('money')
-    }
+    console.log(key)
 
     if (e.key === 'Tab') {
       e.preventDefault()
@@ -146,11 +143,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
       My_Exports.loadRandom()
     }
-    if (key.altKey && key === 39) {
+    if (e.altKey && key === 39) {
       e.preventDefault()
       forward.click()
     }
-    if (key.altKey && key === 37) {
+    if (e.altKey && key === 37) {
       e.preventDefault()
       backward.click()
     }
@@ -323,9 +320,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     socket.send(JSON.stringify(data))
     $('#message').val('')
   }
-  if (forward) {
-    console.log('forwRD$$$$$$$$')
-  }
+
   $playbutton.onclick = () => {
     console.log('play!!')
     if (myPlayer.paused) {
