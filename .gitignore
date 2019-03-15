@@ -8,3 +8,4 @@ todo
 server.cert
 server.key
 archive
+certbot.log
