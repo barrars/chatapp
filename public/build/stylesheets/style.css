@@ -357,6 +357,7 @@ div.userMessage {
 
 #songList {
   height: 90%;
+  width: 103%;
   overflow: auto
 }
 

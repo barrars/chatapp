@@ -95,10 +95,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // console.log(`its been renamed ${JSON.stringify(data)}`)
   })
   myPlayer.onpause = () => {
-    $playbutton.classList.add('fa-stop')
+    $playbutton.classList.add('fa-play')
+    $playbutton.classList.remove('fa-stop')
   }
   myPlayer.onplay = () => {
-    $playbutton.classList.add('fa-play')
+    $playbutton.classList.add('fa-stop')
+    $playbutton.classList.remove('fa-play')
   }
   myPlayer.ontimeupdate = () => {
     if (Math.floor(myPlayer.duration - myPlayer.currentTime) === isNaN) {
@@ -123,10 +125,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
   console.log(username)
 
   $window.onkeydown = (e) => {
-    console.log(e.key)
-    // if (!username) {
-    //   return
-    // }
+    // e.preventDefault()
+    let key = e.keyCode
+    console.log(username)
+    if (key === 39 && e.altKey) {
+      console.log('money')
+    }
+
     if (e.key === 'Tab') {
       e.preventDefault()
       if (document.activeElement === ytlink) {
@@ -135,11 +140,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         ytlink.focus()
       }
     }
-    if (e.key === 'ArrowRight') {
+    if (e.altKey && key === 78) {
+      e.preventDefault()
+      // console.log('load random key')
+
+      My_Exports.loadRandom()
+    }
+    if (key.altKey && key === 39) {
       e.preventDefault()
       forward.click()
     }
-    if (e.key === 'ArrowLeft') {
+    if (key.altKey && key === 37) {
       e.preventDefault()
       backward.click()
     }
@@ -293,6 +304,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     user = data.name
     color = data.color
 
+    console.log(data.user)
     $nameform.style.display = 'none'
   })
   $send.onclick = function () {
