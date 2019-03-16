@@ -30,13 +30,16 @@ var My_Exports = (function () {
     e.stopPropagation()
   }
   const deleteFunc = (e) => {
-    console.log(e)
+    // console.log(e)
 
-    console.log(e.target.parentElement.innerText)
+    // console.log(e.target.parentElement.innerText)
 
     // console.log(e.target.attributes[0].nodeValue)
     let dataAtrribute = e.target.parentElement.innerText
-    socket.emit('delete', dataAtrribute)
+    let youSure = confirm(`are you sure you want to delete ${dataAtrribute}?`)
+    if (youSure) {
+      socket.emit('delete', dataAtrribute)
+    }
     e.stopPropagation()
   }
 
@@ -44,7 +47,7 @@ var My_Exports = (function () {
     document.querySelectorAll(`[data-song-title="${data.trim()}"]`)[0].parentElement.remove()
     // console.log(deleteMe)
 
-    console.log(`the song ${data} has been deleted`)
+    // console.log(`the song ${data} has been deleted`)
   })
 
   const submitRename = function (oldName, newName, id) {
@@ -80,13 +83,13 @@ var My_Exports = (function () {
   }
 
   const addEventHandlersToSong = (tune, title, id) => {
-    console.log('addEventHandlersToSong')
+    // console.log('addEventHandlersToSong')
 
     let editIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[0]
     let addIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[1]
     let deleteIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[2]
 
-    console.log(editIcon)
+    // console.log(editIcon)
 
     editIcon.onclick = e => {
       editFunc(e)
@@ -109,7 +112,7 @@ var My_Exports = (function () {
       hideInput(deleteIcon)
     }
     tune.onclick = song => {
-      console.log('click', { song: song.target.textContent, name: id })
+      // console.log('click', { song: song.target.textContent, name: id })
       socket.emit('songClick', { song: song.target.textContent, name: id })
     }
 
@@ -117,7 +120,7 @@ var My_Exports = (function () {
 
     /* add clisck to add song to playlist */
     let add_icon = document.querySelectorAll(`i[data-name="${title.trim()}"]`)[0]
-    console.log(add_icon)
+    // console.log(add_icon)
     add_icon.addEventListener('click', add_song_to_playlist)
 
     /* add click to edit icon */
@@ -152,16 +155,18 @@ var My_Exports = (function () {
         hideInput(eicon)
       }
       tune.onclick = song => {
-        console.log('click', { song: song.target.textContent, name: id })
+        // console.log('click', { song: song.target.textContent, name: id })
         socket.emit('songClick', { song: song.target.textContent.trim(), name: id })
       }
     }
     // iconSetClick()
   }
   const loadRandom = () => {
-    console.log('loding random song')
+    // console.log('loding random song')
 
     let list = $songList.children
+    console.log(list.length)
+
     let nextIndex = Math.floor(Math.random() * list.length)
     myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].innerText)
     play()
