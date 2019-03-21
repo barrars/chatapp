@@ -16,12 +16,12 @@ var logger = require('tracer').colorConsole({
 })
 var io = require('./sockets').io()
 module.exports = {
-  addSong (arr, song) {
-    arr.push(song)
-  },
-  get_song_list (cb) {
-    return cb(list)
-  },
+  // addSong (arr, song) {
+  //   arr.push(song)
+  // },
+  // get_song_list (cb) {
+  //   return cb(list)
+  // },
   download (data) {
     logger.log(chalk.yellowBright('server received getsong event from' + data))
     const youtubedl = exec(

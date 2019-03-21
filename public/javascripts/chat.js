@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-
+var My_Exports = window.My_Exports
 let myId = document.getElementById('nickname')
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let color
   const icons = (name) => `<i data-name="${name.trim()}"class="hidden fas fa-pen edit_icon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
   const ytlink = document.getElementById('ytlink')
-  const pause = document.getElementById('pause')
+  // const pause = document.getElementById('pause')
   const myPlayer = document.getElementById('audio-element')
   const $window = window
   const gobtn = document.getElementById('gobtn')
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   })
   My_Exports.emitPlay(myId)
   if (!downloading) {
-    gobtn.innerText = 'Win!'
+    gobtn.innerText = 'find song!'
   }
 
   $find.onkeyup = (e) => {
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   $window.onkeydown = (e) => {
     // e.preventDefault()
     let key = e.keyCode
-    console.log(key)
+    // console.log(key)
 
     if (e.key === 'Tab') {
       e.preventDefault()
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
-    gobtn.innerText = 'Win!'
+    gobtn.innerText = 'download song'
     alertify.logPosition('top left')
     alertify.log(song_title, ' Download complete')
 
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
-    gobtn.innerText = 'Win!'
+    gobtn.innerText = 'download song'
     alertify.logPosition('top left')
     alertify.log(' This song has already been downloaded')
   })
@@ -406,6 +406,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
-    gobtn.innerText = 'Win!'
+    gobtn.innerText = 'download song'
   })
 })

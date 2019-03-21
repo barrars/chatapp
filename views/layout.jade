@@ -4,14 +4,12 @@ html
 
 body
   input#rename.fixed.hidden
-  //- iframe#audio(src='/audio/drop.mp3', allow='autoplay', style='display:none')
   include header.jade
+  include nameform.jade
   include container.jade
   include footer.jade
-  include nameform.jade
   include  create_playlist_modal.jade
 
-  //- include modal
 
 
 block scripts

@@ -41,7 +41,7 @@ io.on('connection', function (socket) {
     socket.emit('files', data)
     songs = data
 
-    logger.log(songs)
+    logger.log(songs.length)
   })
   socket.on('delete', data => {
     console.log(`delete ${data}`)

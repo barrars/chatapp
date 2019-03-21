@@ -52,6 +52,7 @@ var My_Exports = (function () {
 
   const submitRename = function (oldName, newName, id) {
     let data = { oldName, newName, id }
+    console.log(data)
     socket.emit('rename', data)
   }
   // document.getElementById('nickname')
