@@ -372,7 +372,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     ytlink.focus()
 
     /* Send a request to the sewrver at /usrs/set_name */
+
     window.$.get(`/users/set_name/${myId}`)
+
     // http://localhost:3001/users/set_name/myname
     // window.$.post(`/users/set_name`, {name:myId})
 

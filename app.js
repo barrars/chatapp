@@ -21,7 +21,6 @@ const playlistRouter = require('./routes/playlistRouter')
 const chalk = require('chalk')
 
 const session = require('express-session')
-// const cookie = require('cookie-parser')
 // const mongoose = require('mongoose')
 const mongoStore = require('connect-mongo')(session)
 const app = express()
