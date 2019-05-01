@@ -18,7 +18,7 @@ const cookieParser = require('cookie-parser')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const playlistRouter = require('./routes/playlistRouter')
-const chalk = require('chalk')
+// const chalk = require('chalk')
 
 const session = require('express-session')
 // const mongoose = require('mongoose')
@@ -58,7 +58,7 @@ app.use('/bulma', express.static(path.join(__dirname, '/node_modules/bulma/css/'
 app.use('/boots', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css/')))
 
 app.use('/users', usersRouter)
-app.use('/playlist', playlistRouter)
+// app.use('/playlist', playlistRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const $send = document.getElementById('send')
   const $nameform = document.getElementById('nameform')
   // socket = window.io()
-  let username = false
+  let username
   let downloading = false
 
   window.$.get('/users/is_name_set', (resp) => {
-    console.log(resp)
+    // console.log(resp)
     if (resp) {
       username = true
       myId = resp
@@ -123,7 +123,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     My_Exports.loadRandom()
   }
   console.log(username)
-
+  $window.onclick = (e) => {
+    console.log(e)
+  }
   $window.onkeydown = (e) => {
     // e.preventDefault()
     let key = e.keyCode
@@ -257,10 +259,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
   })
   socket.on('files', data => {
     console.log('socket on files')
-
+    var a = []
     for (let i = 0; i < data.length; i++) {
-      $songList.innerHTML += ('<div class="song"><p data-song-title="' + data[i].trim() + '"class="inline">' + data[i].trim() + '</p>' + icons(data[i].trim()) + '<div>')
+      a.push('<div class="song"><p data-song-title="' + data[i].trim() + '"class="inline">' + data[i].trim() + '</p>' + icons(data[i].trim()) + '<div>')
     }
+    $songList.innerHTML = a.join('')
     My_Exports.emitPlay(myId)
   })
   socket.on('play', function (message) {
@@ -322,16 +325,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
 
   $playbutton.onclick = () => {
-    console.log('play!!')
     if (myPlayer.paused) {
       myPlayer.play()
     } else {
       myPlayer.pause()
     }
   }
-  // pause.onclick = () => {
-  //   myPlayer.pause()
-  // }
   forward.onclick = () => {
     myPlayer.currentTime += 15.0
   }
@@ -344,9 +343,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
       alertify.logPosition('top left')
       alertify.log('enter a YouTube link!')
       return
-    } else if (downloading === true) {
-      alertify.log('Please wait for the current download to finish')
-      return
     }
     downloading = true
     alertify.log('Starting Download')
@@ -355,15 +351,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
     ytlink.disabled = true
     socket.emit('getsong', song)
 
-    ytlink.value = ''
+    ytlink.value = 'starting download'
   }
 
   myId.focus()
   setname.onclick = () => {
     if (myId.value === '') {
       console.log('enter text')
-      socket.emit('set_name', myId.value)
 
+      // socket.emit('set_name', myId.value)
       return
     }
     myId = myId.value

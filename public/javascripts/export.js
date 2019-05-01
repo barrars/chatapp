@@ -11,14 +11,12 @@ var My_Exports = (function () {
   const edit_icons = $songList.getElementsByClassName('edit_icon')
   const deleteIcon = $songList.getElementsByClassName(' fa-trash-alt')
   const editFunc = (e) => {
-    // console.log(e.target.attributes[0].nodeValue)
     let dataAtrribute = e.target.attributes[0].nodeValue
     renameInput.classList.remove('hidden')
     renameInput.focus()
     renameInput.style.left = (e.clientX - 200) + 'px'
     renameInput.style.top = e.clientY + 'px'
     let oldName = e.target.parentElement.innerText
-    // console.log({ oldName })
     renameInput.value = oldName
     renameInput.onkeydown = e => {
       if (e.key === 'Escape') { hideInput(renameInput) }
@@ -30,11 +28,6 @@ var My_Exports = (function () {
     e.stopPropagation()
   }
   const deleteFunc = (e) => {
-    // console.log(e)
-
-    // console.log(e.target.parentElement.innerText)
-
-    // console.log(e.target.attributes[0].nodeValue)
     let dataAtrribute = e.target.parentElement.innerText
     let youSure = confirm(`are you sure you want to delete ${dataAtrribute}?`)
     if (youSure) {
@@ -45,9 +38,6 @@ var My_Exports = (function () {
 
   socket.on('deleted', data => {
     document.querySelectorAll(`[data-song-title="${data.trim()}"]`)[0].parentElement.remove()
-    // console.log(deleteMe)
-
-    // console.log(`the song ${data} has been deleted`)
   })
 
   const submitRename = function (oldName, newName, id) {
