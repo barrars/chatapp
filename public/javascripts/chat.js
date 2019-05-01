@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (resp) {
       username = true
       myId = resp
-      console.log(myId)
+      // console.log(myId)
 
       const myColor = My_Exports.getUsernameColor(myId)
       socket.emit('set_name', {
@@ -43,8 +43,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         color: myColor
       })
     }
+
+    My_Exports.emitPlay(myId)
   })
-  // My_Exports.emitPlay(myId)
   if (!downloading) {
     gobtn.innerText = 'find song!'
   }
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   myPlayer.onended = () => {
     My_Exports.loadRandom()
   }
-  console.log(username)
+  // console.log(username)
   $window.onclick = (e) => {
     console.log(e)
   }
@@ -258,13 +259,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     myPlayer.play()
   })
   socket.on('files', data => {
-    // My_Exports.emitPlay(myId)
-    console.log('socket on files')
+    // console.log('socket on files')
     var a = []
     for (let i = 0; i < data.length; i++) {
       a.push('<div class="song"><p data-song-title="' + data[i].trim() + '"class="inline">' + data[i].trim() + '</p>' + icons(data[i].trim()) + '</div>')
     }
     $songList.innerHTML = a.join('')
+    My_Exports.emitPlay(myId)
   })
   socket.on('play', function (message) {
     console.log('socket on play')
@@ -342,6 +343,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (ytlink.value.length === 0) {
       alertify.logPosition('top left')
       alertify.log('enter a YouTube link!')
+      return
+    } else if (downloading === true) {
+      alertify.log('Please wait for the current download to finish')
       return
     }
     downloading = true

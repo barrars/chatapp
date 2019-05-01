@@ -74,13 +74,11 @@ var My_Exports = (function () {
   }
 
   const addEventHandlersToSong = (tune, title, id) => {
-    // console.log('addEventHandlersToSong')
+    console.log('addEventHandlersToSong')
 
     let editIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[0]
     let addIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[1]
     let deleteIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[2]
-
-    // console.log(editIcon)
 
     editIcon.onclick = e => {
       editFunc(e)
@@ -92,9 +90,7 @@ var My_Exports = (function () {
       // let editIcon = e.target.children[0]
       if (editIcon) { showInput(editIcon) }
       if (addIcon) { showInput(addIcon) }
-      if (deleteIcon) {
-      }
-      showInput(deleteIcon)
+      if (deleteIcon) { showInput(deleteIcon) }
     }
     tune.onmouseleave = () => {
       // let editIcon = e.target.children[0]
@@ -117,6 +113,8 @@ var My_Exports = (function () {
     /* add click to edit icon */
   }
   const emitPlay = function (id) {
+    // console.log('$$$$$$emitPlay$$$', myId)
+
     for (let i = 0; i < edit_icons.length; i++) {
       let icon = edit_icons[i]
       icon.onclick = e => {
