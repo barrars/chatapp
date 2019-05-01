@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log('socket on files')
     var a = []
     for (let i = 0; i < data.length; i++) {
-      a.push('<div class="song"><p data-song-title="' + data[i].trim() + '"class="inline">' + data[i].trim() + '</p>' + icons(data[i].trim()) + '<div>')
+      a.push('<div class="song"><p data-song-title="' + data[i].trim() + '"class="inline">' + data[i].trim() + '</p>' + icons(data[i].trim()) + '</div>')
     }
     $songList.innerHTML = a.join('')
     My_Exports.emitPlay(myId)
