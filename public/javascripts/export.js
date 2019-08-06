@@ -154,9 +154,11 @@ var My_Exports = (function () {
     // console.log('loding random song')
 
     let list = $songList.children
-    console.log(list.length)
+    console.log(list.length, ' total songs in list')
 
     let nextIndex = Math.floor(Math.random() * list.length)
+    console.log('playing song # ', nextIndex, ' title ', list[nextIndex].innerText)
+
     myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].innerText)
     play()
     currentSong()

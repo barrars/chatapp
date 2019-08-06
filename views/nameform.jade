@@ -1,9 +1,8 @@
-//- block nameform
-section#nameform
-  .backdrop
-
-  .popup
-    .pophead  Please enter a nickname
-    .popbody
-      input#nickname(type="text")
-      input#setname(type="button", value="Set Name")
+#nameform.modal.is-active
+  .modal-background
+  .modal-card
+    header.modal-card-head
+      p.modal-card-title Enter a nickname for chatroom
+    input#nickname.input(type="text" placeholder="enter nickname")
+    footer.modal-card-foot
+      button#setname.button.is-success Enter

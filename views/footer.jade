@@ -1,5 +1,5 @@
 //- Declaration (footer-mixin.pug)
-//- block footer 
+//- block footer
 //- footer.is-fixed-bottom.navbar.tile.is-parent
 //-   input#message.is-6.tile.message_input(type='text', placeholder='Enter your message here')
 //-   input#send.tile.is-3.is-child(type='button', value='Send')
@@ -7,3 +7,7 @@
 footer
   input#message(type='text', placeholder='Enter your message here' class="message_input")
   input#send(type="button", value='Send')
+  .is-pulled-right
+    label.checkbox
+      input#repeat(type='checkbox')
+      |     repeat

@@ -1,430 +1,493 @@
-.red{
-  color: red;
+.red {
+  color: red
 }
+
 ::-webkit-input-placeholder {
-  color: #3431d6;
+  color: #3431d6
 }
+
 :-ms-input-placeholder {
-  color: #3431d6;
+  color: #3431d6
 }
+
 ::-ms-input-placeholder {
-  color: #3431d6;
+  color: #3431d6
 }
+
 ::placeholder {
-  color: #3431d6;
+  color: #3431d6
 }
+
 html {
   overflow: hidden;
-  height: 100%;
+  height: 100%
 }
+
 body,
 html {
   align-items: stretch;
-  display: flex;
+  display: flex
 }
+
 body {
   flex-direction: column;
   font: 14px Lucida Grande, Helvetica, Arial, sans-serif;
   height: 100%;
-  /* height: calc(100% - 20px); */
   margin: 0;
   padding: 0;
-  width: 100%;
+  width: 100%
 }
+
 .user {
-  color: #00ced1;
+  color: #00ced1
 }
+
 section#chatroom {
-  /* background-color: #efffec; */
   display: flex;
   flex-direction: column-reverse;
   height: 100%;
   overflow: overlay;
-  width: 100%;
-  /* min-width: 250px; */
+  width: 100%
 }
+
 ul#list {
   background: #faebd7;
-  padding: 17px;
+  padding: 17px
 }
-@-webkit-keyframes fadeInOpacity {
+
+@-webkit-keyframes a {
   0% {
-    opacity: 0;
+    opacity: 0
   }
+
   to {
-    opacity: 1;
+    opacity: 1
   }
 }
-@keyframes fadeInOpacity {
+
+@keyframes a {
   0% {
-    opacity: 0;
+    opacity: 0
   }
+
   to {
-    opacity: 1;
+    opacity: 1
   }
 }
-.nowrap{
+
+.nowrap {
   flex: 2;
-  white-space: nowrap;
+  white-space: nowrap
 }
-.grow{
-  flex-grow: 1;
+
+.grow {
+  flex-grow: 1
 }
-#buttons{
+
+#buttons {
   white-space: nowrap;
-  border: solid 2px black;
+  border: 2px solid #000;
   padding: 5px;
-  /* display: flex; */
-  /* width: 100%; */
-  /* max-width: 50%; */
-  flex: 1;
+  flex: 1
 }
-.justify{
-  justify-content: space-between;
+
+.justify {
+  justify-content: space-between
 }
-audio#sound{
-  display: none;
-}
-#audio-element{
-  width: 100%;
-  display: none;
-}
-.mymessage{
-  padding: 0 18px;
-  margin: 0;
-  font-family: 'Gloria Hallelujah';
-  background-color: rgb(175, 175, 175);
-  font-size: 1.5em;
-  /* border-radius: 25%; */
-  background-color: rgba(175, 175, 175, 0.42)
+
+audio#sound {
+display: none;
+  height: 100px;
+  width: 500px;
 
 }
-.message {
-  background-color: rgba(175, 175, 175, 0.42);
+
+#audio-element {
+  width: 100%;
+  display: none
+}
+
+.message,
+.mymessage {
   padding: 0 18px;
   margin: 0;
-  font-family: 'Gloria Hallelujah';
-  background-color: rgb(175, 175, 175);
+  font-family: Gloria Hallelujah;
+  background-color: #afafaf;
   font-size: 1.5em;
-  /* border-radius: 25%; */
+  background-color: hsla(0, 0%, 68.6%, .42)
 }
-.name{
-  font-family: 'PT Mono';
+
+.name {
+  font-family: PT Mono;
   background-color: #171717;
-  color: white;
+  color: #fff;
   font-size: 1.25em
 }
+
 #messages {
-  padding: 0 0 0 6px;
   word-break: break-word;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: auto;
-  padding: 10px;
+  padding: 10px
 }
+
 input#message {
-  /* width: calc(100% - 80px); */
-  width: 50%;
+  width: 50%
 }
+
 input#send {
-  width: 8%;
+  width: 8%
 }
-header {
-  /* background-color: #4192c1;
-  margin-top: 15px; */
-}
+
 header h1 {
   color: #b60707;
   margin: 0;
-  padding: 5px 15px 5px 5px;
+  padding: 5px 15px 5px 5px
 }
+
 footer {
   background-color: #4192c1;
   bottom: 0;
   box-sizing: border-box;
   color: #fff;
   margin: 0 0 10px;
-  padding: 6px;
-  /* width: 100%; */
+  padding: 6px
 }
+
 a {
-  color: #00b7ff;
+  color: #00b7ff
 }
+
 .modal {
   opacity: 1;
-  position: absolute;
+  position: absolute
 }
+
 .backdrop,
 .modal {
   height: 100%;
-  width: 100%;
+  width: 100%
 }
-.backdrop {
-  background-color: #777;
-}
-.wrap-btn{
-  /* outline: solid gray 1px; */
-  padding: 0 5px;
 
+.backdrop {
+  background-color: #777
 }
-.player{
-  overflow: hidden;
+
+.wrap-btn {
+  padding: 0 5px
+}
+
+.player {
+  height: 100%;
+  overflow: hidden
+}
+.song>p{
+  white-space: pre;
 }
 .popup {
   background: #fff;
-  height: 100px;
+  /* height: 100px; */
   left: calc(50% - 150px);
   position: absolute;
   top: calc(50% - 50px);
-  width: 300px;
+  width: 300px
 }
+
 .pophead {
   background-color: #4192c1;
   color: #fff;
   font-weight: 700;
   padding: 8px 3px;
-  vertical-align: middle;
+  vertical-align: middle
 }
+
 .popbody {
-  padding: 10px 5px;
+  padding: 10px 5px
 }
-@keyframes scroll {
-  from {transform: translateX(100%)}
-  to {transform: translateX(-100%)}
-}
-.inline{
-  display: inline-block;
-}
-.scroll{
 
-  animation: scroll 7s steps(17)  infinite   ;
+@-webkit-keyframes b {
+  0% {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%)
+  }
+
+  to {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%)
+  }
 }
-#currentSong{
+
+@keyframes b {
+  0% {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%)
+  }
+
+  to {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%)
+  }
+}
+
+.fixed{
+  position: fixed;
+}
+
+.scroll {
+  -webkit-animation: b 7s steps(17) infinite;
+  animation: b 7s steps(17) infinite
+}
+
+#currentSong {
   width: 100%;
-  height: 30px;
+  /* height: 30px; */
   font-size: 2em;
-  position: relative;
-
-  /* flex: 1; */
+  position: relative
 }
+.nomargin{
+  margin: 0;
+
+}
+
 .serverMessage {
   color: red;
   font-family: monospace;
   font-size: 14px;
-  text-align: center;
+  text-align: center
 }
+
 div#songList p:hover {
   background: #f0f8ff;
   color: #0c1c77;
   cursor: pointer;
-  outline: dashed #20b2aa;
+  outline: dashed #20b2aa
 }
+
+#rename{
+  z-index: 1;
+  /* display: none; */
+  /* position: relative; */
+}
+/* div#songList i {
+  visibility: hidden;
+} */
+div#songList i:hover {
+  border-radius: 50%;
+  /* display: inline; */
+  background: #d40000;
+  color: #b4be1a;
+  cursor: pointer;
+  /* outline: dashed #040808 */
+}
+.hidden{
+  visibility: hidden;
+}
+.show{
+  display: inline;
+  visibility: visible;
+}
+
 span.name {
   font-style: oblique;
   margin: 11px 6px;
-  padding: 0 11px;
+  padding: 0 11px
 }
-div.myMessage {
-  -webkit-animation-duration: 1s;
-  -webkit-animation-name: fadeInOpacity;
-  -webkit-animation-timing-function: ease-in;
-  animation-duration: 1s;
-  animation-name: fadeInOpacity;
-  animation-timing-function: ease-in;
-  border-bottom-left-radius: 11px;
-  margin: 7px 0;
-  opacity: 1;
-  padding: 7px 0;
+
+#nameform{
+  width: 100%;
+  height: 100%;
 }
+div.myMessage,
 div.userMessage {
   -webkit-animation-duration: 1s;
-  -webkit-animation-name: fadeInOpacity;
+  -webkit-animation-name: a;
   -webkit-animation-timing-function: ease-in;
   animation-duration: 1s;
-  animation-name: fadeInOpacity;
+  animation-name: a;
   animation-timing-function: ease-in;
   border-bottom-left-radius: 11px;
   margin: 7px 0;
   opacity: 1;
-  padding: 7px 0;
+  padding: 7px 0
 }
-.overflow{
 
-  overflow: hidden;
+.overflow {
+  overflow: hidden
 }
-.grid{
-  display: grid;
+
+.grid {
+  display: grid
 }
+
 .container {
   width: 100%;
   align-items: stretch;
   display: flex;
   flex-direction: row-reverse;
-  height: 87%;
+  height: 87%
 }
+
 #ytlink:focus,
 .message_input:focus {
-  border: 4px solid #da2058;
+  border: 4px solid #da2058
 }
+.song {
+  transition: all .2s;
+
+}
+.houdini{
+    /* display: none; */
+    transform: rotateX(90deg);
+    /* visibility: hidden; */
+}
+.pophead {
+  text-align: center;
+  display: flex
+}
+
 #ytlink {
   height: 100%;
-  width: 80%;
+  width: 60%
 }
-.pophead{
-  text-align: center;
-  display: flex;
+#open_playlist_modal{
+  height: 100%;
+  width: 25%;
 }
 #gobtn {
   height: 100%;
-  width: 20%;
+  width: 10%
 }
+
 #songList {
-  height: 94% ;
-  overflow: auto;
+  height: 90%;
+  width: 103%;
+  overflow: auto
 }
 
-input#setname{
-  width: 35%;
+input#setname {
+  width: 35%
+}
+.flex{
+  display: flex;
+  width: 100%;
 }
 
-.font1{
- font-family: 'Amatic SC';
-}
-.font2{
-
- font-family:'Bad Script';
-}
-.font3{
-
- font-family:'Caveat';
-}
-.font4{
-
- font-family:'Cinzel';
-}
-.font5{
-
- font-family:'EB Garamond';
-}
-.font6{
-
- font-family:'Gloria Hallelujah';
-}
-.font7{
-
- font-family:'Nothing You Could Do';
-}
-.font8{
-
- font-family: 'PT Mono';
-}
-.font9{
-
- font-family: 'Patrick Hand';
-}
-.font10{
-
- font-family: 'Philosopher';
-}
-.font11{
-
- font-family: 'Press Start 2P';
-}
-.font12{
-
- font-family: 'Rancho';
-}
-.font13{
-
- font-family: 'Shadows Into Light';
-}
-.font14{
-
- font-family: 'Special Elite';
-}
-.font15{
-
- font-family: 'Cedarville Cursive';
-}
-.font16{
-
-  font-family:'Cinzel';
-}
-.font17{
-
-  font-family:'Monoton';
-}
-.font18{
-
-  font-family:'Permanent Marker';
-}
-.font19{
-
-  font-family:'Shadows Into Light';
+.font1 {
+  font-family: Amatic SC
 }
 
+.font2 {
+  font-family: Bad Script
+}
 
+.font3 {
+  font-family: Caveat
+}
 
-/* $primary-color: #2ecc71; */
+.font4 {
+  font-family: Cinzel
+}
+
+.font5 {
+  font-family: EB Garamond
+}
+
+.font6 {
+  font-family: Gloria Hallelujah
+}
+
+.font7 {
+  font-family: Nothing You Could Do
+}
+
+.font8 {
+  font-family: PT Mono
+}
+
+.font9 {
+  font-family: Patrick Hand
+}
+
+.font10 {
+  font-family: Philosopher
+}
+
+.font11 {
+  font-family: Press Start\ 2P
+}
+
+.font12 {
+  font-family: Rancho
+}
+
+.font13 {
+  font-family: Shadows Into Light
+}
+
+.font14 {
+  font-family: Special Elite
+}
+
+.font15 {
+  font-family: "Cedarville Cursive"
+}
+
+.font16 {
+  font-family: Cinzel
+}
+
+.font17 {
+  font-family: Monoton
+}
+
+.font18 {
+  font-family: Permanent Marker
+}
+
+.font19 {
+  font-family: Shadows Into Light
+}
 
 #player {
-	/* width: 350px; */
-	/* height: 50px; */
-	/* position: relative; */
   margin: 10px 8px;
-    /* top: 80px; */
-    display: flex;
+  display: flex
 }
-
-	/* i {
-		position: absolute;
-		margin-top: -6px;
-		color: #666;
-	} */
-/*
-	i.fa-volume-down {
-		margin-left: -8px;
-	}
-
-	i.fa-volume-up {
-		margin-right: -8px;
-		right: 0;
-	}
-} */
 
 #volume {
-	/* position: relative; */
-	/* left: 24px; */
-	/* margin: 0 auto; */
-	height: 5px;
-	width: 80%;
-	background: #555;
-  border-radius: 15px;
+  height: 5px;
+  width: 80%;
+  background: #555;
+  border-radius: 15px
 }
 
-	.ui-slider-range-min {
-    height: 5px;
-    /* left: 50%; */
-		/* width: 300px; */
-		position: relative;
-		background: orange;
-		border: none;
-		border-radius: 10px;
-  	outline: none;
+.ui-slider-range-min {
+  height: 5px;
+  position: relative;
+  background: orange;
+  border: none;
+  border-radius: 10px;
+  outline: none
 }
 
-	.ui-slider-handle {
-    display: inline-block;
-    top: -8px;
-		width: 15px;
-  	height: 15px;
-		border-radius: 20px;
-  	background:red;
-  	position: relative;
-  	margin-left: -8px;
-  	margin-top: -8px;
-  	cursor: pointer;
-  	outline: none;
-	}
+.ui-slider-handle {
+  position: relative;
+  top: -11px;
+  display: inline-block;
+  top: -8px;
+  width: 15px;
+  height: 15px;
+  border-radius: 20px;
+  background: red;
+  position: relative;
+  margin-left: -8px;
+  margin-top: -8px;
+  cursor: pointer;
+  outline: none
+}
+
+.inline{
+  display:inline;
+}

@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const $playbutton = document.getElementById('play')
   const $find = document.getElementById('find')
   const $songList = document.getElementById('songList')
+  const $repeat = document.getElementById('repeat')
   const $messages = document.getElementById('messages')
   const $list = document.getElementById('list')
   const $message = document.getElementById('message')
@@ -121,11 +122,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
   })
 
   myPlayer.onended = () => {
+    if ($repeat.checked) {
+      console.log('repeat')
+
+      myPlayer.play()
+      return
+    }
+    console.log('no repeat')
     My_Exports.loadRandom()
   }
   // console.log(username)
   $window.onclick = (e) => {
-    console.log(e)
+    // console.log(e)
   }
   $window.onkeydown = (e) => {
     // e.preventDefault()

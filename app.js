@@ -53,9 +53,7 @@ app.use(sessionMiddleware)
 
 app.use('/', indexRouter)
 app.use(express.static(path.join(__dirname, 'public')))
-app.use('/jquery', express.static(path.join(__dirname, '/node_modules/jquery/dist/')))
-app.use('/bulma', express.static(path.join(__dirname, '/node_modules/bulma/css/')))
-app.use('/boots', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css/')))
+app.use('/public', express.static(path.join(__dirname, '/public')))
 
 app.use('/users', usersRouter)
 // app.use('/playlist', playlistRouter)
