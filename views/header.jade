@@ -7,18 +7,18 @@ header#bannner
       p.nomargin  .......Play Some Muzik........
 
 
-  div.is-flex
+  div.is-flex-desktop
     .nowrap
-      input#ytlink(title='enter a YouTube link', type='text', placeholder='search for song to download')
-      button#gobtn WIN
+      input#ytlink.input(title='enter a YouTube link', type='text', placeholder='search for song to download')
+      button#gobtn.button.is-link WIN
       //- button#open_playlist_modal Create Playlist
-    #buttons
+    #buttons.name
       .is-flex.justify
-        .wrap-btn
-          i#play.fas.fa-play
+        #play.button
+          i.fas.fa-play
 
-        #backward.wrap-btn(title="rewind")
+        #backward.button(title="rewind")
           i.fas.fa-angle-double-left
-        .time
-        #forward.wrap-btn(title="fast forward")
+        #forward.button(title="fast forward")
           i.fas.fa-angle-double-right
+        .time

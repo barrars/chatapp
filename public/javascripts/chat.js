@@ -97,12 +97,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // console.log(`its been renamed ${JSON.stringify(data)}`)
   })
   myPlayer.onpause = () => {
-    $playbutton.classList.add('fa-play')
-    $playbutton.classList.remove('fa-stop')
+    $playbutton.children[0].classList.add('fa-play')
+    $playbutton.children[0].classList.remove('fa-stop')
   }
   myPlayer.onplay = () => {
-    $playbutton.classList.add('fa-stop')
-    $playbutton.classList.remove('fa-play')
+    $playbutton.children[0].classList.add('fa-stop')
+    $playbutton.children[0].classList.remove('fa-play')
   }
   myPlayer.ontimeupdate = () => {
     if (Math.floor(myPlayer.duration - myPlayer.currentTime) === isNaN) {
