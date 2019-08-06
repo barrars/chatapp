@@ -291,10 +291,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
       My_Exports.playDrop()
       console.log('com ', message)
       let time = new Date()
+      let card = 'card'
       $('#messages').append(
         '<div title="' + time + '"style="box-shadow: 0px 2px 0 0' +
       message.color + '"class ="' + message.type + '"><span class="name">' +
-      message.name + '</span> <span class="message">' +
+      message.name + '</span> <span class="message card">' +
       message.message + '</span></div>'
       )
       $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
