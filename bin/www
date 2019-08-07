@@ -4,7 +4,6 @@ function onListening () {
   // console.log('$$$$$$$', addr)
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
   debug('Listening on ' + bind)
-  // console.log('direname, ', __dirname)
 
   console.log(`goodJob! Port at http://localhost:${port}`)
   console.log(ip)

@@ -410,10 +410,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
   }
 
-  socket.on('error', () => {
+  socket.on('error', (error) => {
     console.log('socket on error')
 
-    alertify.log('something went wrong')
+    alertify.log('something went wrong' + error)
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
