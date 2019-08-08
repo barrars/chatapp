@@ -16,8 +16,9 @@ var My_Exports = (function () {
     renameInput.focus()
     renameInput.style.left = (e.clientX - 200) + 'px'
     renameInput.style.top = e.clientY + 'px'
-    let oldName = e.target.parentElement.innerText
-    renameInput.value = oldName
+    let oldName = dataAtrribute
+    // let oldName = e.target.parentElement.innerText
+    renameInput.value = dataAtrribute
     renameInput.onkeydown = e => {
       if (e.key === 'Escape') { hideInput(renameInput) }
       if (e.key === 'Enter') {

@@ -4,10 +4,14 @@
 //-   input#message.is-6.tile.message_input(type='text', placeholder='Enter your message here')
 //-   input#send.tile.is-3.is-child(type='button', value='Send')
 
-footer
+footer.blue.lighten-4
   input#message.input(type='text', placeholder='Enter your message here' class="message_input")
   input#send.button.is-success(type="button", value='Send')
   .is-pulled-right
-    label.checkbox
-      input#repeat.checkbox(type='checkbox')
-      |     repeat
+    label
+      input#repeat(type='checkbox')
+      span Repeat
+
+  //- label
+  //-   input(type='checkbox')
+  //-   span Red

@@ -27,10 +27,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const $message = document.getElementById('message')
   const $send = document.getElementById('send')
   const $nameform = document.getElementById('nameform')
+  const $sidenav = document.getElementById('sidenav')
   // socket = window.io()
   let username
   let downloading = false
+  var elem = document.querySelector('.sidenav')
+  var instance = M.Sidenav.init(elem, { edge: 'right' })
+  console.log(instance)
 
+  $sidenav.addEventListener('click', () => {
+    instance.open()
+  })
   window.$.get('/users/is_name_set', (resp) => {
     // console.log(resp)
     if (resp) {
@@ -343,6 +350,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
   forward.onclick = () => {
     myPlayer.currentTime += 15.0
+    console.log('hi!!!!')
+
   }
   backward.onclick = () => {
     myPlayer.currentTime -= 15.0

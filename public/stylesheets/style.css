@@ -315,7 +315,10 @@ div.userMessage {
 }
 
 .container {
-	overflow: scroll;
+	height: 100vh;
+	margin: 0 auto;
+	width: 100vw;
+	/* overflow: scroll; */
   display: flex;
   flex-direction: row-reverse;
 }
@@ -353,9 +356,15 @@ div.userMessage {
 #songList {
   height: 83%;
   width: 104%;
-  overflow: auto;
-}
+  overflow: overlay;
 
+}
+input#nickname {
+	color: rgb(33, 17, 218);
+	background: #f0f8ff;
+	padding: 0 10px;
+
+}
 input#setname {
   width: 35%;
 }
