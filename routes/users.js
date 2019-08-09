@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+const logger = require('./myLogger')
 
 /* GET users listing. */
 router.get('/set_name/:name', function (req, res, next) {

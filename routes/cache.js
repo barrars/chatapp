@@ -1,10 +1,12 @@
 const fs = require('fs-extra')
 const path = require('path')
+const logger = require('./myLogger')
+
 exports.cacheSongs = (cb) => {
-  // console.log('Caching scotts songs yay!'.red)
+  logger.log('Caching scotts songs yay!'.red)
   fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
     if (err) {
-      console.log(err)
+      logger.log(err)
     }
 
     cb(files)

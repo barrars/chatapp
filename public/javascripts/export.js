@@ -72,6 +72,8 @@ var My_Exports = (function () {
   }
   const currentSong = function () {
     current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2].split('.')[0]
+    let song = document.getElementById('audio-element').getAttribute('src').split('/')[2]
+    console.log(song)
   }
 
   const addEventHandlersToSong = (tune, title, id) => {

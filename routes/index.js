@@ -1,6 +1,8 @@
 var express = require('express')
 var router = express.Router()
 const fs = require('fs-extra')
+const logger = require('./myLogger')
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
   // logger.log('test seession'.green)
@@ -16,11 +18,11 @@ router.get('/', function (req, res, next) {
 
   fs.appendFile('ip.log', `${req.ip} connected at ${Date()} \n`, (err) => {
     if (err) {
-      // logger.log('err'.red)
-      // logger.log(err)
+      logger.log('err'.red)
+      logger.log(err)
     }
   })
-  // logger.log(req.ip)
+  logger.log(req.ip)
 })
 
 module.exports = router

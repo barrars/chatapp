@@ -1,18 +1,20 @@
 const fs = require('fs-extra')
 const path = require('path')
 const colors = require('colors')
-const logger = require('tracer').colorConsole({
-  format: '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
-  dateformat: 'HH:MM:ss.L',
-  filters: {
-    log: [colors.underline, colors.white],
-    trace: colors.magenta,
-    debug: colors.blue,
-    info: colors.green,
-    warn: colors.yellow,
-    error: [colors.red, colors.bold]
-  }
-})
+// const logger = require('tracer').colorConsole({
+//   format: '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
+//   dateformat: 'HH:MM:ss.L',
+//   filters: {
+//     log: [colors.underline, colors.white],
+//     trace: colors.magenta,
+//     debug: colors.blue,
+//     info: colors.green,
+//     warn: colors.yellow,
+//     error: [colors.red, colors.bold]
+//   }
+// })
+const logger = require('./myLogger')
+
 let songs
 const io = require('socket.io')()
 require('./ip').uniqeVisits()
@@ -71,7 +73,7 @@ io.on('connection', function (socket) {
     logger.log(data)
     socket.emit('name_set', data)
 
-    logger.log('Emiting a socke of scotts songs!!'.magenta)
+    logger.info('Emiting a socke of scotts songs!!'.magenta)
     // socket.emit('files', songCache)
 
     socket.nickname = data.name

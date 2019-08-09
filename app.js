@@ -2,14 +2,15 @@
 
 require('dotenv').config()
 
-colors = require('colors')
-logger = require('tracer').colorConsole({
-  format: '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
-  dateformat: 'HH:MM:ss.L'
-})
+// colors = require('colors')
+// logger = require('tracer').colorConsole({
+//   format: '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
+//   dateformat: 'HH:MM:ss.L'
+// })
 // GLOBALS
 
 require('./models/db.js')
+// const logger = require('./routes/myLogger')
 const createError = require('http-errors')
 const express = require('express')
 const path = require('path')

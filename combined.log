@@ -1,0 +1,7 @@
+{"message":"# of uniqve IP addresses 3","level":"info","service":"user-service"}
+{"message":"# of uniqve IP addresses 3","level":"info","service":"user-service"}
+{"message":"Mongoose default connection open to mongodb://dave:pass123@ds053944.mlab.com:53944/chatcat","level":"info","service":"user-service"}
+{"message":"# of uniqve IP addresses 3","level":"info","service":"user-service"}
+{"message":"Mongoose default connection open to mongodb://dave:pass123@ds053944.mlab.com:53944/chatcat","level":"info","service":"user-service"}
+{"message":"Connected to MongoDB","level":"info","service":"user-service"}
+{"message":"# of uniqve IP addresses 3","level":"info","service":"user-service"}

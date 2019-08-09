@@ -47,7 +47,8 @@
     "postcss-merge-rules": "^4.0.3",
     "postcss-prettify": "^0.3.4",
     "socket.io": "^2.2.0",
-    "tracer": "^0.9.8"
+    "tracer": "^0.9.8",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/socket.io": "^1.4.40",
