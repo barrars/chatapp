@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let downloading = false
   var elem = document.querySelector('.sidenav')
   var instance = M.Sidenav.init(elem, { edge: 'right' })
-  console.log(instance)
 
   $sidenav.addEventListener('click', () => {
     instance.open()
@@ -351,7 +350,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   forward.onclick = () => {
     myPlayer.currentTime += 15.0
     console.log('hi!!!!')
-
   }
   backward.onclick = () => {
     myPlayer.currentTime -= 15.0
