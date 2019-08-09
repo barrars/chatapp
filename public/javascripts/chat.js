@@ -217,16 +217,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     console.log(data)
 
     if (!data.clients) {
-      $list.innerHTML += '<li data-id="' + data.id + '">' + data.name + '</li>'
+      $list.innerHTML += '<li class="button is-flex" data-id="' + data.id + '">' + data.name + '</li>'
     } else {
       for (var key in data.clients) {
         if (data.clients.hasOwnProperty(key)) {
           if (key === socket.id) {
             $list.innerHTML +=
-'<li class="user" data-id="' + key + '">' + data.clients[key] + '</li>'
+'<li class="user is-flex button" data-id="' + key + '">' + data.clients[key] + '</li>'
           } else {
             $list.innerHTML +=
-'<li data-id="' + key + '">' + data.clients[key] + '</li>'
+'<li class="is-flex button" data-id="' + key + '">' + data.clients[key] + '</li>'
           }
           console.log(key + '---> ' + data.clients[key])
         }
@@ -235,13 +235,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
   })
   socket.on('userLeft', data => {
     console.log('socket on userLeft')
-
-    console.log('user left!!  ', data)
-    if ($list
-      .querySelector('[data-id="' + data + '"]')) {
-      $list
-        .querySelector('[data-id="' + data + '"]')
-        .style.display = 'none'
+    if ($list.querySelector('[data-id="' + data + '"]')) {
+      let byebye = $list.querySelector('[data-id="' + data + '"]')
+      console.log(`Found him! ${data}`)
+      console.log(byebye)
+      byebye.style.background = 'red'
+      setTimeout(() => {
+        byebye.remove()
+      }, 500)
+      // byebye.style.color = 'red'
+      // byebye.classList.remove('is-flex')
+      // byebye.classList.remove('button')
     }
   })
   socket.on('user_entered', function (user) {
@@ -349,7 +353,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
   forward.onclick = () => {
     myPlayer.currentTime += 15.0
-    console.log('hi!!!!')
   }
   backward.onclick = () => {
     myPlayer.currentTime -= 15.0
