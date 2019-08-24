@@ -1,20 +1,24 @@
+const logger = require('../routes/myLogger')
+logger.trace(new Date())
 const fs = require('fs-extra')
+
 const path = require('path')
-const logger = require('./myLogger')
 
 exports.cacheSongs = (cb) => {
   logger.log('Caching scotts songs yay!'.red)
-  fs.readdir(path.join(__dirname, '/../public/downloads'), (err, files) => {
-    if (err) {
-      logger.log(err)
-    }
+  fs.readdir(path.join(__dirname, '/../public/downloads'))
+    .then((files) => cb(files))
+    .catch(err => logger.trace(err))
+    // if (err) {
+    // 	logger.log(err)
+    // }
 
-    cb(files)
-    // console.log(songList)
-    // exports.songList = songList
-    // console.log(songList)
-    // return songList
+  // cb(files)
 
-    // exports.songs = songList
-  })
+  // console.log(songList)
+  // exports.songList = songList
+  // console.log(songList)
+  // return songList
+
+  // exports.songs = songList
 }

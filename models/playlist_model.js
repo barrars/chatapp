@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
+const logger = require('../routes/myLogger')
+logger.trace(new Date())
 const mongoose = require('mongoose')
 
 const playlist_schema = mongoose.Schema({

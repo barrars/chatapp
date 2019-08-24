@@ -1,3 +1,6 @@
+const logger = require('./myLogger')
+logger.trace(new Date())
+
 const { spawn } = require('child_process')
 const ls = spawn('ls', ['-lh', '/usr'])
 

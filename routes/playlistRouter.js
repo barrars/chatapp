@@ -1,3 +1,6 @@
+const logger = require('./myLogger')
+logger.trace(new Date())
+
 var express = require('express')
 var router = express.Router()
 const playlist_model = require('../models/playlist_model.js')

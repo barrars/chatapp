@@ -1,20 +1,15 @@
-var express = require('express')
-var router = express.Router()
-const fs = require('fs-extra')
 const logger = require('./myLogger')
-
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  // logger.log('test seession'.green)
-  // logger.log(req.session)
-  let count = req.session.count
-  if (!count) {
-    req.session.count = 1
-  } else {
-    req.session.count++
-  }
-
-  res.render('index', { title: 'Chat Radio' })
+logger.trace(new Date())
+const express = require('express')
+const router = express.Router()
+const fs = require('fs-extra')
+const cache = require('./cache').cacheSongs
+router.get('/', function (req, res) {
+  console.time()
+  cache(data => {
+    res.render('index', { title: 'Chat Radio', songs: data })
+  })
+  console.timeEnd()
 
   fs.appendFile('ip.log', `${req.ip} connected at ${Date()} \n`, (err) => {
     if (err) {
@@ -22,7 +17,6 @@ router.get('/', function (req, res, next) {
       logger.log(err)
     }
   })
-  logger.log(req.ip)
 })
 
 module.exports = router

@@ -1,12 +1,20 @@
 #slide-out.player.sidenav
+  input#find.input(placeholder="search" type="text", name="find")
   #player
     //- i.fas.fa-volume-down
     //- #volume
     //- .ico
     //-   i.fas.fa-volume-up
     //- .time
-  input#find.input(placeholder="search" type="text", name="find")
   #songList
+    - if (songs){
+      each val in songs
+        div.card.song(data-name = val)
+          p.inline(data-name = val)=val
+          i.hidden.fa.s.fa-pen.editIcon(data-name=val title="edit title")
+          i.add_song.hidden.fas.fa-plus(data-name=val)
+          i.fas.hidden.fa-trash-alt(data-name=val)
+      - }
   audio#audio-element(autoplay  src="")
   input#rename
 

@@ -17,7 +17,7 @@
 </head>
 <body>
   <button id="btn"></button>
-  <audio id="audio" src="./public/downloads/50 Cent - Hit you up.mp3" controls ></audio>
+  <audio id="audio" src="./public/audio/drop.mp3" controls ></audio>
 <div id="color">
   click here
 </div>
@@ -25,13 +25,13 @@
     var sound = new Audio("./public/audio/drop.mp3");
     document.getElementById('color').onclick = () =>{
       console.log('sounds');
-      
+
      sound.play();
     }
     // document.getElementById('color').onclick = () =>{
     //   colorCheck()
     //   if (document.getElementById('color').style.backgroundColor === 'blue') {
-        
+
     //     document.getElementById('color').style.backgroundColor = 'red'
     //   }else{
     //     document.getElementById('color').style.backgroundColor = 'blue'
@@ -41,10 +41,10 @@
 
 function colorCheck() {
   if (document.getElementById('color').style.backgroundColor === 'blue') {
-    document.getElementById('audio').play() 
+    document.getElementById('audio').play()
   }
 }
-  
+
   document.getElementById('btn').onclick = () =>{
 
   }

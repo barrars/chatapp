@@ -1,69 +1,67 @@
+const logger = require('../routes/myLogger')
+logger.trace(new Date())
 const fs = require('fs-extra')
 const path = require('path')
-const colors = require('colors')
-// const logger = require('tracer').colorConsole({
-//   format: '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
-//   dateformat: 'HH:MM:ss.L',
-//   filters: {
-//     log: [colors.underline, colors.white],
-//     trace: colors.magenta,
-//     debug: colors.blue,
-//     info: colors.green,
-//     warn: colors.yellow,
-//     error: [colors.red, colors.bold]
-//   }
-// })
-const logger = require('./myLogger')
+
+const songModel = require('../models/songModel.js')
+const search = require('./search').search
 
 let songs
 const io = require('socket.io')()
 require('./ip').uniqeVisits()
-// let songCache = require('./cache').songList
-const cache = require('./cache').cacheSongs
-
 exports.io = function () {
   return io
 }
-exports.add_song_to_cache = (newSong) => {
-  logger.log({
-    newSong
-  })
-  logger.log(songs.length)
-
-  songs.push(newSong)
-  // logger.log(songs)
-}
-
 const myClients = {}
 io.on('connection', function (socket) {
-  console.log('socket on connection')
-  cache((data) => {
-    logger.log(data.length)
-    // logger.log(data)
-    socket.emit('files', data)
-    songs = data
+  socket.on('random', (data) => {
+    console.log(data)
+  })
+  songModel.find()
+    .then(results => {
+      // logger.log(results)
+      io.emit('results', results)
+    })
+  logger.log('socket on connection')
+  // cache(data => {
+  // 	console.log(new Date());
 
-    logger.log(songs.length)
+  //   logger.log(`${data.length} of songs in cache`)
+  //   socket.emit('files', data)
+  //   songs = data
+
+  // })
+  socket.on('search', (data) => {
+    // let itunes
+
+    // logger.info(data)
+    const results = search(data)
+    if (results) {
+      logger.info('results!!!!')
+
+      socket.emit('results', results)
+    }
   })
   socket.on('delete', data => {
-    console.log(`delete ${data}`)
+    logger.log(`delete ${data}`)
     fs.move(path.join(__dirname, '/../public/downloads/' + data), path.join(__dirname, '/../public/deleted/' + data), (err, suc) => {
       if (err) return err
 
-      console.log('deleted ', data)
+      logger.log('deleted ', data)
       socket.broadcast.emit('deleted', data)
       socket.emit('deleted', data)
     })
   })
   socket.on('rename', (data) => {
-    console.log('socket on rename')
+    logger.log('socket on rename')
 
     logger.log(data)
+    logger.log(songs)
     fs.rename(path.join(__dirname, '/../public/downloads/' + data.oldName), path.join(__dirname, '/../public/downloads/' + data.newName), (err) => {
       if (err) {
         throw err
       }
-      console.log(`${data.oldName} has been renamed to ${data.newName}`)
+      logger.log(`${data.oldName.red} ${'has been renamed to'.magenta}  ${data.newName}`)
       socket.broadcast.emit('renamed', data)
       socket.emit('renamed', data)
     })
@@ -102,28 +100,28 @@ io.on('connection', function (socket) {
       message: 'Welcome ' + data.name
     }))
     socket.on('disconnect', () => {
-      console.log('socket on disconnect')
+      // logger.log('socket on disconnect')
 
-      logger.log(myClients)
+      logger.log(`myClients = ${JSON.stringify(myClients)}`)
       // logger.log(socket)
       socket.broadcast.emit('userLeft', socket.id)
-      logger.log(socket.nickname, socket.id, ' has left')
+      logger.log(`userName ${socket.nickname} and ID ${socket.id}  has left`)
       delete myClients[socket.id]
     })
     socket.broadcast.emit('user_entered', data)
   })
   socket.on('getsong', require('./youtube.js').download)
-  // console.log('socket on getsong')
+  // logger.log('socket on getsong')
 
   socket.on('songClick', (data) => {
-    console.log('socket on songClick')
+    logger.log('socket on songClick')
 
     logger.log(data)
     socket.broadcast.emit('shareTrack', data)
     socket.emit('shareTrack', data)
   })
   socket.on('playing', (data) => {
-    console.log('socket on playing')
+    logger.log('socket on playing')
 
     // logger.log(socket)
     // data.type = 'serverMessage',
@@ -136,7 +134,7 @@ io.on('connection', function (socket) {
     socket.emit('play', data)
   })
   socket.on('message', function (message) {
-    console.log('socket on message')
+    logger.log('socket on message')
 
     message = JSON.parse(message)
     logger.log(message)

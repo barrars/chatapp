@@ -1,18 +1,8 @@
+const logger = require('./myLogger')
+logger.trace(new Date())
+
 const fs = require('fs-extra')
 var colors = require('colors')
-var logger = require('tracer').colorConsole({
-  format:
-    '{{timestamp.green}} <{{title.yellow}}> {{message.cyan}} (in {{file.red}}:{{line}})',
-  dateformat: 'HH:MM:ss.L',
-  filters: {
-    log: [colors.underline, colors.white],
-    trace: colors.magenta,
-    debug: colors.blue,
-    info: colors.green,
-    warn: colors.yellow,
-    error: [colors.red, colors.bold]
-  }
-})
 // rename( __dirname +'/../public/downloads/', '.mp3', '')
 
 module.exports = function renameExt (dir, oldExt, newExt) {

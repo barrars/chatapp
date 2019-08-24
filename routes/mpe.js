@@ -1,3 +1,6 @@
+const logger = require('./myLogger')
+logger.trace(new Date())
+
 const fs = require('fs-extra')
 // const path = require('path')
 fs.readdir('public/downloads', (err, files) => {

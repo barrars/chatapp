@@ -1,3 +1,5 @@
+const logger = require('../routes/myLogger')
+logger.trace(new Date())
 var os = require('os')
 var ifaces = os.networkInterfaces()
 
@@ -11,14 +13,14 @@ module.exports = Object.keys(ifaces).forEach(function (ifname) {
     }
 
     if (alias >= 1) {
-      // console.log(`alias = ${alias}`)
+      // logger.log(`alias = ${alias}`)
 
       // this single interface has multiple ipv4 addresses
-      console.log(ifname + ':' + alias, iface.address)
+      logger.log(ifname + ':' + alias, iface.address)
     } else {
-      // console.log(`alias = ${alias}`)
+      // logger.log(`alias = ${alias}`)
       // this interface has only one ipv4 adress
-      console.log('external address ', iface.address)
+      logger.log('external address ', iface.address)
     }
     ++alias
   })

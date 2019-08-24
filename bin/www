@@ -1,14 +1,15 @@
 #!/usr/bin/env node
+const logger = require('../routes/myLogger')
+logger.trace(new Date())
 function onListening () {
   var addr = server.address()
-  // console.log('$$$$$$$', addr)
+  // logger.log('$$$$$$$', addr)
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
   debug('Listening on ' + bind)
 
-  console.log(`goodJob! Port at http://localhost:${port}`)
-  console.log(ip)
+  // logger.log(`goodJob! Port at http://localhost:${port}`)
 }
-const ip = require('./myIP')
+// const ip = require('./myIP')
 const socket = require('../routes/sockets').io()
 var app = require('../app')
 var debug = require('debug')('awesome-chat:server')
@@ -77,11 +78,11 @@ function onError (error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges')
+      logger.error(bind + ' requires elevated privileges')
       process.exit(1)
       break
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use')
+      logger.error(bind + ' is already in use')
       process.exit(1)
       break
     default:

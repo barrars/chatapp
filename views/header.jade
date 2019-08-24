@@ -1,6 +1,3 @@
-//- block header
-
-
 header#bannner
   .overflow
     #currentSong.font11.grow.nowrap.scroll
@@ -11,12 +8,13 @@ header#bannner
     .nowrap
       input#ytlink.input(title='enter a YouTube link', type='text', placeholder='search for song to download')
       button#gobtn.button.is-link WIN
-      //- button#open_playlist_modal Create Playlist
+      .dropdown.is-active
+        #dropdown-menu.dropdown-menu(role='menu')
+          #searchContent.dropdown-content.hidden
     #buttons.name
       .is-flex.justify
         #play.button
           i.fas.fa-play
-
         #backward.button(title="rewind")
           i.fas.fa-angle-double-left
         #forward.button(title="fast forward")

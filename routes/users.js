@@ -1,6 +1,9 @@
-var express = require('express')
-var router = express.Router()
 const logger = require('./myLogger')
+logger.trace(new Date())
+
+const express = require('express')
+const router = express.Router()
+// const logger = require('./myLogger')
 
 /* GET users listing. */
 router.get('/set_name/:name', function (req, res, next) {
@@ -9,14 +12,16 @@ router.get('/set_name/:name', function (req, res, next) {
   logger.log(req.params)
   let name = req.params.name
   req.session.name = name
-
-  res.send('respond with a resource')
+  res.send(name)
 })
 
 router.get('/is_name_set', (req, res) => {
-  logger.log('is name set?'.green)
+  logger.log('received get for /is_name_set'.green)
+  logger.log(req.session.name)
   // logger.log(req.session)
-  if (req.session.name) {
+  if (req.session.name !== 'undefined') {
+    logger.log(req.session.name)
+
     res.send(req.session.name)
   } else {
     res.send(false)

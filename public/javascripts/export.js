@@ -1,14 +1,10 @@
 
-var My_Exports = (function () {
+var myExports = (function () {
   const $ = window.$
   const socket = window.io()
   const $songList = document.getElementById('songList')
-  // const alertify = window.alertify
-  // const ytlink = document.getElementById('ytlink')
-  // const gobtn = document.getElementById('gobtn')
-  // let myId
-  const renameInput = document.getElementById('rename')
-  const edit_icons = $songList.getElementsByClassName('edit_icon')
+  // const renameInput = document.getElementById('rename')
+  const editIcon = $songList.getElementsByClassName('editIcon')
   const deleteIcon = $songList.getElementsByClassName(' fa-trash-alt')
   const editFunc = (e) => {
     let dataAtrribute = e.target.attributes[0].nodeValue
@@ -29,7 +25,9 @@ var My_Exports = (function () {
     e.stopPropagation()
   }
   const deleteFunc = (e) => {
-    let dataAtrribute = e.target.parentElement.innerText
+    let dataAtrribute = e.target.getAttribute('data-name'.trim())
+    console.log(dataAtrribute)
+
     let youSure = confirm(`are you sure you want to delete ${dataAtrribute}?`)
     if (youSure) {
       socket.emit('delete', dataAtrribute)
@@ -38,32 +36,15 @@ var My_Exports = (function () {
   }
 
   socket.on('deleted', data => {
-    document.querySelectorAll(`[data-song-title="${data.trim()}"]`)[0].parentElement.remove()
+    console.log(`deleted event data ${data}`)
+
+    // document.querySelectorAll(`[data-song-title="${data.trim()}"]`)[0].parentElement.remove()
+    console.log(document.querySelector(`[data-name="${data.trim()}"]`).parentElement)
+    document.querySelector(`[data-name="${data.trim()}"]`).parentElement.remove()
   })
 
-  const submitRename = function (oldName, newName, id) {
-    let data = { oldName, newName, id }
-    console.log(data)
-    socket.emit('rename', data)
-  }
-  // document.getElementById('nickname')
   const myPlayer = document.getElementById('audio-element')
   const current = document.getElementById('currentSong')
-
-  const COLORS = [
-    '#e21400',
-    '#91580f',
-    '#f8a700',
-    '#f78b00',
-    '#58dc00',
-    '#287b00',
-    '#a8f07a',
-    '#4ae8c4',
-    '#3b88eb',
-    '#3824aa',
-    '#a700ff',
-    '#d300e7'
-  ]
 
   let downloading = false
   const play = function () {
@@ -74,50 +55,9 @@ var My_Exports = (function () {
     current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2]
   }
 
-  const addEventHandlersToSong = (tune, title, id) => {
-    console.log('addEventHandlersToSong')
-
-    let editIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[0]
-    let addIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[1]
-    let deleteIcon = document.querySelectorAll(`[data-name="${title.trim()}"]`)[2]
-
-    editIcon.onclick = e => {
-      editFunc(e)
-    }
-    deleteIcon.onclick = e => {
-      deleteFunc(e)
-    }
-    tune.onmouseover = () => {
-      // let editIcon = e.target.children[0]
-      if (editIcon) { showInput(editIcon) }
-      if (addIcon) { showInput(addIcon) }
-      if (deleteIcon) { showInput(deleteIcon) }
-    }
-    tune.onmouseleave = () => {
-      // let editIcon = e.target.children[0]
-      hideInput(editIcon)
-      hideInput(addIcon)
-      hideInput(deleteIcon)
-    }
-    tune.onclick = song => {
-      // console.log('click', { song: song.target.textContent, name: id })
-      socket.emit('songClick', { song: song.target.textContent, name: id })
-    }
-
-    // iconSetClick()
-
-    /* add clisck to add song to playlist */
-    let add_icon = document.querySelectorAll(`i[data-name="${title.trim()}"]`)[0]
-    // console.log(add_icon)
-    add_icon.addEventListener('click', add_song_to_playlist)
-
-    /* add click to edit icon */
-  }
   const emitPlay = function (id) {
-    // console.log('$$$$$$emitPlay$$$', myId)
-
-    for (let i = 0; i < edit_icons.length; i++) {
-      let icon = edit_icons[i]
+    for (let i = 0; i < editIcon.length; i++) {
+      let icon = editIcon[i]
       icon.onclick = e => {
         editFunc(e)
       }
@@ -131,7 +71,7 @@ var My_Exports = (function () {
     let songDivList = $songList.getElementsByTagName('div')
     for (let i = 0; i < songDivList.length; i++) {
       let tune = songDivList[i]
-      let xicon = $(tune).find('.edit_icon')[0]
+      let xicon = $(tune).find('.editIcon')[0]
       let eicon = $(tune).find('.add_song')[0]
       let dicon = $(tune).find('.fa-trash-alt')[0]
       tune.onmouseover = () => {
@@ -145,11 +85,18 @@ var My_Exports = (function () {
         hideInput(eicon)
       }
       tune.onclick = song => {
-        // console.log('click', { song: song.target.textContent, name: id })
+        console.log('click', { song: song.target.textContent, name: id })
+        console.log(song)
+
+        socket.emit('songClick', { song: song.target.textContent, name: id })
+      }
+      tune.onclick = song => {
+        console.log(song.target.textContent.trim())
+        console.log(id)
+        console.log(JSON.stringify(id))
         socket.emit('songClick', { song: song.target.textContent.trim(), name: id })
       }
     }
-    // iconSetClick()
   }
   const loadRandom = () => {
     // console.log('loding random song')
@@ -158,6 +105,9 @@ var My_Exports = (function () {
     console.log(list.length, ' total songs in list')
 
     let nextIndex = Math.floor(Math.random() * list.length)
+    socket.emit('random', (nextIndex) => {
+      console.log(nextIndex)
+    })
     console.log('playing song # ', nextIndex, ' title ', list[nextIndex].innerText)
 
     myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].innerText)
@@ -201,8 +151,8 @@ var My_Exports = (function () {
     })
 
     /* add click to edit icon */
-    for (let i = 0; i < edit_icons.length; i++) {
-      let eicon = edit_icons[i]
+    for (let i = 0; i < editIcon.length; i++) {
+      let eicon = editIcon[i]
       eicon.onclick = e => {
         editFunc(e)
       }
@@ -233,6 +183,6 @@ var My_Exports = (function () {
   const setVolume = function (myVolume) {
     myPlayer.volume = myVolume
   }
-  return { deleteFunc, addEventHandlersToSong, playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, hitPlay }
+  return { deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, emitPlay, iconSetClick, hideInput, showInput, downloading, hitPlay }
 })()
 // export { playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }
