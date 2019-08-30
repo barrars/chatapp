@@ -5,4 +5,14 @@ section#chatroom
     p.card Users List
     ul#list
   #messages
+    - if (chats){
+      each val in chats
+        .myMessage(title=val.timestamp style='box-shadow: 0px 2px 0 ' + val.color)
+          span.name= val.name
+          span.message.card= val.message
+
+        //- p= 'name ' +val.name + ' message: '+ val.message
+      - }
   audio#sound(src='/audio/drop.mp3' preload='auto')
+
+

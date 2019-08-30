@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+
 const logger = require('../routes/myLogger')
 logger.trace(new Date())
 const mongoose = require('mongoose')

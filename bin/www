@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const logger = require('../routes/myLogger')
-logger.trace(new Date())
+// logger.trace(new Date())
 function onListening () {
   var addr = server.address()
   // logger.log('$$$$$$$', addr)

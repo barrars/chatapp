@@ -1,24 +1,14 @@
 const logger = require('../routes/myLogger')
-logger.trace(new Date())
+// logger.trace(new Date())
 const fs = require('fs-extra')
-
 const path = require('path')
-
-exports.cacheSongs = (cb) => {
+const chat = require('../models/chatModel')
+exports.cacheSongs = cb => {
   logger.log('Caching scotts songs yay!'.red)
   fs.readdir(path.join(__dirname, '/../public/downloads'))
-    .then((files) => cb(files))
+    // .then(chat)
+    // .then(logger.info(chat))
+    // .then(logger.log(chat.find()))
+    .then(files => cb(files))
     .catch(err => logger.trace(err))
-    // if (err) {
-    // 	logger.log(err)
-    // }
-
-  // cb(files)
-
-  // console.log(songList)
-  // exports.songList = songList
-  // console.log(songList)
-  // return songList
-
-  // exports.songs = songList
-}
+};

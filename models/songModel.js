@@ -1,9 +1,8 @@
-/* eslint-disable camelcase */
 const mongoose = require('mongoose')
 const uuidv4 = require('uuid/v4')
 
 const logger = require('../routes/myLogger')
-logger.trace(new Date())
+// logger.trace(new Date())
 const songSchema = mongoose.Schema({
   name: { type: String, required: true },
   artist: { type: String },
@@ -14,7 +13,7 @@ const songSchema = mongoose.Schema({
 
 }, { timestamp: true })
 
-const Song = module.exports = mongoose.model('Song', songSchema)
+const Song = module.exports = mongoose.model('songs', songSchema)
 Song.create = create
 
 async function create (song) {
@@ -24,7 +23,6 @@ async function create (song) {
   if (!newSong.save()) {
     throw 'Error saving playlist'
   }
-
   return newSong
 }
 

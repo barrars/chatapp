@@ -1,17 +1,22 @@
 const logger = require('./myLogger')
-logger.trace(new Date())
+// logger.trace(new Date())
 const express = require('express')
 const router = express.Router()
 const fs = require('fs-extra')
 const cache = require('./cache').cacheSongs
-router.get('/', function (req, res) {
-  console.time()
-  cache(data => {
-    res.render('index', { title: 'Chat Radio', songs: data })
-  })
-  console.timeEnd()
+const chatLog = require('../models/chatModel')
+chatLog.find({}).then(result => {
+  logger.log(result.length)
+})
 
-  fs.appendFile('ip.log', `${req.ip} connected at ${Date()} \n`, (err) => {
+router.get('/', function (req, res) {
+  cache(songs => {
+    chatLog.find({}).then(chats => {
+      res.render('index', { title: 'Chat Radio', songs: songs, chats: chats })
+    })
+  })
+
+  fs.appendFile('ip.log', `${req.ip} connected at ${Date()} \n`, err => {
     if (err) {
       logger.log('err'.red)
       logger.log(err)

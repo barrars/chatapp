@@ -1,53 +1,40 @@
 require('dotenv').config()
 require('./models/db.js')
+const logger = require('./routes/myLogger')
 const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
-const playerRouter = require('./routes/playerRouter')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 const app = express()
-var compression = require('compression')
-
-// view engine setup
 app.set('views', path.join(__dirname, 'views'))
-
 app.set('view engine', 'jade')
-// app.set('view cache', true)
-
 app.enable('trust proxy')
-app.use(compression())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
-// const songModel = require('./models/songModel.js')
-
-// SESSION OPTIONS
-const mongoStore = new MongoStore({ url: process.env.MONGO_URL })
-const sessionOptions = {
-  store: mongoStore,
-  secret: 'secret',
-  saveUninitialized: true,
-  resave: true,
-  cookie: {
-    httpOnly: false
-  }
-}
-
-const sessionMiddleware = session(sessionOptions)
-// app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.static('public'))
-
-// app.use('/public', express.static(path.join(__dirname, '/public')))
-app.use(sessionMiddleware)
+const store = new MongoStore({
+  url: process.env.MONGO_URL,
+  autoRemove: 'interval',
+  autoRemoveInterval: 1
+})
+app.use(
+  session({
+    store,
+    saveUninitialized: false,
+    resave: true,
+    secret: 'secret'
+  })
+)
 
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
-app.use('/player', playerRouter)
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/public', express.static(path.join(__dirname, '/public')))
 
+app.use('/users', usersRouter)
 // app.use('/playlist', playlistRouter)
 
 // catch 404 and forward to error handler
@@ -64,6 +51,7 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500)
   res.render('error')
+  logger.log(err)
 })
 
 module.exports = app

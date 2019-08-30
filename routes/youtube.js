@@ -53,11 +53,11 @@ module.exports = {
             .then(song => {
               logger.log(`Song Created: ${song}`)
               io.emit('title', title)
-              songModel.find()
-                .then(results => {
-                  logger.log(results)
-                  io.emit('results', results)
-                })
+              // songModel.find()
+              //   .then(results => {
+              //     logger.log(results)
+              //     io.emit('results', results)
+              //   })
             })
             .catch(err => {
               logger.log(err)

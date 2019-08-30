@@ -1,8 +1,8 @@
 const logger = require('./myLogger')
-logger.trace(new Date())
+// logger.trace(new Date())
 
 const get = require('simple-get')
-// console.log(process.argv[2])
+// logger.log(process.argv[2])
 // get('https://itunes.apple.com/search?term=lizzo', function (err, res) {
 function msToTime (s) {
   var ms = s % 1000
@@ -17,12 +17,12 @@ function msToTime (s) {
 // var regexConst = /.*(source)/g
 
 // const term = escape(process.argv[2])
-// console.log(process.argv[2])
+// logger.log(process.argv[2])
 
-// console.log(term)
+// logger.log(term)
 
 // const term = escape('A$AP TWELVYY - CHILDS PLAY')
-module.exports.search = (term) => {
+module.exports.search = term => {
   const opts = {
     method: 'POST',
     url: 'https://itunes.apple.com/search?term=' + term,
@@ -33,21 +33,23 @@ module.exports.search = (term) => {
   }
   get.concat(opts, function (err, res, data) {
     if (err) throw err
-    console.log(Object.keys(data))
-    console.log(data['resultCount'])
+    logger.log(Object.keys(data))
+    logger.log(data.resultCount)
 
-    data['results'].forEach((element, i) => {
+    data.results.forEach((element, i) => {
       if (i < 5) {
-        console.log(`Artist = ${element.artistName}`)
-        console.log(`Track = ${element.trackName}`)
-        console.log(`Album = ${element.collectionName}`)
-        console.log(`sample = ${element.previewUrl}`)
-        console.log(`Thumbnail = ${element.artworkUrl100}`.match(/.*(source)/g) + '/512x512bb.jpg')
-        console.log(`Runtime = ${msToTime(element.trackTimeMillis)}`)
-        console.log('__________________________________')
+        logger.log(`Artist = ${element.artistName}`)
+        logger.log(`Track = ${element.trackName}`)
+        logger.log(`Album = ${element.collectionName}`)
+        logger.log(`sample = ${element.previewUrl}`)
+        logger.log(
+          `Thumbnail = ${element.artworkUrl100}`.match(/.*(source)/g) +
+            '/512x512bb.jpg'
+        )
+        logger.log(`Runtime = ${msToTime(element.trackTimeMillis)}`)
+        logger.log('__________________________________')
       } else {
-
       }
     })
   })
-}
+};
