@@ -1,21 +1,10 @@
 const logger = require('./myLogger')
-logger.trace(new Date())
-
 var exec = require('child_process').exec
-
 var io = require('./sockets').io()
 const songModel = require('../models/songModel.js')
 
 module.exports = {
-  // addSong (arr, song) {
-  //   arr.push(song)
-  // },
-  // get_song_list (cb) {
-  //   return cb(list)
-  // },
   download (data) {
-    console.log(data)
-
     logger.log(('server received getsong event from' + data))
     const youtubedl = exec(
       `youtube-dl "ytsearch:${data.song}" --config-location . `,
@@ -47,7 +36,7 @@ module.exports = {
       if (stdout.toLocaleLowerCase().indexOf('mp3') > 0) {
         youtubedl.on('close', code => {
           if (code) return logger.log('Error'.red)
-          let title = stdout.slice(41)
+          const title = stdout.slice(41)
 
           songModel.create({ name: title, createdBy: data.user })
             .then(song => {

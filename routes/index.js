@@ -6,7 +6,7 @@ const fs = require('fs-extra')
 const cache = require('./cache').cacheSongs
 const chatLog = require('../models/chatModel')
 chatLog.find({}).then(result => {
-  logger.log(result.length)
+  logger.log(`${result.length} chats saved in the db`)
 })
 
 router.get('/', function (req, res) {

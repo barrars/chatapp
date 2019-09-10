@@ -1,10 +1,9 @@
 require('dotenv').config()
 const logger = require('../routes/myLogger')
-// logger.trace(new Date())
 const mongoose = require('mongoose')
-const db_uri = process.env.MONGO_URL
+const dbURI = process.env.MONGO_URL
 
-mongoose.connect(db_uri, { useNewUrlParser: true })
+mongoose.connect(dbURI, { useNewUrlParser: true })
   .catch(error => {
     logger.log(error.message)
   })
@@ -14,7 +13,7 @@ mongoose.set('useCreateIndex', true)
 // CONNECTION EVENTS
 // When successfully connected
 mongoose.connection.on('connected', function () {
-  logger.log('Mongoose default connection open to ' + db_uri)
+  logger.log('Mongoose default connection open to ' + dbURI)
 })
 
 // If the connection throws an error
@@ -28,9 +27,9 @@ mongoose.connection.on('disconnected', function () {
 })
 
 // If the Node process ends, close the Mongoose connection
-process.on('SIGINT', function () {
-  mongoose.connection.close(function () {
-    logger.log('Mongoose default connection disconnected through app termination')
-    process.exit(0)
-  })
-})
+// process.on('SIGINT', function () {
+//   mongoose.connection.close(function () {
+//     logger.log('Mongoose default connection disconnected through app termination')
+//     process.exit(0)
+//   })
+// })

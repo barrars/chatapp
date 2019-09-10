@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const logger = require('../routes/myLogger')
+// const logger = require('../routes/myLogger')
 const Schema = mongoose.Schema
 
 const chatSchema = new Schema({
@@ -8,14 +8,14 @@ const chatSchema = new Schema({
   color: { type: String },
   timestamp: { type: Date, default: Date.now }
 })
-const Chats = (module.exports = mongoose.model('chat', chatSchema))
+const Chats = module.exports = mongoose.model('chat', chatSchema)
 
 async function create (chat) {
-  const newSong = new Chats(chat)
-  if (!newSong.save()) {
-    throw 'Error saving playlist';
+  const newChat = new Chats(chat)
+  if (!newChat.save()) {
+    throw new Error()
   }
-  return newSong
+  // return newChat
 }
 
 Chats.create = create

@@ -261,6 +261,8 @@ div#songList p:hover {
 }
 
 #rename {
+	margin-left:1%;
+	width: 33%;
   z-index: 1;
   /* display: none; */
   /* position: relative; */
@@ -275,6 +277,9 @@ div#songList i:hover {
   color: #b4be1a;
   cursor: pointer;
   /* outline: dashed #040808 */
+}
+i{
+	margin-right:10%;
 }
 .hidden {
   visibility: hidden;

@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 const logger = require('../routes/myLogger')
-// logger.trace(new Date())
 function onListening () {
   var addr = server.address()
-  // logger.log('$$$$$$$', addr)
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
   debug('Listening on ' + bind)
 
   // logger.log(`goodJob! Port at http://localhost:${port}`)
 }
-// const ip = require('./myIP')
+require('./myIP')
 const socket = require('../routes/sockets').io()
 var app = require('../app')
 var debug = require('debug')('awesome-chat:server')

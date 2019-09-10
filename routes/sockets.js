@@ -1,19 +1,15 @@
 const logger = require('../routes/myLogger')
-// logger.trace(new Date())
 const fs = require('fs-extra')
 const path = require('path')
-
 const songModel = require('../models/songModel')
 const chatModel = require('../models/chatModel')
 const search = require('./search').search
 const songs = require('../models/importSongs')
-
-// let songs
 const io = require('socket.io')()
 require('./ip').uniqeVisits()
 exports.io = function () {
   return io
-};
+}
 const myClients = {}
 songs()
 io.on('connection', function (socket) {
@@ -45,12 +41,13 @@ io.on('connection', function (socket) {
     }
   })
   socket.on('delete', data => {
-    logger.log(`delete ${data}`)
+    logger.log(`delete ${JSON.stringify(data)}`)
     fs.move(
-      path.join(__dirname, '/../public/downloads/' + data),
-      path.join(__dirname, '/../public/deleted/' + data),
+      path.join(__dirname, '/../public/downloads/' + data.song),
+      path.join(__dirname, '/../public/deleted/' + data.song),
       (err, suc) => {
         if (err) return err
+        console.log(suc)
 
         logger.log('deleted ', data)
         socket.broadcast.emit('deleted', data)
@@ -123,8 +120,6 @@ io.on('connection', function (socket) {
   // logger.log('socket on getsong')
 
   socket.on('songClick', data => {
-    logger.log('socket on songClick')
-
     logger.log(data)
     socket.broadcast.emit('shareTrack', data)
     socket.emit('shareTrack', data)
@@ -155,7 +150,7 @@ io.on('connection', function (socket) {
       socket.nickname = message.username
       logger.log(message, socket.id)
       socket.broadcast.send(JSON.stringify(message))
-      message.type = 'myMessage';
+      message.type = 'myMessage'
       socket.send(JSON.stringify(message))
     }
   })
