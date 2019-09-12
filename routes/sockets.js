@@ -126,22 +126,13 @@ io.on('connection', function (socket) {
   })
   socket.on('playing', data => {
     logger.log('socket on playing')
-
-    // logger.log(socket)
-    // data.type = 'serverMessage',
-    // logger.log(data)
-
     logger.log(data.name, '  is playing!!!')
-    // logger.log('data == ', data);
-
-    // socket.broadcast.emit('play')
     socket.emit('play', data)
   })
   socket.on('message', function (message) {
     logger.log(`socket on message ${message}`)
-
-    chatModel.create(JSON.parse(message))
     message = JSON.parse(message)
+    chatModel.create(message)
     logger.log(message)
 
     if (message.type === 'userMessage') {

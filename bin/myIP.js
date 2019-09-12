@@ -15,7 +15,7 @@ module.exports = Object.keys(ifaces).forEach(function (ifname) {
       // logger.log(ifname + ':' + alias, iface.address)
       // logger.log(`alias = ${alias}`)
       // this interface has only one ipv4 adress
-      logger.log('external address http://' + iface.address)
+      logger.log('external address http://' + iface.address + ':3001')
       logger.log('internal address = http://localhost:3001/')
     }
     ++alias

@@ -9,8 +9,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const alertify = window.alertify
   let user
   let color
-  // const icons = name =>
-  // `<i data-name="${name.trim()}"class="hidden fas fa-pen editIcon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
+  const icons = name => `<i data-name="${name.trim()}"class="hidden fas fa-pen editIcon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
   const ytlink = getId('ytlink')
   const myPlayer = getId('audio-element')
   const $window = window
@@ -59,7 +58,7 @@ document.addEventListener('DOMContentLoaded', event => {
     instance.open()
   })
   body.onclick = () => {
-    console.log(this)
+    // console.log(this)
     myPlayer.muted = false
   }
   document.addEventListener('mouseover', e => {

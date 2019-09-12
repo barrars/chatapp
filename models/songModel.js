@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const uuidv4 = require('uuid/v4')
 
-const logger = require('../routes/myLogger')
+// const logger = require('../routes/myLogger')
 // logger.trace(new Date())
 const songSchema = mongoose.Schema({
   name: { type: String, required: true },
@@ -9,9 +9,10 @@ const songSchema = mongoose.Schema({
   youtubeUrl: { type: String },
   thumbnailUrl: { type: String },
   fileSlug: { type: String, required: true, unique: true },
-  createdBy: { type: String, required: true }
+  createdBy: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now }
 
-}, { timestamp: true })
+})
 
 const Song = module.exports = mongoose.model('songs', songSchema)
 Song.create = create
