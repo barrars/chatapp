@@ -3,7 +3,7 @@ const logger = require('./myLogger')
 const express = require('express')
 const router = express.Router()
 const fs = require('fs-extra')
-const cache = require('./cache').cacheSongs
+// const cache = require('./cache').cacheSongs
 const chatLog = require('../models/chatModel')
 
 const songs = require('../models/importSongs')
