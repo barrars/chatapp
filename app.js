@@ -43,6 +43,9 @@ app.use('/player', playerRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
+  // logger.error(req)
+  // logger.error(res)
+
   next(createError(404))
 })
 

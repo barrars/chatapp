@@ -14,7 +14,9 @@ const songSchema = mongoose.Schema({
   plays: { type: Number, default: 0 },
   fileSlug: { type: String, required: true, unique: true },
   createdBy: { type: String, required: true, default: 'rambo' },
-  timestamp: { type: Date, default: Date.now }
+	lastPlayed: { type: Date, default: Date.now },
+	timestamp: { type: Date, default: Date.now }
+
 
 })
 const Song = module.exports = mongoose.model('songsList', songSchema)

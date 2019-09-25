@@ -57,10 +57,7 @@ document.addEventListener('DOMContentLoaded', event => {
   $sidenav.addEventListener('click', () => {
     instance.open()
   })
-  body.onclick = () => {
-    // console.log(this)
-    myPlayer.muted = false
-  }
+
   document.addEventListener('mouseover', e => {
     if (e.target.hasAttribute('data-name')) {
       const name = e.target.getAttribute('data-name')
@@ -80,17 +77,15 @@ document.addEventListener('DOMContentLoaded', event => {
   })
 
   $window.addEventListener('click', function (e) {
+    myPlayer.muted = false
+
     const node = e.target
-    // console.log(node)
     if (node.classList.contains('fa-trash-alt')) {
       const song = node.getAttribute('data-name')
-      // const elm = document.querySelector(`[data-name="${song}" ]`)
       exp.deleteFunc(song, myId)
     }
     if (node.classList.contains('editIcon')) {
       const dataAtrribute = node.getAttribute('data-name')
-      console.log(dataAtrribute)
-
       renameInput.classList.remove('hidden')
       renameInput.focus()
       // renameInput.style.left = e.clientX - 200 + 'px'
@@ -111,9 +106,10 @@ document.addEventListener('DOMContentLoaded', event => {
       }
     }
     if (node.nodeName === 'P' && node.hasAttribute('data-name')) {
-      console.log('click', { song: node.textContent, name: myId })
+      // console.log('click', { song: node.textContent, name: myId })
+      const data = { song: node.textContent, name: myId }
 
-      socket.emit('songClick', { song: node.textContent, name: myId })
+      socket.emit('songClick', data)
     }
     if (node.classList.contains('fa-plus')) {
       const song = escape(node.getAttribute('data-name'))
@@ -142,6 +138,7 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   }
   socket.on('results', data => {
+    // placeholder
     // console.log(data)
   })
   socket.on('renamed', data => {
@@ -268,15 +265,7 @@ document.addEventListener('DOMContentLoaded', event => {
     alertify.logPosition('top left')
     alertify.log(songTitle, ' Download complete')
   })
-  socket.on('archive', () => {
-    console.log('archived')
-    downloading = false
-    ytlink.disabled = false
-    ytlink.placeholder = 'enter another link'
-    gobtn.innerText = 'download song'
-    alertify.logPosition('top left')
-    alertify.log(' This song has already been downloaded')
-  })
+  exp.archive
 
   socket.on('list', data => {
     if (!data.clients) {

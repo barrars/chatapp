@@ -59,11 +59,17 @@ io.on('connection', function (socket) {
     logger.log('socket on rename')
 
     logger.log(data)
-    songs.findOneAndRemove({ title: data.oldName }, { title: data.newName })
-    // logger.log(songs)
+    songs.findOneAndUpdate({ title: data.oldName }, { title: data.newName }, { new: true }, (err, doc) => {
+      if (err) {
+        console.error(err)
+        throw new Error()
+      }
+      console.log(doc)
+    })
+    const songPath = (path) => '/../public/downloads/' + path
     fs.rename(
-      path.join(__dirname, '/../public/downloads/' + data.oldName),
-      path.join(__dirname, '/../public/downloads/' + data.newName),
+      path.join(__dirname, songPath(data.oldName)),
+      path.join(__dirname, songPath(data.newName)),
       err => {
         if (err) {
           throw err
@@ -118,8 +124,15 @@ io.on('connection', function (socket) {
   })
   socket.on('getsong', require('./youtube.js').download)
   // logger.log('socket on getsong')
-
+  const songs = require('../models/importSongs')
   socket.on('songClick', data => {
+    songs.findOneAndUpdate({ title: data.song }, { $inc: { plays: 1 }, lastPlayed: Date.now() }, { new: true }, (err, doc) => {
+      if (err) {
+        console.error(err)
+        throw new Error()
+      }
+      console.log(doc)
+    })
     logger.log(data)
     socket.broadcast.emit('shareTrack', data)
     socket.emit('shareTrack', data)

@@ -1,7 +1,12 @@
 
 var exp = (function () {
   const $ = window.$
+  const getId = document.getElementById.bind(document)
+
   const socket = window.io()
+  const ytlink = getId('ytlink')
+  const gobtn = getId('gobtn')
+  const alertify = window.alertify
   const $songList = document.getElementById('songList')
   const editIcon = $songList.getElementsByClassName('editIcon')
   const COLORS = [
@@ -34,7 +39,7 @@ var exp = (function () {
   const myPlayer = document.getElementById('audio-element')
   const current = document.getElementById('currentSong')
 
-  const downloading = false
+  let downloading = false
   const play = function () {
     document.getElementById('audio-element').load()
     document.getElementById('audio-element').play()
@@ -49,9 +54,11 @@ var exp = (function () {
 
     const nextIndex = Math.floor(Math.random() * list.length)
     socket.emit('random', (nextIndex))
+    console.log(list[nextIndex])
+
     console.log('playing song # ', nextIndex, ' title ', list[nextIndex].innerText)
 
-    myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].innerText)
+    myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].textContent)
     play()
     currentSong()
   }
@@ -123,6 +130,17 @@ var exp = (function () {
   const setVolume = function (myVolume) {
     myPlayer.volume = myVolume
   }
-  return { getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, iconSetClick, hideInput, showInput, downloading, hitPlay }
+  const archive = () => {
+    socket.on('archive', () => {
+      console.log('archived')
+      downloading = false
+      ytlink.disabled = false
+      ytlink.placeholder = 'enter another link'
+      gobtn.innerText = 'download song'
+      alertify.logPosition('top left')
+      alertify.log(' This song has already been downloaded')
+    })
+  }
+  return { archive, getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, iconSetClick, hideInput, showInput, downloading, hitPlay }
 })()
 // export { playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }

@@ -3,7 +3,7 @@ const logger = require('../routes/myLogger')
 const mongoose = require('mongoose')
 const dbURI = process.env.MONGO_URL
 
-mongoose.connect(dbURI, { useNewUrlParser: true })
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .catch(error => {
     logger.log(error.message)
   })
