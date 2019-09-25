@@ -1,10 +1,9 @@
 const logger = require('../routes/myLogger')
 const fs = require('fs-extra')
 const path = require('path')
-const songModel = require('../models/songModel')
 const chatModel = require('../models/chatModel')
 const search = require('./search').search
-const songs = require('../models/importSongs')
+const songs = require('../models/songs')
 const io = require('socket.io')()
 require('./ip').uniqeVisits()
 exports.io = function () {
@@ -16,10 +15,7 @@ io.on('connection', function (socket) {
   socket.on('random', data => {
     logger.log(data)
   })
-  songModel.find().then(results => {
-    // logger.log(results)
-    io.emit('results', results)
-  })
+
   logger.log('socket on connection')
   // cache(data => {
   // logger.log(new Date());
@@ -123,8 +119,6 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('user_entered', data)
   })
   socket.on('getsong', require('./youtube.js').download)
-  // logger.log('socket on getsong')
-  const songs = require('../models/importSongs')
   socket.on('songClick', data => {
     songs.findOneAndUpdate({ title: data.song }, { $inc: { plays: 1 }, lastPlayed: Date.now() }, { new: true }, (err, doc) => {
       if (err) {
@@ -149,8 +143,6 @@ io.on('connection', function (socket) {
     logger.log(message)
 
     if (message.type === 'userMessage') {
-      // songModel.create({ name: title, createdBy: data.user })
-
       socket.nickname = message.username
       logger.log(message, socket.id)
       socket.broadcast.send(JSON.stringify(message))

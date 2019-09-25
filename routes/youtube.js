@@ -1,11 +1,11 @@
 const logger = require('./myLogger')
 var exec = require('child_process').exec
 var io = require('./sockets').io()
-const songModel = require('../models/songModel.js')
+const songList = require('../models/songs')
 
 module.exports = {
   download (data) {
-    logger.log(('server received getsong event from' + data))
+    logger.log(('server received getsong event from' + JSON.stringify(data)))
     const youtubedl = exec(
       `youtube-dl "ytsearch:${data.song}" --config-location . `,
       error => {
@@ -38,11 +38,11 @@ module.exports = {
           if (code) return logger.log('Error'.red)
           const title = stdout.slice(41)
 
-          songModel.create({ name: title, createdBy: data.user })
+          songList.create({ title: title, createdBy: data.user, fileName: title })
             .then(song => {
               logger.log(`Song Created: ${song}`)
               io.emit('title', title)
-              // songModel.find()
+              // songList.find()
               //   .then(results => {
               //     logger.log(results)
               //     io.emit('results', results)
@@ -58,6 +58,7 @@ module.exports = {
         youtubedl.on('close', code => {
           logger.log(code)
           if (code === 0) {
+            logger.error('archive')
             io.emit('archive')
           }
         })

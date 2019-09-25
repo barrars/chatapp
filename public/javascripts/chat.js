@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', event => {
-  var body = document.getElementsByTagName('BODY')[0]
-
-  var exp = window.exp
+  const exp = window.exp
   const getId = document.getElementById.bind(document)
   let myId = getId('nickname')
   const socket = window.io()
@@ -69,7 +67,6 @@ document.addEventListener('DOMContentLoaded', event => {
   document.addEventListener('mouseout', e => {
     if (e.target.hasAttribute('data-name')) {
       const name = e.target.getAttribute('data-name')
-
       document.querySelectorAll(`i[data-name="${name}"]`).forEach(icon => {
         icon.classList.add('hidden')
       })
@@ -137,10 +134,7 @@ document.addEventListener('DOMContentLoaded', event => {
       }
     }
   }
-  socket.on('results', data => {
-    // placeholder
-    // console.log(data)
-  })
+
   socket.on('renamed', data => {
     console.log('socket on renamed')
     console.log(data)
@@ -265,7 +259,7 @@ document.addEventListener('DOMContentLoaded', event => {
     alertify.logPosition('top left')
     alertify.log(songTitle, ' Download complete')
   })
-  exp.archive
+  exp.archive()
 
   socket.on('list', data => {
     if (!data.clients) {

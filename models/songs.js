@@ -16,10 +16,10 @@ const songSchema = mongoose.Schema({
   createdBy: { type: String, required: true, default: 'rambo' },
   lastPlayed: { type: Date, default: Date.now },
   timestamp: { type: Date, default: Date.now },
-  deleted: { type: Boolean }
+  deleted: { type: Boolean, default: false }
 
 })
-const Song = module.exports = mongoose.model('songsList', songSchema)
+const Song = module.exports = mongoose.model('songs', songSchema)
 // logger.log(Song.find()
 //   .then(results => {
 //     logger.log(results)

@@ -6,7 +6,7 @@ const fs = require('fs-extra')
 // const cache = require('./cache').cacheSongs
 const chatLog = require('../models/chatModel')
 
-const songs = require('../models/importSongs')
+const songs = require('../models/songs')
 router.get('/', function (req, res) {
   songs.find({}).then(tracks => {
     // logger.log(tracks)

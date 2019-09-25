@@ -22,7 +22,7 @@ async function create (song) {
 
   // not actually sure this will work
   if (!newSong.save()) {
-    throw 'Error saving playlist'
+    throw Error('Error saving playlist')
   }
   return newSong
 }

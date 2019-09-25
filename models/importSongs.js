@@ -14,12 +14,12 @@ const songSchema = mongoose.Schema({
   plays: { type: Number, default: 0 },
   fileSlug: { type: String, required: true, unique: true },
   createdBy: { type: String, required: true, default: 'rambo' },
-	lastPlayed: { type: Date, default: Date.now },
-	timestamp: { type: Date, default: Date.now }
-
+  lastPlayed: { type: Date, default: Date.now },
+  timestamp: { type: Date, default: Date.now },
+  deleted: { type: Boolean }
 
 })
-const Song = module.exports = mongoose.model('songsList', songSchema)
+const Song = module.exports = mongoose.model('importSongs', songSchema)
 // logger.log(Song.find()
 //   .then(results => {
 //     logger.log(results)
@@ -49,7 +49,7 @@ async function create (song) {
 
   // not actually sure this will work
   if (!newSong.save()) {
-    throw 'Error saving playlist'
+    throw Error('Error saving playlist')
   }
   // logger.trace(newSong)
   return newSong

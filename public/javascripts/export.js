@@ -131,14 +131,16 @@ var exp = (function () {
     myPlayer.volume = myVolume
   }
   const archive = () => {
+    console.log('ARRRCHIVE')
+
     socket.on('archive', () => {
       console.log('archived')
       downloading = false
       ytlink.disabled = false
       ytlink.placeholder = 'enter another link'
       gobtn.innerText = 'download song'
-      alertify.logPosition('top left')
-      alertify.log(' This song has already been downloaded')
+      window.alertify.logPosition('top left')
+      window.alertify.log(' This song has already been downloaded')
     })
   }
   return { archive, getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, iconSetClick, hideInput, showInput, downloading, hitPlay }
