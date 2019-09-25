@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', event => {
       const url = 'https://itunes.apple.com/search?term=' + term
 
       window
-        .fetch(url)
+        .fetch(url, { mode: 'no-cors' })
         .then(function (response) {
           if (response.status !== 200) {
             console.log(
