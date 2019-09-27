@@ -15,7 +15,7 @@ const songSchema = mongoose.Schema({
   fileSlug: { type: String, required: true, unique: true },
   createdBy: { type: String, required: true, default: 'rambo' },
   lastPlayed: { type: Date, default: Date.now },
-  timestamp: { type: Date, default: Date.now },
+  downloaded: { type: Date, default: Date.now },
   deleted: { type: Boolean, default: false }
 
 })

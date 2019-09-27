@@ -36,11 +36,13 @@ module.exports = {
       if (stdout.toLocaleLowerCase().indexOf('mp3') > 0) {
         youtubedl.on('close', code => {
           if (code) return logger.log('Error'.red)
-          const title = stdout.slice(41)
+          const title = stdout.slice(41).trim()
 
           songList.create({ title: title, createdBy: data.user, fileName: title })
             .then(song => {
               logger.log(`Song Created: ${song}`)
+              console.log(title)
+
               io.emit('title', title)
               // songList.find()
               //   .then(results => {

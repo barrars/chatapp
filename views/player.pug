@@ -10,12 +10,14 @@
     - if (songs){ songs = songs.reverse()
       //- -console.log(songs)
       each val, i in songs
+        - if (!val.deleted){
         div.card.song(data-name= val.title data-order= i)
-          p.inline(data-name= val.title)=val.title
+          p.inline(data-name=val.title)=val.title
           i.hidden.fas.fa-pen.editIcon(data-name=val.title title="edit title")
           i.add_song.hidden.fas.fa-plus(data-name=val.title title="copy link")
           i.fas.hidden.fa-trash-alt(data-name=val.title title="delete song")
+        - }
       - }
-  audio#audio-element(muted  src="")
+  audio#audio-element(muted preload src="")
   //- input#rename
 

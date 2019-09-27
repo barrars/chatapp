@@ -2,11 +2,12 @@
 var exp = (function () {
   const $ = window.$
   const getId = document.getElementById.bind(document)
+  const playHistory = []
 
   const socket = window.io()
   const ytlink = getId('ytlink')
   const gobtn = getId('gobtn')
-  const alertify = window.alertify
+  // const alertify = window.alertify
   const $songList = document.getElementById('songList')
   const editIcon = $songList.getElementsByClassName('editIcon')
   const COLORS = [
@@ -40,9 +41,23 @@ var exp = (function () {
   const current = document.getElementById('currentSong')
 
   let downloading = false
-  const play = function () {
-    document.getElementById('audio-element').load()
-    document.getElementById('audio-element').play()
+  const play = () => {
+    console.log('$$$$$exp.play()$$$$$$$$$')
+    var url = decodeURI(new URL(myPlayer.src).pathname)
+    console.log(url)
+    if (url.includes('downloads') && playHistory[0] !== url.slice(11)) {
+      playHistory.unshift(url.slice(11))
+    }
+    console.log(playHistory)
+
+    // myPlayer.load()
+    var promise = myPlayer.play()
+
+    if (promise !== undefined) {
+      promise.then(_ => {
+        console.log('playing')
+      }).catch(err => { throw Error(err) })
+    }
   }
   const currentSong = function () {
     current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2]

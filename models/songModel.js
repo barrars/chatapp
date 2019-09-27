@@ -14,7 +14,7 @@ const songSchema = mongoose.Schema({
 
 })
 
-const Song = module.exports = mongoose.model('songs', songSchema)
+const Song = module.exports = mongoose.model('songModel', songSchema)
 Song.create = create
 
 async function create (song) {

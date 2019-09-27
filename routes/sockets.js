@@ -38,29 +38,41 @@ io.on('connection', function (socket) {
   })
   socket.on('delete', data => {
     logger.log(`delete ${JSON.stringify(data)}`)
-    fs.move(
-      path.join(__dirname, '/../public/downloads/' + data.song),
-      path.join(__dirname, '/../public/deleted/' + data.song),
-      (err, suc) => {
-        if (err) return err
-        console.log(suc)
-
-        logger.log('deleted ', data)
-        socket.broadcast.emit('deleted', data)
-        socket.emit('deleted', data)
+    songs.findOneAndUpdate({ title: data.song }, { deleted: true }, { new: true, useFindAndModify: false }, (err, doc) => {
+      if (err) {
+        logger.error(err)
+        throw new Error()
       }
-    )
+      logger.log('deleted ', data)
+      socket.broadcast.emit('deleted', data)
+      socket.emit('deleted', data)
+      logger.log(`${doc.title} deleted`)
+    })
+    // fs.move(
+    //   path.join(__dirname, '/../public/downloads/' + data.song),
+    //   path.join(__dirname, '/../public/deleted/' + data.song),
+    //   (err, suc) => {
+    //     if (err) return err
+    //     logger.log(suc)
+
+    //     logger.log('deleted ', data)
+    //     socket.broadcast.emit('deleted', data)
+    //     socket.emit('deleted', data)
+    //   }
+    // )
   })
   socket.on('rename', data => {
     logger.log('socket on rename')
 
     logger.log(data)
-    songs.findOneAndUpdate({ title: data.oldName }, { title: data.newName }, { new: true }, (err, doc) => {
+    songs.findOneAndUpdate({ title: data.oldName }, { title: data.newName }, { new: true, useFindAndModify: false }, (err, doc) => {
       if (err) {
-        console.error(err)
+        logger.error(err)
         throw new Error()
       }
-      console.log(doc)
+      logger.log('$$$$$$$$$$$$$$$$$$$$$$$$')
+
+      logger.log(`${doc.title} modified`)
     })
     const songPath = (path) => '/../public/downloads/' + path
     fs.rename(
@@ -120,12 +132,12 @@ io.on('connection', function (socket) {
   })
   socket.on('getsong', require('./youtube.js').download)
   socket.on('songClick', data => {
-    songs.findOneAndUpdate({ title: data.song }, { $inc: { plays: 1 }, lastPlayed: Date.now() }, { new: true }, (err, doc) => {
+    songs.findOneAndUpdate({ title: data.song }, { $inc: { plays: 1 }, lastPlayed: Date.now() }, { new: true, useFindAndModify: false }, (err, doc) => {
       if (err) {
-        console.error(err)
+        logger.error(err)
         throw new Error()
       }
-      console.log(doc)
+      logger.log(`${doc} updated`)
     })
     logger.log(data)
     socket.broadcast.emit('shareTrack', data)

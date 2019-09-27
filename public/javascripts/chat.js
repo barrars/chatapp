@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', event => {
 
   myPlayer.onended = () => {
     if ($repeat.checked) {
-      myPlayer.play()
+      exp.play()
       return
     }
     exp.loadRandom()
@@ -271,25 +271,23 @@ document.addEventListener('DOMContentLoaded', event => {
         '</li>'
     } else {
       for (var key in data.clients) {
-        if (data.clients.hasOwnProperty(key)) {
-          if (key === socket.id) {
-            $list.innerHTML +=
+        if (Object.prototype.hasOwnProperty.call(data.clients, key) && (key === socket.id)) {
+          $list.innerHTML +=
               '<li class="user is-flex button" data-id="' +
               key +
               '">' +
               data.clients[key] +
               '</li>'
-          } else {
-            $list.innerHTML +=
+        } else {
+          $list.innerHTML +=
               '<li class="is-flex button" data-id="' +
               key +
               '">' +
               data.clients[key] +
               '</li>'
-          }
-          // console.log(key + '---> ' + data.clients[key])
-          myId = data.clients[key]
         }
+        // console.log(key + '---> ' + data.clients[key])
+        myId = data.clients[key]
       }
     }
   })
@@ -312,6 +310,8 @@ document.addEventListener('DOMContentLoaded', event => {
     exp.userEntered(data, $messages)
   })
   socket.on('shareTrack', data => {
+    console.log('$$ShareTrack$$$')
+
     console.log(data)
 
     myPlayer.setAttribute('src', '/downloads/' + data.song)
@@ -325,10 +325,7 @@ document.addEventListener('DOMContentLoaded', event => {
     )
     $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
 
-    var promise = myPlayer.play()
-    if (promise) {
-      promise.catch(err => console.log(err))
-    }
+    exp.play()
   })
 
   socket.on('play', function (message) {
@@ -390,7 +387,7 @@ document.addEventListener('DOMContentLoaded', event => {
 
   $playbutton.onclick = () => {
     if (myPlayer.paused) {
-      myPlayer.play()
+      exp.play()
     } else {
       myPlayer.pause()
     }
@@ -421,8 +418,8 @@ document.addEventListener('DOMContentLoaded', event => {
       const url = 'https://itunes.apple.com/search?term=' + term
 
       window
-        .fetch(url, { mode: 'no-cors' })
-        .then(function (response) {
+        .fetch(url)
+        .then(response => {
           if (response.status !== 200) {
             console.log(
               'Looks like there was a problem. Status Code: ' + response.status
@@ -431,29 +428,33 @@ document.addEventListener('DOMContentLoaded', event => {
           }
 
           // Examine the text in the response
-          response.json().then(function (data) {
+          response.json().then(data => {
             data.results.forEach((element, i) => {
-              const artName = element.artistName
-              const trackName = element.trackName
-              // let album = element.collectionName
-              const sample = element.previewUrl
-              // let thumb = element.artworkUrl100
-              // let time = element.trackTimeMillis
               if (i < 5) {
-                // console.log(artName)
+                const artName = element.artistName
+                const trackName = element.trackName
+                // let album = element.collectionName
+                const sample = element.previewUrl
+                // let thumb = element.artworkUrl100
+                // let time = element.trackTimeMillis
 
                 const p = document.createElement('p')
-                p.classList.add('dropdown-item')
+                p.classList.add('dropdown-item', 'card', 'button')
                 p.setAttribute('data-song', sample)
                 p.append(artName + ' - ' + trackName)
                 searchContent.append(p)
-                const songSamp = document.getElementsByClassName('dropdown-item')
-                Array.prototype.forEach.call(songSamp, elm => {
-                  elm.addEventListener('mouseenter', e => {
-                    console.log(e.target.dataset.song)
-                    myPlayer.setAttribute('src', e.target.dataset.song)
-                    myPlayer.play()
-                  })
+              }
+            })
+            const songSamp = document.getElementsByClassName('dropdown-item')
+            Array.prototype.forEach.call(songSamp, elm => {
+              if (!elm.already) {
+                elm.already = true
+                elm.addEventListener('mouseenter', e => {
+                  myPlayer.setAttribute('src', e.target.dataset.song)
+                  exp.play()
+                })
+                elm.addEventListener('mouseleave', () => {
+                  myPlayer.pause()
                 })
               }
             })
