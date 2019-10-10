@@ -52,12 +52,27 @@ var exp = (function () {
 
     // myPlayer.load()
     var promise = myPlayer.play()
+    scrollSong(url.slice(11))
 
     if (promise !== undefined) {
       promise.then(_ => {
         console.log('playing')
       }).catch(err => { throw Error(err) })
     }
+  }
+  const list = document.querySelectorAll('p.inline')
+  const scrollSong = (name) => {
+    console.log(`~~~~~~~~${name}~~~~~~~~~~`)
+
+    list.forEach((e, i) => {
+      if (list.item(i).innerHTML === name) {
+        console.log('%%%%%%%%%songscroll match%%%%%%%')
+
+        list.item(i).classList.add('playing')
+
+        list.item(i).scrollIntoView()
+      }
+    })
   }
   const currentSong = function () {
     current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2]

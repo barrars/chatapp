@@ -1,23 +1,38 @@
 const logger = require('./myLogger')
-// logger.trace(new Date())
 const express = require('express')
 const router = express.Router()
 const fs = require('fs-extra')
-// const cache = require('./cache').cacheSongs
 const chatLog = require('../models/chatModel')
+const songModel = require('../models/songs')
 
-const songs = require('../models/songs')
-router.get('/', function (req, res) {
-  songs.find({}).then(tracks => {
-    // logger.log(tracks)
+router.get('/', async function (req, res) {
+  const [songs, chats, names] = await
+  Promise.all([
+    songModel.find(),
+    chatLog.find(),
+    chatLog.find().distinct('name')
+  ])
+  res.render('index', {
+    names,
+    songs,
+    title: 'ChatRadio',
+    chats
 
-    chatLog.find({}).then(chats => {
-      res.render('index', { title: 'Chat Radio', songs: tracks, chats: chats })
-    })
   })
 
-  // cache(songs => {
-  // })
+  // const tracks = await songs.find()
+  // const players = await songs.find().distinct('createdBy')
+  // logger.log(players)
+
+  // const chats = await chatLog.find()
+  // const names = await chatLog.find().distinct('name')
+  // res.render('index',
+  //   {
+  //     names: names,
+  //     title: 'Chat Radio',
+  //     songs: tracks,
+  //     chats: chats
+  //   })
 
   fs.appendFile('ip.log', `${req.ip} connected at ${Date()} \n`, err => {
     if (err) {

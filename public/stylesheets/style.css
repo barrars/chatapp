@@ -278,6 +278,9 @@ div#songList i:hover {
   cursor: pointer;
   /* outline: dashed #040808 */
 }
+.playing{
+	outline: dashed #20b2aa;
+}
 i{
 	margin-right:10%;
 }

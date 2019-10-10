@@ -8,7 +8,6 @@
     //- .time
   #songList
     - if (songs){ songs = songs.reverse()
-      //- -console.log(songs)
       each val, i in songs
         - if (!val.deleted){
         div.card.song(data-name= val.title data-order= i)
