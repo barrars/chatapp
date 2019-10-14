@@ -67,15 +67,36 @@ var exp = (function () {
     list.forEach((e, i) => {
       if (list.item(i).innerHTML === name) {
         console.log('%%%%%%%%%songscroll match%%%%%%%')
+        if (!elementInViewport2(list.item(i))) {
+          list.item(i).scrollIntoView({ behavior: 'smooth' })
+        }
+        console.log(elementInViewport2(list.item(i)))
 
         list.item(i).classList.add('playing')
-
-        list.item(i).scrollIntoView()
       }
     })
   }
   const currentSong = function () {
     current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2]
+  }
+  function elementInViewport2 (el) {
+    var top = el.offsetTop
+    var left = el.offsetLeft
+    var width = el.offsetWidth
+    var height = el.offsetHeight
+
+    while (el.offsetParent) {
+      el = el.offsetParent
+      top += el.offsetTop
+      left += el.offsetLeft
+    }
+
+    return (
+      top < (window.pageYOffset + window.innerHeight) &&
+			left < (window.pageXOffset + window.innerWidth) &&
+			(top + height) > window.pageYOffset &&
+			(left + width) > window.pageXOffset
+    )
   }
 
   const loadRandom = () => {
