@@ -34,6 +34,24 @@ router.get('/', async function (req, res) {
   //     chats: chats
   //   })
 
+  router.get('/pdf/:file', (req, res) => {
+    console.log(req.ip)
+    console.log(req.ips)
+
+    // console.log(req.param('file'))
+    console.log(req.params.file)
+    // res.end('hello')
+    var tempFile = `./pdfs/${req.params.file}`
+
+    fs.readFile(tempFile, function (err, data) {
+      if (err) {
+        console.error(err)
+      }
+      res.contentType('application/pdf')
+      res.send(data)
+    })
+  })
+
   fs.appendFile('ip.log', `${req.ip} connected at ${Date()} \n`, err => {
     if (err) {
       logger.log('err'.red)
