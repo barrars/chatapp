@@ -35,8 +35,8 @@ router.get('/', async function (req, res) {
   //   })
 
   router.get('/pdf/:file', (req, res) => {
-    console.log(req.ip)
-    console.log(req.ips)
+    logger.log(req.ip)
+    logger.log(req.ips)
 
     // console.log(req.param('file'))
     console.log(req.params.file)
