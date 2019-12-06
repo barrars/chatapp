@@ -1,48 +1,46 @@
+// import { templateElement } from 'babel-types'
+
 document.addEventListener('DOMContentLoaded', event => {
   const exp = window.exp
-  const getId = document.getElementById.bind(document)
-  let myId = getId('nickname')
+  const getId = document.querySelector.bind(document)
+  let myId = getId('#nickname')
   const socket = window.io()
   const $ = window.$
   const alertify = window.alertify
   let user
   let color
   const icons = name => `<i data-name="${name.trim()}"class="hidden fas fa-pen editIcon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
-  const ytlink = getId('ytlink')
-  const myPlayer = getId('audio-element')
+  const ytlink = getId('#ytlink')
+  const myPlayer = getId('#audio-element')
   const $window = window
-  const gobtn = getId('gobtn')
-  const searchContent = getId('searchContent')
-  const backward = getId('backward')
-  const setname = getId('setname')
-  const forward = getId('forward')
-  const $playbutton = getId('play')
+  const gobtn = getId('#gobtn')
+  const searchContent = getId('#searchContent')
+  const backward = getId('#backward')
+  const setname = getId('#setname')
+  const forward = getId('#forward')
+  const $playbutton = getId('#play')
   const renameInput = document.getElementById('rename')
   const submitRename = function (oldName, newName, id) {
     const data = { oldName, newName, id }
     console.log(data)
     socket.emit('rename', data)
   }
-  const $find = getId('find')
-  const $songList = getId('songList')
-  const $repeat = getId('repeat')
-  const $messages = getId('messages')
-  const $list = getId('list')
-  const $message = getId('message')
-  const $send = getId('send')
-  const $nameform = getId('nameform')
-  const $sidenav = getId('sidenav')
+  const $find = getId('#find')
+  const $songList = getId('#songList')
+  const $repeat = getId('#repeat')
+  const $messages = getId('#messages')
+  const $list = getId('#list')
+  const $message = getId('#message')
+  const $send = getId('#send')
+  const $nameform = getId('#nameform')
   let downloading = false
-  // materialize slider
-  const elem = document.querySelector('.sidenav')
-  const instance = window.M.Sidenav.init(elem, { edge: 'right' })
   // ##### must be first function
-  window.$.get('/users/is_name_set', resp => {
+  window.fetch('/users/is_name_set').then(async resp => {
+    resp = await resp.text()
+
     if (resp) {
       myId = resp
-      console.log(
-        `myId variable reassigned to ${resp} with window.$.get('/users/is_name_set'`
-      )
+      console.log(`myId variable reassigned to ${resp} with window.fetch('/users/is_name_set'`)
       const myColor = exp.getColor(myId)
       socket.emit('set_name', {
         name: myId,
@@ -50,11 +48,12 @@ document.addEventListener('DOMContentLoaded', event => {
       })
     }
   })
-  $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+  // $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+  $messages.scrollTop = $messages.scrollHeight
 
-  $sidenav.addEventListener('click', () => {
-    instance.open()
-  })
+  // $sidenav.addEventListener('click', () => {
+  //   instance.open()
+  // })
 
   document.addEventListener('mouseover', e => {
     if (e.target.hasAttribute('data-name')) {
@@ -171,15 +170,15 @@ document.addEventListener('DOMContentLoaded', event => {
         Math.floor(myPlayer.duration - myPlayer.currentTime) + ' s'
     }
   }
-  $('#volume').slider({
-    min: 0,
-    max: 100,
-    value: 50,
-    range: 'min',
-    slide: function (e, ui) {
-      exp.setVolume(ui.value / 100)
-    }
-  })
+  // $('#volume').slider({
+  //   min: 0,
+  //   max: 100,
+  //   value: 50,
+  //   range: 'min',
+  //   slide: function (e, ui) {
+  //     exp.setVolume(ui.value / 100)
+  //   }
+  // })
 
   myPlayer.onended = () => {
     if ($repeat.checked) {
@@ -316,28 +315,31 @@ document.addEventListener('DOMContentLoaded', event => {
 
     myPlayer.setAttribute('src', '/downloads/' + data.song)
     exp.currentSong()
-    $('#messages').append(
-      '<div class=" serverMessage"><span style="color: blue">' +
-        data.name +
-        ' <span style="color:red"> started playing <span style="color:black"> ' +
-        data.song +
-        '</span> </div>'
-    )
-    $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+    const frag = document.createElement('template')
+    frag.innerHTML =
+		'<div class=" serverMessage"><span style="color: blue">' +
+		data.name +
+		' <span style="color:red"> started playing <span style="color:black"> ' +
+		data.song +
+		'</span> </div>'
+
+    $messages.append(frag.content)
+    $messages.scrollTop = $messages.scrollHeight
 
     exp.play()
   })
 
   socket.on('play', function (message) {
     console.log(message)
+    const frag = document.createElement('template')
+    frag.innerHTML =
 
-    $('#messages').append(
-      '<div class="' +
-        message.type +
-        '">' +
-        message.name +
-        'started playing</div>'
-    )
+		'<div class="' +
+		message.type +
+		'">' +
+		message.name +
+		'started playing</div>'
+    $messages.append(frag.content)
   })
   socket.on('message', function (message) {
     message = JSON.parse(message)
@@ -345,20 +347,22 @@ document.addEventListener('DOMContentLoaded', event => {
       exp.playDrop()
       console.log('com ', message)
       const time = new Date()
-      $('#messages').append(
-        '<div title="' +
-          time +
-          '"style="box-shadow: 0px 2px 0 0' +
-          message.color +
-          '"class ="' +
-          message.type +
-          '"><span class="name">' +
-          message.name +
-          '</span> <span class="message card">' +
-          message.message +
-          '</span></div>'
-      )
-      $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+      const frag = document.createElement('template')
+      frag.innerHTML =
+				'<div title="' +
+				time +
+				'"style="box-shadow: 0px 2px 0 0' +
+				message.color +
+				'"class ="' +
+				message.type +
+				'"><span class="name">' +
+				message.name +
+				'</span> <span class="message card">' +
+				message.message +
+				'</span></div>'
+
+      $messages.append(frag.content)
+      $messages.scrollTop = $messages.scrollHeight
     }
   })
   socket.on('name_set', function (data) {
@@ -378,11 +382,11 @@ document.addEventListener('DOMContentLoaded', event => {
       name: user,
       color: color,
       id: socket.nickname,
-      message: $('#message').val(),
+      message: $message.value,
       type: 'userMessage'
     }
     socket.send(JSON.stringify(data))
-    $('#message').val('')
+    $message.value = ''
   }
 
   $playbutton.onclick = () => {
@@ -497,7 +501,7 @@ document.addEventListener('DOMContentLoaded', event => {
     }
     myId = myId.value
     console.log(myId)
-    window.$.get(`/users/set_name/${myId}`)
+    window.fetch(`/users/set_name/${myId}`)
 
     const myColor = exp.getColor(myId)
 
