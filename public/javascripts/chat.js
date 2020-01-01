@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const alertify = window.alertify
   let user
   let color
-  const icons = name => `<i data-name="${name.trim()}"class="hidden fas fa-pen editIcon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
+  const icons = name => `<i data-name="${name.trim()}"class="hidden fas fa-download downloadIcon" title="download song"></i><i data-name="${name.trim()}"class="hidden fas fa-pen editIcon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
   const ytlink = getId('#ytlink')
   const myPlayer = getId('#audio-element')
   const $window = window
@@ -76,6 +76,11 @@ document.addEventListener('DOMContentLoaded', event => {
     myPlayer.muted = false
 
     const node = e.target
+    if (node.classList.contains('downloadIcon')) {
+      console.log('download!')
+      console.log(node.getAttribute('data-name'))
+      window.fetch(`/download/${node.getAttribute('data-name')}`)
+    }
     if (node.classList.contains('fa-trash-alt')) {
       const song = node.getAttribute('data-name')
       exp.deleteFunc(song, myId)
