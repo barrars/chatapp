@@ -369,7 +369,7 @@ div.userMessage {
 #songList {
   height: 83%;
   width: 104%;
-  overflow: overlay;
+  overflow: auto;
 
 }
 input#nickname {

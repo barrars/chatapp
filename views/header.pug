@@ -8,9 +8,6 @@ header#bannner
     .nowrap
       input#ytlink.input(title='enter a YouTube link', type='text', placeholder='search for song to download')
       button#gobtn.button.is-link WIN
-      .dropdown.is-active
-        #dropdown-menu.dropdown-menu(role='menu')
-          #searchContent.dropdown-content.hidden
     #buttons.name
       .is-flex.justify
         #play.button
@@ -20,4 +17,7 @@ header#bannner
         #forward.button(title="fast forward")
           i.fas.fa-angle-double-right
         .time
-        #sidenav.button.sidenav-trigger(data-target="slide-out") song List
+        //- #sidenav.button.sidenav-trigger(data-target="slide-out") song List
+    .dropdown.is-active
+      #dropdown-menu.dropdown-menu(role='menu')
+        #searchContent.dropdown-content.hidden

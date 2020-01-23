@@ -76,6 +76,13 @@ document.addEventListener('DOMContentLoaded', event => {
     myPlayer.muted = false
 
     const node = e.target
+
+    if (node.classList.contains('dropdown-item')) {
+      ytlink.value = node.innerText
+      searchContent.style.display = 'none'
+      searchContent.textContent = ' '
+      gobtn.click()
+    }
     if (node.classList.contains('downloadIcon')) {
       console.log('download!')
       console.log(node.getAttribute('data-name'))
@@ -244,7 +251,7 @@ document.addEventListener('DOMContentLoaded', event => {
     console.log('socket on title')
     var songTitle = data.trim()
     //  ## Prepend newly downloaded song
-    $($songList).prepend(
+    $songList.insertAdjacentHTML('afterbegin',
       '<div ' +
         'data-name="' +
         songTitle.trim() +
