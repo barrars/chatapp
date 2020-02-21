@@ -273,7 +273,6 @@ document.addEventListener('DOMContentLoaded', event => {
     alertify.logPosition('top left')
     alertify.log(songTitle, ' Download complete')
   })
-  exp.archive()
 
   socket.on('list', data => {
     if (!data.clients) {
@@ -496,7 +495,17 @@ document.addEventListener('DOMContentLoaded', event => {
       searchContent.textContent = ' '
     }
   })
-
+  socket.on('archive', () => {
+    console.log({ downloading })
+    console.log('archived')
+    downloading = false
+    console.log({ downloading })
+    ytlink.disabled = false
+    ytlink.placeholder = 'enter another link'
+    gobtn.innerText = 'download song'
+    window.alertify.logPosition('top left')
+    window.alertify.log(' This song has already been downloaded')
+  })
   gobtn.onclick = () => {
     if (ytlink.value.length === 0) {
       alertify.logPosition('top left')

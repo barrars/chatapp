@@ -40,7 +40,7 @@ var exp = (function () {
   const myPlayer = document.getElementById('audio-element')
   const current = document.getElementById('currentSong')
 
-  let downloading = false
+  // const downloading = false
   const play = () => {
     // console.log('$$$$$exp.play()$$$$$$$$$')
     var url = decodeURI(new URL(myPlayer.src).pathname)
@@ -181,19 +181,7 @@ var exp = (function () {
   const setVolume = function (myVolume) {
     myPlayer.volume = myVolume
   }
-  const archive = () => {
-    console.log('ARRRCHIVE')
 
-    socket.on('archive', () => {
-      console.log('archived')
-      downloading = false
-      ytlink.disabled = false
-      ytlink.placeholder = 'enter another link'
-      gobtn.innerText = 'download song'
-      window.alertify.logPosition('top left')
-      window.alertify.log(' This song has already been downloaded')
-    })
-  }
-  return { archive, getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, iconSetClick, hideInput, showInput, downloading, hitPlay }
+  return { getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, iconSetClick, hideInput, showInput, downloading, hitPlay }
 })()
 // export { playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }
