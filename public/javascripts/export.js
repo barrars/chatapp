@@ -1,12 +1,13 @@
 
-var exp = (function () {
-  const $ = window.$
+const exp = (function () {
+  // const $ = window.$
   const getId = document.getElementById.bind(document)
   const playHistory = []
+  const $messages = getId('#messages')
 
   const socket = window.io()
-  const ytlink = getId('ytlink')
-  const gobtn = getId('gobtn')
+  // const ytlink = getId('ytlink')
+  // const gobtn = getId('gobtn')
   // const alertify = window.alertify
   const $songList = document.getElementById('songList')
   const editIcon = $songList.getElementsByClassName('editIcon')
@@ -44,7 +45,7 @@ var exp = (function () {
   const play = () => {
     // console.log('$$$$$exp.play()$$$$$$$$$')
     var url = decodeURI(new URL(myPlayer.src).pathname)
-    console.log(url)
+    // console.log(url)
     if (url.includes('downloads') && playHistory[0] !== url.slice(11)) {
       playHistory.unshift(url.slice(11))
     }
@@ -56,7 +57,7 @@ var exp = (function () {
 
     if (promise !== undefined) {
       promise.then(_ => {
-        console.log('playing')
+        // console.log('playing')
       }).catch(err => { throw Error(err) })
     }
   }
@@ -66,11 +67,11 @@ var exp = (function () {
 
     list.forEach((e, i) => {
       if (list.item(i).innerHTML === name) {
-        console.log('%%%%%%%%%songscroll match%%%%%%%')
+        // console.log('%%%%%%%%%songscroll match%%%%%%%')
         if (!elementInViewport2(list.item(i))) {
           list.item(i).scrollIntoView({ behavior: 'smooth' })
         }
-        console.log(elementInViewport2(list.item(i)))
+        // console.log(elementInViewport2(list.item(i)))
 
         list.item(i).classList.add('playing')
       }
@@ -101,13 +102,13 @@ var exp = (function () {
 
   const loadRandom = () => {
     const list = $songList.children
-    console.log(list.length, ' total songs in list')
+    // console.log(list.length, ' total songs in list')
 
     const nextIndex = Math.floor(Math.random() * list.length)
     socket.emit('random', (nextIndex))
-    console.log(list[nextIndex])
+    // console.log(list[nextIndex])
 
-    console.log('playing song # ', nextIndex, ' title ', list[nextIndex].innerText)
+    // console.log('playing song # ', nextIndex, ' title ', list[nextIndex].innerText)
 
     myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].textContent)
     play()
@@ -170,7 +171,8 @@ var exp = (function () {
       user.name +
       '</span> has joined the room!' +
       '</div>'
-    $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+    // $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
+    $messages.scrollTop = $messages.scrollHeight
   }
   const hitPlay = (e, data) => {
     console.log('playbutton event', e)
