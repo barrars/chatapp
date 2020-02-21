@@ -4,6 +4,7 @@ var exp = (function () {
   const getId = document.getElementById.bind(document)
   const playHistory = []
   const $messages = getId('#messages')
+  console.log($messages)
 
   const socket = window.io()
   // const ytlink = getId('ytlink')
@@ -172,7 +173,7 @@ var exp = (function () {
       '</span> has joined the room!' +
       '</div>'
     // $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
-    $messages.scrollTop = $messages.scrollHeight
+    elm.scrollTop = elm.scrollHeight
   }
   const hitPlay = (e, data) => {
     console.log('playbutton event', e)
