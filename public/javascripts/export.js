@@ -1,5 +1,5 @@
 
-const exp = (function () {
+var exp = (function () {
   // const $ = window.$
   const getId = document.getElementById.bind(document)
   const playHistory = []
