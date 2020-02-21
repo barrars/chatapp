@@ -2,20 +2,31 @@ const logger = require('./myLogger')
 var exec = require('child_process').exec
 var io = require('./sockets').io()
 const songList = require('../models/songs')
-
+let youtubedl
 module.exports = {
   download (data) {
-    logger.log(('server received getsong event from' + JSON.stringify(data)))
-    const youtubedl = exec(
-      `youtube-dl "ytsearch:${data.song}" --config-location . `,
-      error => {
-        if (!error === null) {
-          logger.log(error)
-          io.emit('error')
+    logger.log('server received getsong event from' + JSON.stringify(data))
+    if (data.song.startsWith('http' || 'https' || 'www')) {
+      youtubedl = exec(
+        `youtube-dl "${data.song}" --config-location . `,
+        error => {
+          if (!error === null) {
+            logger.log(error)
+            io.emit('error')
+          }
         }
-      }
-    )
-
+      )
+    } else {
+      youtubedl = exec(
+        `youtube-dl "ytsearch:${data.song}" --config-location . `,
+        error => {
+          if (!error === null) {
+            logger.log(error)
+            io.emit('error')
+          }
+        }
+      )
+    }
     youtubedl.on('close', code => {
       logger.log(code)
       if (code === 1) {
@@ -37,8 +48,11 @@ module.exports = {
         youtubedl.on('close', code => {
           if (code) return logger.log('Error'.red)
           const title = stdout.slice(41).trim()
+          logger.log('TITLE')
+          logger.log(stdout)
 
-          songList.create({ title: title, createdBy: data.user, fileName: title })
+          songList
+            .create({ title: title, createdBy: data.user, fileName: title })
             .then(song => {
               logger.log(`Song Created: ${song}`)
               console.log(title)

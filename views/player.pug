@@ -1,19 +1,19 @@
 #slide-out.player.sidenav
-  input#find.input(placeholder="search" type="text", name="find")
+  input#find.input(placeholder="search" type="text" name="find")
   //- #player
-    //- i.fas.fa-volume-down
-    //- #volume
-    //- .ico
-    //-   i.fas.fa-volume-up
-    //- .time
+  //- i.fas.fa-volume-down
+  //- #volume
+  //- .ico
+  //-   i.fas.fa-volume-up
+  //- .time
   #songList
     - if (songs){ songs = songs.reverse()
       each val, i in songs
         - if (!val.deleted){
         div.card.song(data-name= val.title data-order= i)
           p.inline(data-name=val.title)=val.title
-          a(href="/downloads/LIMP.mp3", title="title")
-            i.hidden.fas.fa-download.downloadIcon(data-name=val.title title="download song")
+          //- a(href="/downloads/LIMP.mp3" title="title")
+          //- i.hidden.fas.fa-download.downloadIcon(data-name=val.title title="download song")
           i.hidden.fas.fa-pen.editIcon(data-name=val.title title="edit title")
           i.add_song.hidden.fas.fa-plus(data-name=val.title title="copy link")
           i.fas.hidden.fa-trash-alt(data-name=val.title title="delete song")

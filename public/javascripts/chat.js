@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', event => {
   const getId = document.querySelector.bind(document)
   let myId = getId('#nickname')
   const socket = window.io()
-  const $ = window.$
   const alertify = window.alertify
   let user
   let color
-  const icons = name => `<i data-name="${name.trim()}"class="hidden fas fa-download downloadIcon" title="download song"></i><i data-name="${name.trim()}"class="hidden fas fa-pen editIcon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
+  const icons = name =>
+    `<i data-name="${name.trim()}"class="hidden fas fa-download downloadIcon" title="download song"></i><i data-name="${name.trim()}"class="hidden fas fa-pen editIcon" title="edit title"></i><i data-name="${name.trim()}"class="add_song hidden fas fa-plus"></i><i data-name="${name.trim()}"class="fas hidden fa-trash-alt"></i>`
   const ytlink = getId('#ytlink')
   const myPlayer = getId('#audio-element')
   const $window = window
@@ -40,7 +40,9 @@ document.addEventListener('DOMContentLoaded', event => {
 
     if (resp) {
       myId = resp
-      console.log(`myId variable reassigned to ${resp} with window.fetch('/users/is_name_set'`)
+      console.log(
+        `myId variable reassigned to ${resp} with window.fetch('/users/is_name_set'`
+      )
       const myColor = exp.getColor(myId)
       socket.emit('set_name', {
         name: myId,
@@ -251,7 +253,8 @@ document.addEventListener('DOMContentLoaded', event => {
     console.log('socket on title')
     var songTitle = data.trim()
     //  ## Prepend newly downloaded song
-    $songList.insertAdjacentHTML('afterbegin',
+    $songList.insertAdjacentHTML(
+      'afterbegin',
       '<div ' +
         'data-name="' +
         songTitle.trim() +
@@ -266,7 +269,7 @@ document.addEventListener('DOMContentLoaded', event => {
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
-    gobtn.innerText = 'download song'
+    gobtn.innerText = 'find song!'
     alertify.logPosition('top left')
     alertify.log(songTitle, ' Download complete')
   })
@@ -282,20 +285,23 @@ document.addEventListener('DOMContentLoaded', event => {
         '</li>'
     } else {
       for (var key in data.clients) {
-        if (Object.prototype.hasOwnProperty.call(data.clients, key) && (key === socket.id)) {
+        if (
+          Object.prototype.hasOwnProperty.call(data.clients, key) &&
+          key === socket.id
+        ) {
           $list.innerHTML +=
-              '<li class="user is-flex button" data-id="' +
-              key +
-              '">' +
-              data.clients[key] +
-              '</li>'
+            '<li class="user is-flex button" data-id="' +
+            key +
+            '">' +
+            data.clients[key] +
+            '</li>'
         } else {
           $list.innerHTML +=
-              '<li class="is-flex button" data-id="' +
-              key +
-              '">' +
-              data.clients[key] +
-              '</li>'
+            '<li class="is-flex button" data-id="' +
+            key +
+            '">' +
+            data.clients[key] +
+            '</li>'
         }
         // console.log(key + '---> ' + data.clients[key])
         myId = data.clients[key]
@@ -317,11 +323,11 @@ document.addEventListener('DOMContentLoaded', event => {
       }, 500)
     }
   })
-  socket.on('user_entered', (data) => {
+  socket.on('user_entered', data => {
     exp.userEntered(data, $messages)
   })
   socket.on('shareTrack', data => {
-    console.log('$$ShareTrack$$$')
+    // console.log('$$ShareTrack$$$')
 
     console.log(data)
 
@@ -329,11 +335,11 @@ document.addEventListener('DOMContentLoaded', event => {
     exp.currentSong()
     const frag = document.createElement('template')
     frag.innerHTML =
-		'<div class=" serverMessage"><span style="color: blue">' +
-		data.name +
-		' <span style="color:red"> started playing <span style="color:black"> ' +
-		data.song +
-		'</span> </div>'
+      '<div class=" serverMessage"><span style="color: blue">' +
+      data.name +
+      ' <span style="color:red"> started playing <span style="color:black"> ' +
+      data.song +
+      '</span> </div>'
 
     $messages.append(frag.content)
     $messages.scrollTop = $messages.scrollHeight
@@ -345,12 +351,11 @@ document.addEventListener('DOMContentLoaded', event => {
     console.log(message)
     const frag = document.createElement('template')
     frag.innerHTML =
-
-		'<div class="' +
-		message.type +
-		'">' +
-		message.name +
-		'started playing</div>'
+      '<div class="' +
+      message.type +
+      '">' +
+      message.name +
+      'started playing</div>'
     $messages.append(frag.content)
   })
   socket.on('message', function (message) {
@@ -361,17 +366,17 @@ document.addEventListener('DOMContentLoaded', event => {
       const time = new Date()
       const frag = document.createElement('template')
       frag.innerHTML =
-				'<div title="' +
-				time +
-				'"style="box-shadow: 0px 2px 0 0' +
-				message.color +
-				'"class ="' +
-				message.type +
-				'"><span class="name">' +
-				message.name +
-				'</span> <span class="message card">' +
-				message.message +
-				'</span></div>'
+        '<div title="' +
+        time +
+        '"style="box-shadow: 0px 2px 0 0' +
+        message.color +
+        '"class ="' +
+        message.type +
+        '"><span class="name">' +
+        message.name +
+        '</span> <span class="message card">' +
+        message.message +
+        '</span></div>'
 
       $messages.append(frag.content)
       $messages.scrollTop = $messages.scrollHeight
@@ -434,12 +439,17 @@ document.addEventListener('DOMContentLoaded', event => {
       const url = 'https://itunes.apple.com/search?term=' + term
 
       window
-        .fetch(url, { mode: 'no-cors' })
+        .fetch(url,
+          {
+            mode: 'cors',
+            Origin: 'http://localhost:3001'
+
+          })
         .then(response => {
           if (response.status !== 200) {
-            console.log(
-              'Looks like there was a problem. Status Code: '
-            )
+            console.log('Looks like there was a problem. Status Code: ')
+            console.log(url)
+
             console.log(response)
 
             return
@@ -506,10 +516,8 @@ document.addEventListener('DOMContentLoaded', event => {
   }
   myId.focus()
   setname.onclick = () => {
-    if (myId.value) {
-      console.log('value!')
-    }
     if (!myId.value) {
+      alertify.log('enter text')
       console.log('enter text')
       return
     }
@@ -549,6 +557,6 @@ document.addEventListener('DOMContentLoaded', event => {
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
-    gobtn.innerText = 'download song'
+    gobtn.innerText = 'find song!'
   })
 })

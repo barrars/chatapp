@@ -42,7 +42,7 @@ var exp = (function () {
 
   let downloading = false
   const play = () => {
-    console.log('$$$$$exp.play()$$$$$$$$$')
+    // console.log('$$$$$exp.play()$$$$$$$$$')
     var url = decodeURI(new URL(myPlayer.src).pathname)
     console.log(url)
     if (url.includes('downloads') && playHistory[0] !== url.slice(11)) {
@@ -62,7 +62,7 @@ var exp = (function () {
   }
   const list = document.querySelectorAll('p.inline')
   const scrollSong = (name) => {
-    console.log(`~~~~~~~~${name}~~~~~~~~~~`)
+    // console.log(`~~~~~~~~${name}~~~~~~~~~~`)
 
     list.forEach((e, i) => {
       if (list.item(i).innerHTML === name) {
