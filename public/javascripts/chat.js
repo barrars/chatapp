@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', event => {
         .fetch(url,
           {
             mode: 'cors',
-            Origin: 'http://localhost:3001'
+            Origin: 'https://chat-radio.com'
 
           })
         .then(response => {
