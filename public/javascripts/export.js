@@ -1,10 +1,10 @@
 
 var exp = (function () {
   // const $ = window.$
-  const getId = document.getElementById.bind(document)
+  // const getId = document.getElementById.bind(document)
   const playHistory = []
-  const $messages = getId('#messages')
-  console.log($messages)
+  // const $messages = getId('#messages')
+  // console.log($messages)
 
   const socket = window.io()
   // const ytlink = getId('ytlink')
