@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const uuidv4 = require('uuid/v4')
 const fs = require('fs-extra')
 const path = require('path')
+const logger = require('../routes/myLogger')
 // const logger = require('../routes/myLogger')
 // logger.log(new Date())
 
@@ -20,45 +21,40 @@ const songSchema = mongoose.Schema({
 
 })
 const Song = module.exports = mongoose.model('songs', songSchema)
-// logger.log(Song.find()
-//   .then(results => {
-//     logger.log(results)
-//   }))
 
-fs.readdir(path.join(__dirname, '../public/downloads'), (err, files) => {
-  if (err) {
-    throw err
-  }
-  files.forEach(file => {
-    // logger.log(file)
-    Song.find({ title: file }, (err, docs) => {
-      if (err) {
-        throw err
-      }
-      if (!docs.length) {
-        Song.create({ title: file, fileName: file })
-      }
+fs.readdir(path.join(__dirname, '../public/downloads'))
+  .then(files => {
+    files.forEach(file => {
+      Song.find({ fileName: file }, (err, docs) => {
+        if (err) {
+          throw err
+        }
+        if (!docs.length) {
+          logger.log('creating')
+          fs.stat(path.join(__dirname, '../public/downloads', file))
+            .then(data => {
+              logger.log(data.ctimeMs)
+              logger.log(file)
+              Song.create({ title: file, fileName: file, downloaded: data.ctimeMs })
+            })
+        }
+      })
     })
   })
-})
+
 Song.create = create
 
 async function create (song) {
-  // logger.trace(song)
   const newSong = await new Song(addFileSlug(song))
 
-  // not actually sure this will work
   if (!newSong.save()) {
     throw Error('Error saving playlist')
   }
-  // logger.trace(newSong)
   return newSong
 }
 
 function addFileSlug (song) {
-  // logger.trace(song)
-  song.fileSlug = uuidv4() // ⇨ '10ba038e-48da-487b-96e8-8d3b99b6d18a'
-  // logger.trace(song)
+  song.fileSlug = uuidv4()
 
   return song
 }
