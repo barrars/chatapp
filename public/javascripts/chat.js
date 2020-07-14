@@ -127,8 +127,8 @@ document.addEventListener('DOMContentLoaded', event => {
       socket.emit('songClick', data)
     }
     if (node.classList.contains('fa-plus')) {
-      const song = escape(node.getAttribute('data-name'))
-      const url = node.baseURI + 'player/' + song
+      const id = escape(node.getAttribute('data-id'))
+      const url = node.baseURI + 'player/' + id
       navigator.clipboard.writeText(url).then(() => {
         alertify.logPosition('top left')
         alertify.log('link copied to clipboard')
