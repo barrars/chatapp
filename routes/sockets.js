@@ -10,7 +10,7 @@ exports.io = function () {
   return io
 }
 const myClients = {}
-songs()
+// songs()
 io.on('connection', function (socket) {
   socket.on('random', data => {
     logger.log(data)
@@ -38,11 +38,13 @@ io.on('connection', function (socket) {
   })
   socket.on('delete', data => {
     logger.log(`delete ${JSON.stringify(data)}`)
-    songs.findOneAndUpdate({ title: data.song }, { deleted: true }, { new: true, useFindAndModify: false }, (err, doc) => {
+    songs.findOneAndUpdate({ fileSlug: data.id }, { deleted: true }, { new: true, useFindAndModify: false }, (err, doc) => {
       if (err) {
         logger.error(err)
         throw new Error()
       }
+      // data.doc = doc
+      console.log(doc)
       logger.log('deleted ', data)
       socket.broadcast.emit('deleted', data)
       socket.emit('deleted', data)
@@ -65,32 +67,30 @@ io.on('connection', function (socket) {
     logger.log('socket on rename')
 
     logger.log(data)
-    songs.findOneAndUpdate({ title: data.oldName }, { title: data.newName }, { new: true, useFindAndModify: false }, (err, doc) => {
+    songs.findOneAndUpdate({ fileSlug: data.id }, { title: data.newName }, { new: true, useFindAndModify: false }, (err, doc) => {
       if (err) {
         logger.error(err)
         throw new Error()
       }
-      logger.log('$$$$$$$$$$$$$$$$$$$$$$$$')
-
-      logger.log(`${doc.title} modified`)
+      socket.broadcast.emit('renamed', doc)
+      socket.emit('renamed', doc)
+      logger.log(`${doc.title} has been renamed via socket event`)
     })
-    const songPath = (path) => '/../public/downloads/' + path
-    fs.rename(
-      path.join(__dirname, songPath(data.oldName)),
-      path.join(__dirname, songPath(data.newName)),
-      err => {
-        if (err) {
-          throw err
-        }
-        logger.log(
-          `${data.oldName.red} ${'has been renamed to'.magenta}  ${
-            data.newName
-          }`
-        )
-        socket.broadcast.emit('renamed', data)
-        socket.emit('renamed', data)
-      }
-    )
+    // const songPath = (path) => '/../public/downloads/' + path
+    // fs.rename(
+    //   path.join(__dirname, songPath(data.oldName)),
+    //   path.join(__dirname, songPath(data.newName)),
+    //   err => {
+    //     if (err) {
+    //       throw err
+    //     }
+    //     logger.log(
+    //       `${data.oldName.red} ${'has been renamed to'.magenta}  ${
+    //         data.newName
+    //       }`
+    //     )
+    //   }
+    // )
   })
   socket.on('set_name', function (data) {
     socket.emit('name_set', data)
@@ -132,16 +132,17 @@ io.on('connection', function (socket) {
   })
   socket.on('getsong', require('./youtube.js').download)
   socket.on('songClick', data => {
-    songs.findOneAndUpdate({ title: data.song }, { $inc: { plays: 1 }, lastPlayed: Date.now() }, { new: true, useFindAndModify: false }, (err, doc) => {
+    logger.log(data)
+    songs.findOneAndUpdate({ fileSlug: data.id }, { $inc: { plays: 1 }, lastPlayed: Date.now() }, { new: true, useFindAndModify: false }, (err, doc) => {
       if (err) {
         logger.error(err)
         throw new Error()
       }
       logger.log(`${doc} updated`)
+      logger.log(data)
+      socket.broadcast.emit('shareTrack', { data, doc })
+      socket.emit('shareTrack', { data, doc })
     })
-    logger.log(data)
-    socket.broadcast.emit('shareTrack', data)
-    socket.emit('shareTrack', data)
   })
   socket.on('playing', data => {
     logger.log('socket on playing')

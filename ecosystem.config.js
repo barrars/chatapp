@@ -10,7 +10,7 @@ module.exports = {
       },
       env_production: {
         // 'PORT': 80
-        'NODE_ENV': 'production'
+        NODE_ENV: 'production'
       },
 
       ignore_watch: ['node_modules', 'public/downloads', '.git/*', 'ip.log', 'archive', 'public/deleted'],

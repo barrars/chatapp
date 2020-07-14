@@ -5,11 +5,11 @@ const fs = require('fs-extra')
 const chatLog = require('../models/chatModel')
 const songModel = require('../models/songs')
 const { join } = require('path')
-const mime = require('mime')
+// const mime = require('mime')
 router.get('/', async function (req, res) {
   const [songs, chats, names] = await
   Promise.all([
-    songModel.find(),
+    songModel.find({}).sort('-downloaded'),
     chatLog.find(),
     chatLog.find().distinct('name')
   ])
