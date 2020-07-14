@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'myapp',
+      name: 'chatapp',
       script: 'bin/www',
       watch: false,
       env: {
