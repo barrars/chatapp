@@ -1,7 +1,9 @@
 const logger = require('./myLogger')
 var exec = require('child_process').exec
 var io = require('./sockets').io()
-const songList = require('../models/songs')
+// const chokidar = require('chokidar')
+// const path = require('path')
+const songs = require('../models/songs')
 let youtubedl
 module.exports = {
   download (data) {
@@ -39,36 +41,31 @@ module.exports = {
     })
 
     youtubedl.stdout.on('data', function (stdout) {
-      logger.log('STDOUT = ', stdout)
+      // logger.log(stdout)
       if (stdout.toLocaleLowerCase().indexOf('%') > 0) {
-        var percent = stdout.match(/(\d+).\d%/g)[0]
+        // var percent = stdout.match(/(\d+).\d%/g)[0]
+        var percent = stdout.match(/(\d+).\d%/g)
         io.emit('percent', percent)
       }
       if (stdout.toLocaleLowerCase().indexOf('mp3') > 0) {
+        var parseTitle = stdout
+        const title = parseTitle.slice(parseTitle.indexOf('downloads') + 10).trim()
+        logger.log('TITLE: ', title)
         youtubedl.on('close', code => {
           if (code) return logger.log('Error'.red)
-          const title = stdout.slice(41).trim()
-          logger.log('TITLE')
-          logger.log(stdout)
-
-          songList
-            .create({ title: title, createdBy: data.user, fileName: title })
-            .then(song => {
-              logger.log(`Song Created: ${song}`)
-              console.log(title)
-
-              io.emit('title', title)
-              // songList.find()
-              //   .then(results => {
-              //     logger.log(results)
-              //     io.emit('results', results)
-              //   })
-            })
-            .catch(err => {
-              logger.log(err)
-              // TODO pass errors to client
-            })
         })
+
+        songs
+          .create({ title: title, createdBy: data.user, fileName: title })
+          .then(song => {
+            logger.log(`Song Created: ${song}`)
+            console.log(title)
+            io.emit('title', song)
+          })
+          .catch(err => {
+            logger.log(err)
+            // TODO pass errors to client
+          })
       }
       if (stdout.toLocaleLowerCase().indexOf('archive') > 0) {
         youtubedl.on('close', code => {

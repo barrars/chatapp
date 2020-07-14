@@ -26,10 +26,10 @@ var exp = (function () {
     '#a700ff',
     '#d300e7'
   ]
-  const deleteFunc = (song, user) => {
+  const deleteFunc = (song, user, id) => {
     const youSure = window.confirm(`are you sure you want to delete ${song}?`)
     if (youSure) {
-      const data = { song, user }
+      const data = { song, user, id }
       socket.emit('delete', data)
     }
   }

@@ -2,8 +2,7 @@ const mongoose = require('mongoose')
 const uuidv4 = require('uuid/v4')
 const fs = require('fs-extra')
 const path = require('path')
-// const logger = require('../routes/myLogger')
-// logger.log(new Date())
+const logger = require('../routes/myLogger')
 
 const songSchema = mongoose.Schema({
   title: { type: String, required: true },
@@ -36,6 +35,7 @@ fs.readdir(path.join(__dirname, '../public/downloads'), (err, files) => {
         throw err
       }
       if (!docs.length) {
+        logger.log('importing song ', file)
         Song.create({ title: file, fileName: file })
       }
     })

@@ -8,14 +8,15 @@ html(lang="en")
     title Document
   body
 
+
     script.
-      let song = "#{song}"
-      //- console.log(song)
-
-    p Track: #{song}
-    //- audio(src="/downloads/#{song}" controls )
-    #waveform
-
+      var song = !{JSON.stringify(song)}
+  div(style={margin:'0 auto'})
+    p Track:
+      span.mymessage#name
+    p Downloaded by:
+      span.mymessage#dlby
+  #waveform
     script(src="https://unpkg.com/wavesurfer.js")
 
     script( src="/javascripts/wave.js" )

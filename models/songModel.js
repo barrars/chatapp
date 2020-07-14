@@ -1,3 +1,4 @@
+// not used
 const mongoose = require('mongoose')
 const uuidv4 = require('uuid/v4')
 
@@ -19,8 +20,6 @@ Song.create = create
 
 async function create (song) {
   const newSong = await new Song(addFileSlug(song))
-
-  // not actually sure this will work
   if (!newSong.save()) {
     throw Error('Error saving playlist')
   }
@@ -28,7 +27,6 @@ async function create (song) {
 }
 
 function addFileSlug (song) {
-  song.fileSlug = uuidv4() // ⇨ '10ba038e-48da-487b-96e8-8d3b99b6d18a'
-
+  song.fileSlug = uuidv4()
   return song
 }

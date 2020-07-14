@@ -1,6 +1,19 @@
 {
-	"eslint.autoFixOnSave": true,
+	// "eslint.autoFixOnSave": true,
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
-	}
+    "source.fixAll.eslint": true,
+
+  },
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "C_Cpp.default.includePath": ["../../chatapp"],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "*/node_modules":true
+
+  }
 }
