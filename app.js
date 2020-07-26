@@ -7,26 +7,32 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
+const cors = require('cors')
+
 const playerRouter = require('./routes/playerRouter')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
-const app = express()
 var compression = require('compression')
-
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
-app.enable('trust proxy')
+const app = express()
+app.use(cors())
 app.use(compression())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'pug')
+// app.enable('trust proxy')
 const store = new MongoStore({
   url: process.env.MONGO_URL,
-  autoRemove: 'interval',
-  autoRemoveInterval: 1
+  autoRemove: 'native',
+  ttl: 14 * 24 * 60 * 60
+  // autoRemoveInterval: 1
 })
 app.use(
   session({
+    cookie: {
+      sameSite: 'none'
+    },
     store,
     saveUninitialized: false,
     resave: true,
