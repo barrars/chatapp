@@ -10,6 +10,8 @@ const usersRouter = require('./routes/users')
 const cors = require('cors')
 
 const playerRouter = require('./routes/playerRouter')
+const songList = require('./routes/songList')
+const songGet = require('./routes/songGet')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 var compression = require('compression')
@@ -31,7 +33,8 @@ const store = new MongoStore({
 app.use(
   session({
     cookie: {
-      sameSite: 'none'
+      secure: true,
+      sameSite: 'strict'
     },
     store,
     saveUninitialized: false,
@@ -45,6 +48,8 @@ app.use('/', indexRouter)
 app.use('/public', express.static(path.join(__dirname, '/public')))
 app.use('/users', usersRouter)
 app.use('/player', playerRouter)
+app.use('/songList', songList)
+app.use('/songGet', songGet)
 // app.use('/playlist', playlistRouter)
 
 // catch 404 and forward to error handler
@@ -65,6 +70,9 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
   logger.log(err)
+  // setTimeout(() => {
+  //   res.redirect('/')
+  // }, 500)
 })
 
 module.exports = app
