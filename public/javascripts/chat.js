@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', event => {
   const exp = window.exp
   const getId = document.querySelector.bind(document)
@@ -9,11 +8,9 @@ document.addEventListener('DOMContentLoaded', event => {
   let color
   const icons = (name, id) =>
   // <i data-name="${name}"data-id="${id}"class="hidden fas fa-download downloadIcon" title="download song"></i>
-  `
-    <i data-name="${name}"data-id="${id}"class="hidden fas fa-pen editIcon" title="edit title"></i>
+  `<i data-name="${name}"data-id="${id}"class="hidden fas fa-pen editIcon" title="edit title"></i>
     <i data-name="${name}"data-id="${id}"class="add_song hidden fas fa-plus"></i>
-    <i data-name="${name}"data-id="${id}"class="fas hidden fa-trash-alt"></i>
-    `
+    <i data-name="${name}"data-id="${id}"class="fas hidden fa-trash-alt"></i>`
   const ytlink = getId('#ytlink')
   const myPlayer = getId('#audio-element')
   const $window = window
@@ -52,12 +49,7 @@ document.addEventListener('DOMContentLoaded', event => {
       })
     }
   })
-  // $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
   $messages.scrollTop = $messages.scrollHeight
-
-  // $sidenav.addEventListener('click', () => {
-  //   instance.open()
-  // })
 
   document.addEventListener('mouseover', e => {
     if (e.target.hasAttribute('data-id')) {
@@ -129,10 +121,18 @@ document.addEventListener('DOMContentLoaded', event => {
     if (node.classList.contains('fa-plus')) {
       const id = escape(node.getAttribute('data-id'))
       const url = node.baseURI + 'player/' + id
+      console.log(url)
       navigator.clipboard.writeText(url).then(() => {
         alertify.logPosition('top left')
         alertify.log('link copied to clipboard')
       })
+    }
+    if (node.getAttribute('data-socketID')) {
+      console.log(myId)
+      const clickedID = node.getAttribute('data-socketID')
+      console.log(node.getAttribute('data-socketID'))
+      console.log(socket.id)
+      socket.emit('ding', clickedID)
     }
   })
 
@@ -162,8 +162,7 @@ document.addEventListener('DOMContentLoaded', event => {
     dataName.forEach(node => {
       node.setAttribute('data-name', data.title)
     })
-    // console.log(pSongTitle)
-    // console.log(dataName)
+
     pSongTitle.innerHTML = data.title
 
     // console.log(pSongTitle.attributes)
@@ -185,15 +184,6 @@ document.addEventListener('DOMContentLoaded', event => {
         Math.floor(myPlayer.duration - myPlayer.currentTime) + ' s'
     }
   }
-  // $('#volume').slider({
-  //   min: 0,
-  //   max: 100,
-  //   value: 50,
-  //   range: 'min',
-  //   slide: function (e, ui) {
-  //     exp.setVolume(ui.value / 100)
-  //   }
-  // })
 
   myPlayer.onended = () => {
     if ($repeat.checked) {
@@ -202,16 +192,8 @@ document.addEventListener('DOMContentLoaded', event => {
     }
     exp.loadRandom()
   }
-  // console.log(username)
 
   $window.onkeydown = e => {
-    // e.preventDefault()
-    // let key = e.keyCode
-    // console.log(e.key)
-    // console.log(e.keyCode)
-
-    // console.log(key)
-
     if (e.key === 'Tab') {
       e.preventDefault()
       if (document.activeElement === ytlink) {
@@ -234,6 +216,9 @@ document.addEventListener('DOMContentLoaded', event => {
       backward.click()
     }
   }
+  socket.on('hey', msg => {
+    console.log(msg)
+  })
   socket.on('percent', percent => {
     // console.log('socket on percent')
     gobtn.innerText = percent
@@ -262,29 +247,22 @@ document.addEventListener('DOMContentLoaded', event => {
     alertify.log(songTitle, ' Download complete')
   })
 
-  socket.on('list', data => {
+  socket.on('userList', data => {
     if (!data.clients) {
       $list.innerHTML +=
-        '<li class="button is-flex" data-id="' +
-        data.id +
-        '">' +
-        data.name +
-        '</li>'
+      '<li class="button is-flex" data-socketID="' + data.id + '">' + data.name + '</li>'
     } else {
       for (var key in data.clients) {
         if (
           Object.prototype.hasOwnProperty.call(data.clients, key) &&
           key === socket.id
         ) {
+          console.log(data)
           $list.innerHTML +=
-            '<li class="user is-flex button" data-id="' +
-            key +
-            '">' +
-            data.clients[key] +
-            '</li>'
+            '<li class="user is-flex button" data-socketID="' + key + '">' + data.clients[key] + '</li>'
         } else {
           $list.innerHTML +=
-            '<li class="is-flex button" data-id="' +
+            '<li class="is-flex button" data-socketID="' +
             key +
             '">' +
             data.clients[key] +
@@ -296,17 +274,17 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   })
   socket.on('userLeft', data => {
-    function gone (elm) {
+    function removeUserFromList (elm) {
       elm.remove()
       console.log('BYEBYEBYE')
     }
     console.log('socket on userLeft')
-    if ($list.querySelector('[data-id="' + data + '"]')) {
-      const byebye = $list.querySelector('[data-id="' + data + '"]')
+    if ($list.querySelector('[data-socketID="' + data + '"]')) {
+      const user = $list.querySelector('[data-socketID="' + data + '"]')
       console.log(`Found him! ${data}`)
-      byebye.style.background = 'red'
+      user.style.background = 'red'
       setTimeout(() => {
-        gone(byebye)
+        removeUserFromList(user)
       }, 500)
     }
   })

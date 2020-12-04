@@ -1,17 +1,9 @@
 
 var exp = (function () {
-  // const $ = window.$
-  // const getId = document.getElementById.bind(document)
   const playHistory = []
-  // const $messages = getId('#messages')
-  // console.log($messages)
 
   const socket = window.io()
-  // const ytlink = getId('ytlink')
-  // const gobtn = getId('gobtn')
-  // const alertify = window.alertify
   const $songList = document.getElementById('songList')
-  const editIcon = $songList.getElementsByClassName('editIcon')
   const COLORS = [
     '#e21400',
     '#91580f',
@@ -95,9 +87,9 @@ var exp = (function () {
 
     return (
       top < (window.pageYOffset + window.innerHeight) &&
-			left < (window.pageXOffset + window.innerWidth) &&
-			(top + height) > window.pageYOffset &&
-			(left + width) > window.pageXOffset
+      left < (window.pageXOffset + window.innerWidth) &&
+      (top + height) > window.pageYOffset &&
+      (left + width) > window.pageXOffset
     )
   }
 
@@ -136,28 +128,7 @@ var exp = (function () {
     el.classList.remove('hidden')
     el.classList.add('show')
   }
-  function add_song_to_playlist (e) {
-    console.log(e.target)
-    e.stopPropagation()
-  }
 
-  const iconSetClick = function () {
-  // console.log('SETCLICK FUNCTION')
-    // const renameInput = document.getElementById('rename')
-    /* add clisck to add song to playlist */
-    const add_song_icons = $songList.getElementsByClassName('add_song')
-    Array.from(add_song_icons).forEach((add_song_icon) => {
-      add_song_icon.addEventListener('click', add_song_to_playlist)
-    })
-
-    /* add click to edit icon */
-    for (let i = 0; i < editIcon.length; i++) {
-      const eicon = editIcon[i]
-      eicon.onclick = e => {
-        editFunc(e)
-      }
-    }
-  }
   const userEntered = function (user, elm) {
     console.log('socket on user_entered')
     console.log('USER ENTERED')
@@ -172,7 +143,6 @@ var exp = (function () {
       user.name +
       '</span> has joined the room!' +
       '</div>'
-    // $('#messages')[0].scrollTop = $('#messages')[0].scrollHeight
     elm.scrollTop = elm.scrollHeight
   }
   const hitPlay = (e, data) => {
@@ -185,6 +155,6 @@ var exp = (function () {
     myPlayer.volume = myVolume
   }
 
-  return { getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, iconSetClick, hideInput, showInput, hitPlay }
+  return { getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, hideInput, showInput, hitPlay }
 })()
 // export { playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }

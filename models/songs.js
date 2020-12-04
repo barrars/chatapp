@@ -25,11 +25,12 @@ const Song = module.exports = mongoose.model('songs', songSchema)
 fs.readdir(path.join(__dirname, '../public/downloads'))
   .then(files => {
     files.forEach(file => {
-      Song.find({ fileName: file }, (err, docs) => {
+      Song.find({ fileName: file }, (err, doc) => {
         if (err) {
           throw err
         }
-        if (!docs.length) {
+        if (!doc.length) {
+          console.log(doc.length)
           logger.log('creating')
           fs.stat(path.join(__dirname, '../public/downloads', file))
             .then(data => {
