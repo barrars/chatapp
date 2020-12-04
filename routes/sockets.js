@@ -1,6 +1,6 @@
 const logger = require('../routes/myLogger')
-const fs = require('fs-extra')
-const path = require('path')
+// const fs = require('fs-extra')
+// const path = require('path')
 const chatModel = require('../models/chatModel')
 const search = require('./search').search
 const songs = require('../models/songs')
@@ -10,25 +10,17 @@ exports.io = function () {
   return io
 }
 const myClients = {}
-// songs()
 io.on('connection', function (socket) {
   socket.on('random', data => {
     logger.log(data)
   })
-
+  socket.on('ding', id => {
+    logger.log(id)
+    io.to(id).emit('hey', 'i <3 u!')
+  })
   logger.log('socket on connection')
-  // cache(data => {
-  // logger.log(new Date());
 
-  //   logger.log(`${data.length} of songs in cache`)
-  //   socket.emit('files', data)
-  //   songs = data
-
-  // })
   socket.on('search', data => {
-    // let itunes
-
-    // logger.info(data)
     const results = search(data)
     if (results) {
       logger.info('results!!!!')
@@ -98,17 +90,17 @@ io.on('connection', function (socket) {
     socket.color = data.color
     myClients[socket.id] = socket.nickname
     logger.log(`myClients = ${JSON.stringify(myClients)}`)
-    socket.emit('list', {
+    socket.emit('userList', {
       name: socket.nickname,
       id: socket.id,
-      event: 'set_name',
+      event: 'userList',
       clients: myClients,
       color: socket.color
     })
-    socket.broadcast.emit('list', {
+    socket.broadcast.emit('userList', {
       name: socket.nickname,
       id: socket.id,
-      event: 'set_name',
+      event: 'userList',
       color: socket.color
     })
     logger.log('nick ', socket.nickname)
