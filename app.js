@@ -42,6 +42,7 @@ app.use(
     secret: 'secret'
   })
 )
+console.log('update')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/public', express.static(path.join(__dirname, '/public')))
