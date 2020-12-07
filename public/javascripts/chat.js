@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', event => {
       console.log('enter text')
       return
     }
-    myId = myId.value
+    myId = myId.value.toLowerCase()
     console.log(myId)
     window.fetch(`/users/set_name/${myId}`)
 
