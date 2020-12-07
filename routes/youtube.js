@@ -10,7 +10,7 @@ module.exports = {
     logger.log('server received getsong event from' + JSON.stringify(data))
     if (data.song.startsWith('http' || 'https' || 'www')) {
       youtubedl = exec(
-        `youtube-dlc "${data.song}" --config-location . `,
+        `youtube-dl "${data.song}" --config-location . `,
         error => {
           if (!error === null) {
             logger.log(error)
@@ -20,7 +20,7 @@ module.exports = {
       )
     } else {
       youtubedl = exec(
-        `youtube-dlc "ytsearch:${data.song}" --config-location . `,
+        `youtube-dl "ytsearch:${data.song}" --config-location . `,
         error => {
           if (!error === null) {
             logger.log(error)

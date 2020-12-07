@@ -93,19 +93,26 @@ var exp = (function () {
     )
   }
 
-  const loadRandom = () => {
+  const loadRandom = (myId) => {
     const list = $songList.children
     // console.log(list.length, ' total songs in list')
-
     const nextIndex = Math.floor(Math.random() * list.length)
-    socket.emit('random', (nextIndex))
+    const id = list[nextIndex].getAttribute('data-id')
+    const song = list[nextIndex].textContent
+    console.log(id)
+
+    const data = { song, name: myId, id }
+
+    // socket.emit('random', (data))
+    socket.emit('songClick', data)
+
     // console.log(list[nextIndex])
 
     // console.log('playing song # ', nextIndex, ' title ', list[nextIndex].innerText)
-
-    myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].textContent)
-    play()
-    currentSong()
+    // console.log(list[nextIndex])
+    // myPlayer.setAttribute('src', '/downloads/' + list[nextIndex].textContent)
+    // play()
+    // currentSong()
   }
   const getColor = id => {
     let hash = 7
@@ -145,16 +152,16 @@ var exp = (function () {
       '</div>'
     elm.scrollTop = elm.scrollHeight
   }
-  const hitPlay = (e, data) => {
-    console.log('playbutton event', e)
-    console.log('playbutton data', data)
+  // const hitPlay = (e, data) => {
+  //   console.log('playbutton event', e)
+  //   console.log('playbutton data', data)
 
-    socket.emit('playing', data)
-  }
+  //   socket.emit('playing', data)
+  // }
   const setVolume = function (myVolume) {
     myPlayer.volume = myVolume
   }
 
-  return { getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, hideInput, showInput, hitPlay }
+  return { getColor, COLORS, userEntered, deleteFunc, playDrop, setVolume, currentSong, loadRandom, play, hideInput, showInput }
 })()
 // export { playDrop, setVolume, currentSong, loadRandom, play, emitPlay, getUsernameColor, iconSetClick, hideInput, showInput, downloading, title, hitPlay }

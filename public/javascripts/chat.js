@@ -6,12 +6,20 @@ document.addEventListener('DOMContentLoaded', event => {
   const alertify = window.alertify
   let user
   let color
+  let displayFavoritesPlayList = false
+  const favoritesPlayList = document.getElementsByClassName('play-list')[0]
+  const listToggleButton = document.getElementsByClassName('fa-list')[0]
+  const playerToggleButton = document.getElementsByClassName('fa-music')[0]
+  const chatToggleButton = document.getElementsByClassName('fa-comments')[0]
+  const musicRoom = document.getElementsByClassName('player')[0]
   const icons = (name, id) =>
   // <i data-name="${name}"data-id="${id}"class="hidden fas fa-download downloadIcon" title="download song"></i>
   `<i data-name="${name}"data-id="${id}"class="hidden fas fa-pen editIcon" title="edit title"></i>
     <i data-name="${name}"data-id="${id}"class="add_song hidden fas fa-plus"></i>
+    <i data-name="${name}"data-id="${id}"class="add_song hidden fas fa-share"></i>
     <i data-name="${name}"data-id="${id}"class="fas hidden fa-trash-alt"></i>`
   const ytlink = getId('#ytlink')
+  const chatroom = getId('#chatroom')
   const myPlayer = getId('#audio-element')
   const $window = window
   const gobtn = getId('#gobtn')
@@ -53,10 +61,8 @@ document.addEventListener('DOMContentLoaded', event => {
 
   document.addEventListener('mouseover', e => {
     if (e.target.hasAttribute('data-id')) {
-      // console.log('$$$ID$$$$')
       const name = e.target.getAttribute('data-id')
       document.querySelectorAll(`i[data-id="${name}"]`).forEach(icon => {
-        // console.log(icon)
         icon.classList.remove('hidden')
       })
     }
@@ -69,7 +75,23 @@ document.addEventListener('DOMContentLoaded', event => {
       })
     }
   })
-
+  socket.on('playlist', data => {
+    console.log(data.length, data)
+    data.forEach(song => {
+      const card = document.createElement('DIV')
+      card.classList.add('card', 'song')
+      const title = document.createElement('P')
+      title.classList.add('inline')
+      title.setAttribute('data-id', song.fileSlug)
+      title.innerHTML = song.title
+      const deleteIcon = document.createElement('I')
+      deleteIcon.classList.add(['fas', 'fa-trash-alt'])
+      const likeIcon = document.createElement('I')
+      likeIcon.classList.add('add_song', 'fas', 'fa-plus')
+      card.append(title, deleteIcon, likeIcon)
+      favoritesPlayList.appendChild(card)
+    })
+  })
   $window.addEventListener('click', function (e) {
     myPlayer.muted = false
     const node = e.target
@@ -78,6 +100,27 @@ document.addEventListener('DOMContentLoaded', event => {
       searchContent.style.display = 'none'
       searchContent.textContent = ' '
       gobtn.click()
+    }
+    if (node.classList.contains('fa-music')) {
+      console.log('music!!!!')
+      playerToggleButton.style.display = 'none'
+      chatToggleButton.style.display = 'flex'
+      musicRoom.style.display = 'flex'
+      chatroom.style.display = 'none'
+    }
+    if (node.classList.contains('fa-comments')) {
+      console.log('chats!!!!')
+      playerToggleButton.style.display = 'flex'
+      chatToggleButton.style.display = 'none'
+      musicRoom.style.display = 'none'
+      chatroom.style.display = 'flex'
+    }
+    if (node === listToggleButton) {
+      console.log('show playlist!!')
+      favoritesPlayList.style.display = (displayFavoritesPlayList ? 'none' : 'block')
+      $songList.style.display = (displayFavoritesPlayList ? 'block' : 'none')
+      listToggleButton.style.color = (displayFavoritesPlayList ? 'red' : 'green')
+      displayFavoritesPlayList = !displayFavoritesPlayList
     }
     if (node.classList.contains('downloadIcon')) {
       console.log('download!')
@@ -111,7 +154,7 @@ document.addEventListener('DOMContentLoaded', event => {
     }
     if (node.nodeName === 'P' && node.hasAttribute('data-id')) {
       // console.log('click', { song: node.textContent, name: myId })
-      const id = escape(node.getAttribute('data-id'))
+      const id = node.getAttribute('data-id')
       console.log(id)
 
       const data = { song: node.textContent, name: myId, id }
@@ -119,7 +162,11 @@ document.addEventListener('DOMContentLoaded', event => {
       socket.emit('songClick', data)
     }
     if (node.classList.contains('fa-plus')) {
-      const id = escape(node.getAttribute('data-id'))
+      const slug = node.getAttribute('data-id')
+      socket.emit('addToPlaylist', { myId, slug })
+    }
+    if (node.classList.contains('fa-share')) {
+      const id = node.getAttribute('data-id')
       const url = node.baseURI + 'player/' + id
       console.log(url)
       navigator.clipboard.writeText(url).then(() => {
@@ -190,7 +237,7 @@ document.addEventListener('DOMContentLoaded', event => {
       exp.play()
       return
     }
-    exp.loadRandom()
+    exp.loadRandom(myId)
   }
 
   $window.onkeydown = e => {
@@ -205,7 +252,7 @@ document.addEventListener('DOMContentLoaded', event => {
     if (e.altKey && e.keyCode === 78) {
       // alt + n
       e.preventDefault()
-      exp.loadRandom()
+      exp.loadRandom(myId)
     }
     if (e.altKey && e.keyCode === 39) {
       e.preventDefault()
@@ -248,7 +295,7 @@ document.addEventListener('DOMContentLoaded', event => {
   })
 
   socket.on('userList', data => {
-    if (!data.clients) {
+    if (!data.clients && window.username) {
       $list.innerHTML +=
       '<li class="button is-flex" data-socketID="' + data.id + '">' + data.name + '</li>'
     } else {
@@ -352,7 +399,7 @@ document.addEventListener('DOMContentLoaded', event => {
     color = data.color
     $nameform.style.display = 'none'
   })
-  $send.onclick = function () {
+  $send.onclick = () => {
     if ($message.value === '') {
       alertify.logPosition('bottom-left')
       alertify.log('enter text')

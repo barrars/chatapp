@@ -6,7 +6,7 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const indexRouter = require('./routes/index')
-const usersRouter = require('./routes/users')
+const usersRouter = require('./routes/users.router')
 const cors = require('cors')
 
 const playerRouter = require('./routes/playerRouter')
@@ -32,17 +32,16 @@ const store = new MongoStore({
 })
 app.use(
   session({
-    cookie: {
-      secure: true,
-      sameSite: 'strict'
-    },
+    // cookie: {
+    //   secure: false,
+    //   sameSite: 'strict'
+    // },
     store,
     saveUninitialized: false,
     resave: true,
     secret: 'secret'
   })
 )
-
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 app.use('/public', express.static(path.join(__dirname, '/public')))

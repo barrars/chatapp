@@ -4,6 +4,7 @@ const logger = require('../routes/myLogger')
 const chatModel = require('../models/chatModel')
 const search = require('./search').search
 const songs = require('../models/songs')
+const users = require('../models/users')
 const io = require('socket.io')()
 require('./ip').uniqeVisits()
 exports.io = function () {
@@ -11,6 +12,7 @@ exports.io = function () {
 }
 const myClients = {}
 io.on('connection', function (socket) {
+  // logger.log(io.sockets)
   socket.on('random', data => {
     logger.log(data)
   })
@@ -18,7 +20,6 @@ io.on('connection', function (socket) {
     logger.log(id)
     io.to(id).emit('hey', 'i <3 u!')
   })
-  logger.log('socket on connection')
 
   socket.on('search', data => {
     const results = search(data)
@@ -85,7 +86,23 @@ io.on('connection', function (socket) {
     // )
   })
   socket.on('set_name', function (data) {
+    users.create(data)
     socket.emit('name_set', data)
+    users.findOneAndUpdate({ name: data.name }, {
+      $addToSet: { favorites: data.slug ? data.slug : null }
+    }, { new: true })
+      .populate('playlist')
+      .exec(function (err, songs) {
+        if (err) {
+          logger.error(err)
+        }
+        if (songs) {
+          // console.log(songs)
+
+          socket.emit('playlist', songs.playlist)
+          // logger.log(songs)
+        }
+      })
     socket.nickname = data.name
     socket.color = data.color
     myClients[socket.id] = socket.nickname
@@ -123,24 +140,33 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('user_entered', data)
   })
   socket.on('getsong', require('./youtube.js').download)
+  socket.on('addToPlaylist', data => {
+    // users.playlist(data)
+    users.findOneAndUpdate({ name: data.myId }, {
+      $addToSet: { favorites: data.slug ? data.slug : null }
+    }, { new: true })
+      .populate('playlist')
+      .exec(function (err, songs) {
+        if (err) {
+          logger.error(err)
+        }
+        socket.emit('playlist', songs.playlist)
+        logger.log(songs)
+      })
+  })
   socket.on('songClick', data => {
-    logger.log(data)
+    // logger.log(data)
     songs.findOneAndUpdate({ fileSlug: data.id }, { $inc: { plays: 1 }, lastPlayed: Date.now() }, { new: true, useFindAndModify: false }, (err, doc) => {
       if (err) {
         logger.error(err)
         throw new Error()
       }
       logger.log(`${doc} updated`)
-      logger.log(data)
-      socket.broadcast.emit('shareTrack', { data, doc })
-      socket.emit('shareTrack', { data, doc })
+      // socket.broadcast.emit('shareTrack', { data, doc })
+      io.emit('shareTrack', { data, doc })
     })
   })
-  socket.on('playing', data => {
-    logger.log('socket on playing')
-    logger.log(data.name, '  is playing!!!')
-    socket.emit('play', data)
-  })
+
   socket.on('message', function (message) {
     logger.log(`socket on message ${message}`)
     message = JSON.parse(message)
@@ -151,8 +177,8 @@ io.on('connection', function (socket) {
       socket.nickname = message.username
       logger.log(message, socket.id)
       socket.broadcast.send(JSON.stringify(message))
-      message.type = 'myMessage'
       socket.send(JSON.stringify(message))
+      // message.type = 'myMessage'
     }
   })
 })
