@@ -44,6 +44,20 @@ section#chatroom {
   overflow: overlay;
   width: 100%;
 }
+@media only screen
+  and (max-width: 500px)
+  /* and (-webkit-device-pixel-ratio: 4)  */
+  {
+
+    section#chatroom {
+      display: none;
+      /* flex-direction: column-reverse; */
+      height: 100%;
+      overflow: overlay;
+      width: 100%;
+    }
+  }
+
 
 /* ul#list { */
   /* background: #faebd7; */
@@ -176,6 +190,7 @@ a {
 }
 
 .player {
+  width: 100%;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -504,3 +519,17 @@ input#setname {
 /* .inline{
   display:inline;
 } */
+
+.level{
+  margin: 0;
+}
+.play-list{
+display: none;
+  height: 100%;
+  width: 104%;
+  overflow: auto;
+}
+
+.bgAlice{
+  background-color: aliceblue;
+}

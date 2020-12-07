@@ -5,11 +5,14 @@ header#bannner
 
 
   div.is-flex-desktop
-    .nowrap
-      input#ytlink.input(title='enter a YouTube link' type='text' placeholder='search for song to download')
-      button#gobtn.button.is-link WIN
+    input#ytlink.input(title='enter a YouTube link' type='text' placeholder='search for song to download')
+    button#gobtn.button.is-link find song!
+
     #buttons.name
       .is-flex.justify
+        a.is-size-3.fas.fa-list
+        a.is-size-3.fas.fa-comments
+        a.is-size-3.fas.fa-music
         #play.button
           i.fas.fa-play
         #backward.button(title="rewind")
@@ -18,6 +21,6 @@ header#bannner
           i.fas.fa-angle-double-right
         .time
         //- #sidenav.button.sidenav-trigger(data-target="slide-out") song List
-    .dropdown.is-active
-      #dropdown-menu.dropdown-menu(role='menu')
-        #searchContent.dropdown-content.hidden
+    //- .dropdown.is-active
+    //-   #dropdown-menu.dropdown-menu(role='menu')
+    //-     #searchContent.dropdown-content.hidden

@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
+const { Schema } = mongoose
 const uuidv4 = require('uuid/v4')
 const fs = require('fs-extra')
 const path = require('path')
 const logger = require('../routes/myLogger')
-// const logger = require('../routes/myLogger')
 // logger.log(new Date())
 
-const songSchema = mongoose.Schema({
+const songSchema = new Schema({
   title: { type: String, required: true },
   fileName: { type: String, required: true },
   artist: { type: String },
@@ -20,6 +20,7 @@ const songSchema = mongoose.Schema({
   deleted: { type: Boolean, default: false }
 
 })
+
 const Song = module.exports = mongoose.model('songs', songSchema)
 
 fs.readdir(path.join(__dirname, '../public/downloads'))

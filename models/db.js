@@ -3,7 +3,7 @@ const logger = require('../routes/myLogger')
 const mongoose = require('mongoose')
 const dbURI = process.env.MONGO_URL
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
   .catch(error => {
     logger.log(error.message)
   })
@@ -27,9 +27,9 @@ mongoose.connection.on('disconnected', function () {
 })
 
 // If the Node process ends, close the Mongoose connection
-// process.on('SIGINT', function () {
-//   mongoose.connection.close(function () {
-//     logger.log('Mongoose default connection disconnected through app termination')
-//     process.exit(0)
-//   })
-// })
+process.on('SIGINT', function () {
+  mongoose.connection.close(function () {
+    logger.log('Mongoose default connection disconnected through app termination')
+    process.exit(0)
+  })
+})
