@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', event => {
   let user
   let color
   let displayFavoritesPlayList = false
+  let myPlayList = {}
   const favoritesPlayList = document.getElementsByClassName('play-list')[0]
   const listToggleButton = document.getElementsByClassName('fa-list')[0]
   const playerToggleButton = document.getElementsByClassName('fa-music')[0]
@@ -76,8 +77,10 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   })
   socket.on('playlist', data => {
-    console.log(data.length, data)
-    data.forEach(song => {
+    myPlayList = data
+    console.log(data)
+    favoritesPlayList.innerHTML = ''
+    myPlayList.forEach(song => {
       const card = document.createElement('DIV')
       const title = document.createElement('P')
       const deleteIcon = document.createElement('I')
@@ -116,7 +119,6 @@ document.addEventListener('DOMContentLoaded', event => {
       chatroom.style.display = 'flex'
     }
     if (node === listToggleButton) {
-      console.log('show playlist!!')
       favoritesPlayList.style.display = (displayFavoritesPlayList ? 'none' : 'block')
       $songList.style.display = (displayFavoritesPlayList ? 'block' : 'none')
       listToggleButton.style.color = (displayFavoritesPlayList ? 'red' : 'green')
