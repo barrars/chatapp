@@ -1,0 +1,13 @@
+display accumulated "plays" for songs **
+ - dont count a play unless song played continuosly for 40% of total duration
+
+ add scroll when random() song plays
+
+ playHistory icon
+  -last 50 songs playd in user's DB model**
+
+make username unique?
+
+hide 'all songs /favorites' when toggling
+
+toggle shuffle play to/from all songs/favorite songs
