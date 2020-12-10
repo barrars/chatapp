@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', event => {
       title.setAttribute('data-id', song.fileSlug)
       title.innerHTML = song.title
       deleteIcon.classList.add('fas', 'fa-trash-alt')
-      likeIcon.classList.add('add_song', 'fas', 'fa-plus')
-      card.append(title /* todo add delete icon */)
+      likeIcon.classList.add('add_song', 'fas', 'fa-bong')
+      card.append(title, likeIcon)
       favoritesPlayList.appendChild(card)
     })
   })
