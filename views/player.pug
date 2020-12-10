@@ -4,17 +4,20 @@
   .play-list
     p.font14.has-text-centered.bgAlice Your Favorite Songs
 
-  p.font14.has-text-centered.bgAlice All Songs
   #songList
+    p.font14.has-text-centered.bgAlice All Songs
     - if (songs)
       each val, i in songs
         - if (!val.deleted){
         div.card.song(data-id=val.fileSlug data-name= val.title data-order= i)
           p.inline(data-id=val.fileSlug data-name=val.title)=val.title
-          i.hidden.fas.fa-pen.editIcon(data-id=val.fileSlug data-name=val.title title="edit title")
-          i.add_song.hidden.fas.fa-plus(data-id=val.fileSlug data-name=val.title title="add to playlist")
-          i.fas.hidden.fa-trash-alt(data-id=val.fileSlug data-name=val.title title="delete song")
-          i.fas.hidden.fa-share(data-id=val.fileSlug data-name=val.title title="copy link to share this song")
+          .flex
+            i.hidden.fas.fa-pen.editIcon(data-id=val.fileSlug data-name=val.title title="edit title")
+            i.add_song.hidden.fas.fa-plus(data-id=val.fileSlug data-name=val.title title="add to playlist")
+            i.fas.hidden.fa-trash-alt(data-id=val.fileSlug data-name=val.title title="delete song")
+            i.fas.hidden.fa-share(data-id=val.fileSlug data-name=val.title title="copy link to share this song")
+            span.playCount=`  ${val.plays} total plays`
+
         - }
   audio#audio-element(muted preload src="")
   //- input#rename

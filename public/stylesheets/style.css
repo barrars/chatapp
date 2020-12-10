@@ -533,3 +533,6 @@ display: none;
 .bgAlice{
   background-color: aliceblue;
 }
+.playCount{
+  font-size:x-small
+}

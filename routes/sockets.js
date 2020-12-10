@@ -69,40 +69,17 @@ io.on('connection', function (socket) {
       socket.emit('renamed', doc)
       logger.log(`${doc.title} has been renamed via socket event`)
     })
-    // const songPath = (path) => '/../public/downloads/' + path
-    // fs.rename(
-    //   path.join(__dirname, songPath(data.oldName)),
-    //   path.join(__dirname, songPath(data.newName)),
-    //   err => {
-    //     if (err) {
-    //       throw err
-    //     }
-    //     logger.log(
-    //       `${data.oldName.red} ${'has been renamed to'.magenta}  ${
-    //         data.newName
-    //       }`
-    //     )
-    //   }
-    // )
   })
-  socket.on('set_name', function (data) {
-    users.create(data)
+  socket.on('set_name', async function (data) {
+    users.createUser(data)
     socket.emit('name_set', data)
-    users.findOneAndUpdate({ name: data.name }, {
-      $addToSet: { favorites: data.slug ? data.slug : null }
-    }, { new: true })
-      .populate('playlist')
-      .exec(function (err, songs) {
-        if (err) {
-          logger.error(err)
-        }
-        if (songs) {
-          // console.log(songs)
+    const playlist = await users.playlist(data)
+    if (playlist) {
+      logger.log(playlist)
+      logger.log(playlist.playlist)
+      socket.emit('playlist', playlist.playlist)
+    }
 
-          socket.emit('playlist', songs.playlist)
-          // logger.log(songs)
-        }
-      })
     socket.nickname = data.name
     socket.color = data.color
     myClients[socket.id] = socket.nickname
@@ -142,16 +119,19 @@ io.on('connection', function (socket) {
   socket.on('getsong', require('./youtube.js').download)
   socket.on('addToPlaylist', data => {
     // users.playlist(data)
+    logger.log(data)
     users.findOneAndUpdate({ name: data.myId }, {
-      $addToSet: { favorites: data.slug ? data.slug : null }
+      $addToSet: { favorites: data.slug }
     }, { new: true })
       .populate('playlist')
       .exec(function (err, songs) {
         if (err) {
           logger.error(err)
         }
-        socket.emit('playlist', songs.playlist)
-        logger.log(songs)
+        if (songs) {
+          logger.log(songs)
+          socket.emit('playlist', songs.playlist)
+        }
       })
   })
   socket.on('songClick', data => {

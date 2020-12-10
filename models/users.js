@@ -21,28 +21,21 @@ userSchema.virtual('playlist',
 
   })
 const Users = module.exports = mongoose.model('user', userSchema)
-const playlistGet = data => {
-  Users.findOneAndUpdate({ name: data.myId }, {
-    $addToSet: { favorites: data.slug ? data.slug : null }
-  }, { new: true })
+const playlistGet = async data => {
+  logger.log(data)
+  const songs = await Users.findOne({ name: data.name }, {}, { lean: true })
+
     .populate('playlist')
-    .exec(function (err, songs) {
-      if (err) {
-        logger.error(err)
-      }
-      // logger.log(songs)
-      return songs
-    })
+  return songs
 }
 function createUser (user) {
-  logger.log(user)
   Users.findOneAndUpdate(user, { lastLogin: date.toDateString() }, { upsert: true, new: true })
     .then(doc => {
-      // logger.log({ doc })
       doc.save()
+      return doc
     })
     .catch(err => logger.error(err))
 }
 
-Users.create = createUser
+Users.createUser = createUser
 Users.playlist = playlistGet

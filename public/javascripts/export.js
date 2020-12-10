@@ -92,9 +92,9 @@ var exp = (function () {
       (left + width) > window.pageXOffset
     )
   }
-
+  // document.querySelectorAll('div.card-song')
   const loadRandom = (myId) => {
-    const list = $songList.children
+    const list = document.querySelectorAll('#songList > div')
     // console.log(list.length, ' total songs in list')
     const nextIndex = Math.floor(Math.random() * list.length)
     const id = list[nextIndex].getAttribute('data-id')
