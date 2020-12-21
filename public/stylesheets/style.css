@@ -131,7 +131,16 @@ audio#sound {
   color: #fff;
   font-size: 1.25em;
 }
-
+.overflow{
+  background: rgb(209, 209, 204)
+  ;
+}
+.blue{
+  color: #00b7ff;
+}
+.is-flex-desktop{
+  background: rgb(209, 209, 204)
+}
 #messages {
 	width: 100%;
   word-break: break-word;
@@ -387,6 +396,8 @@ div.userMessage {
   height: 100%;
   width: 104%;
   overflow: auto;
+  background: rgb(209, 209, 204);
+
 
 }
 input#nickname {
@@ -417,6 +428,10 @@ input#setname {
 
 .font4 {
   font-family: Cinzel;
+  font-weight: bold;
+  background-color: rgb(209, 209, 204);
+  border-bottom: #558e3e solid 2px;
+  padding-left: 10px;
 }
 
 .font5 {

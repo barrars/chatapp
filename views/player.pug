@@ -9,7 +9,7 @@
     - if (songs)
       each val, i in songs
         - if (!val.deleted){
-        div.card.song(data-id=val.fileSlug data-name= val.title data-order= i)
+        div.card.font4.song(data-id=val.fileSlug data-name= val.title data-order= i)
           p.inline(data-id=val.fileSlug data-name=val.title)=val.title
           .flex
             i.hidden.fas.fa-pen.editIcon(data-id=val.fileSlug data-name=val.title title="edit title")
