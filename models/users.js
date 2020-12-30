@@ -7,7 +7,7 @@ const userSchema = new Schema({
   name: { type: String, unique: true },
   color: { type: String },
   created: { type: Date, default: Date.now },
-  lastLogin: { type: Date },
+  lastLogin: { type: Date, default: Date.now },
   favorites: Array
 }, {
   toObject: { virtuals: true },
@@ -20,16 +20,16 @@ userSchema.virtual('playlist',
     foreignField: 'fileSlug'
 
   })
-const Users = module.exports = mongoose.model('user', userSchema)
 const playlistGet = async data => {
-  logger.log(data)
+  // logger.log(data)
   const songs = await Users.findOne({ name: data.name }, {}, { lean: true })
 
     .populate('playlist')
   return songs
 }
 function createUser (user) {
-  Users.findOneAndUpdate(user, { lastLogin: date.toDateString() }, { upsert: true, new: true })
+  logger.log(user)
+  Users.findOneAndUpdate(user, { lastLogin: date.toISOString() }, { upsert: true, new: true })
     .then(doc => {
       doc.save()
       return doc
@@ -37,5 +37,6 @@ function createUser (user) {
     .catch(err => logger.error(err))
 }
 
+const Users = module.exports = mongoose.model('user', userSchema)
 Users.createUser = createUser
 Users.playlist = playlistGet
