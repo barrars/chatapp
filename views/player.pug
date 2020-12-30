@@ -1,6 +1,4 @@
 .player
-  input#find.input(placeholder="search the musi library" type="text" name="find")
-
   .play-list
     p.font14.has-text-centered.bgAlice Your Favorite Songs
 
@@ -11,7 +9,7 @@
         - if (!val.deleted){
         div.card.font4.song(data-id=val.fileSlug data-name= val.title data-order= i)
           p.inline(data-id=val.fileSlug data-name=val.title)=val.title
-          .flex
+          .flex(data-id=val.fileSlug)
             i.hidden.fas.fa-pen.editIcon(data-id=val.fileSlug data-name=val.title title="edit title")
             i.add_song.hidden.fas.fa-plus(data-id=val.fileSlug data-name=val.title title="add to playlist")
             i.fas.hidden.fa-trash-alt(data-id=val.fileSlug data-name=val.title title="delete song")

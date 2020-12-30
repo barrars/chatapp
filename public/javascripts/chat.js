@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', event => {
 
   document.addEventListener('mouseover', e => {
     if (e.target.hasAttribute('data-id')) {
+      console.log('mouse!!')
       const name = e.target.getAttribute('data-id')
       document.querySelectorAll(`i[data-id="${name}"]`).forEach(icon => {
         icon.classList.remove('hidden')
@@ -188,7 +189,7 @@ document.addEventListener('DOMContentLoaded', event => {
   if (!downloading) {
     gobtn.innerText = 'find song!'
   }
-  $find.onkeyup = e => {
+  ytlink.onkeyup = e => {
     const songs = document.querySelectorAll('.song')
     var txtValue, song
     for (let i = 0; i < songs.length; i++) {
@@ -197,7 +198,7 @@ document.addEventListener('DOMContentLoaded', event => {
       if (txtValue.toUpperCase().indexOf(e.target.value.toUpperCase()) < 0) {
         songs[i].style.display = 'none'
       } else {
-        songs[i].style.display = ''
+        songs[i].style.display = 'block'
       }
     }
   }

@@ -106,12 +106,12 @@ section#chatroom {
 
 audio#sound {
   display: none;
-  height: 100px;
-  width: 500px;
+  /* height: 100px;
+  width: 500px; */
 }
 
 #audio-element {
-  width: 100%;
+  /* width: 100%; */
   display: none;
 }
 
@@ -120,9 +120,8 @@ audio#sound {
   line-height: 2em;
   padding: 0 18px;
   font-family: Gloria Hallelujah;
-  background-color: #afafaf;
   font-size: 1.1em;
-  background-color: hsla(0, 0%, 68.6%, 0.42);
+  /* background-color: hsla(0, 0%, 68.6%, 0.42); */
 }
 
 .name {
@@ -279,8 +278,8 @@ a {
   text-align: center;
 }
 
-div#songList p:hover {
-  background: #f0f8ff;
+div#songList .card:hover {
+  background: #acd1f1;
   color: #0c1c77;
   cursor: pointer;
   outline: dashed #20b2aa;
@@ -341,6 +340,13 @@ div.userMessage {
   margin: 7px 0;
   opacity: 1;
   padding: 7px 0;
+  line-height: 2em;
+  padding: 0 18px;
+  font-family: Gloria Hallelujah;
+  font-size: 1.1em;
+  /* background-color: hsla(0, 0%, 68.6%, 0.42); */
+  /* opacity: .5; */
+
 }
 
 .overflow {
@@ -367,6 +373,7 @@ div.userMessage {
   border: 4px solid #da2058;
 }
 .song {
+  user-select: none;
   transition: all 0.2s;
 }
 .houdini {

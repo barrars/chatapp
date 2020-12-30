@@ -7,9 +7,9 @@ section#chatroom
   #messages
     - if (chats){
       each val in chats
-        .myMessage(title=val.timestamp style='box-shadow: 0px 2px 0 ' + val.color)
+        .myMessage(title=val.timestamp style='background-color:' + val.color+'5c')
           span.name= val.name
-          span.message.card= val.message
+          span.message(style='background-color:' + val.color+'5c')= val.message
 
         //- p= 'name ' +val.name + ' message: '+ val.message
       - }

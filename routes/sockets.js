@@ -1,6 +1,4 @@
 const logger = require('../routes/myLogger')
-// const fs = require('fs-extra')
-// const path = require('path')
 const chatModel = require('../models/chatModel')
 const search = require('./search').search
 const songs = require('../models/songs')
@@ -10,14 +8,33 @@ require('./ip').uniqeVisits()
 exports.io = function () {
   return io
 }
+logger.log(io.sockets.adapter.rooms)
 const myClients = {}
 io.on('connection', function (socket) {
+  logger.log(io.of('/').allSockets())
+  logger.log(io.of('/scotts').allSockets())
+  // logger.log(io.of('/').sockets)
+  // logger.log(io.sockets.adapter.rooms)
+  // logger.log(io.onconnection(socket))
   // logger.log(io.sockets)
+  // logger.log(socket.handshake)
   socket.on('random', data => {
     logger.log(data)
   })
   socket.on('ding', id => {
-    logger.log(id)
+    // logger.log(id)
+    logger.log(socket)
+    socket.join('/scotts')
+    function listRooms (count) {
+      io.sockets.adapter.rooms.forEach((value, key, map) => {
+        logger.log(`room${count}: ${key}`)
+        logger.log('--------------------------')
+        logger.log(`sockets: ${JSON.stringify([...value])}`)
+        logger.log('--------------------------')
+        count++
+      })
+    }
+    // listRooms(1)
     io.to(id).emit('hey', 'i <3 u!')
   })
 
@@ -75,8 +92,8 @@ io.on('connection', function (socket) {
     socket.emit('name_set', data)
     const playlist = await users.playlist(data)
     if (playlist) {
-      logger.log(playlist)
-      logger.log(playlist.playlist)
+      // logger.log(playlist)
+      // logger.log(playlist.playlist)
       socket.emit('playlist', playlist.playlist)
     }
 
@@ -122,17 +139,20 @@ io.on('connection', function (socket) {
     logger.log(data)
     users.findOneAndUpdate({ name: data.myId }, {
       $addToSet: { favorites: data.slug }
-    }, { new: true })
-      .populate('playlist')
-      .exec(function (err, songs) {
-        if (err) {
-          logger.error(err)
-        }
-        if (songs) {
-          logger.log(songs)
-          socket.emit('playlist', songs.playlist)
-        }
-      })
+    }, { upsert: true, new: true })
+      .then(doc => logger.log(doc))
+      .catch(err => console.error(err))
+
+    // .populate('playlist')
+    // .exec(function (err, songs) {
+    //   if (err) {
+    //     logger.error(err)
+    //   }
+    //   if (songs) {
+    //     logger.log(songs)
+    //     socket.emit('playlist', songs.playlist)
+    //   }
+    // })
   })
   socket.on('songClick', data => {
     // logger.log(data)
