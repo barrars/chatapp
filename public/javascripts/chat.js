@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', event => {
 
   document.addEventListener('mouseover', e => {
     if (e.target.hasAttribute('data-id')) {
-      console.log('mouse!!')
       const name = e.target.getAttribute('data-id')
       document.querySelectorAll(`i[data-id="${name}"]`).forEach(icon => {
         icon.classList.remove('hidden')
@@ -70,9 +69,9 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   })
   document.addEventListener('mouseout', e => {
-    if (e.target.hasAttribute('data-name')) {
-      const name = e.target.getAttribute('data-name')
-      document.querySelectorAll(`i[data-name="${name}"]`).forEach(icon => {
+    if (e.target.hasAttribute('data-id')) {
+      const id = e.target.getAttribute('data-id')
+      document.querySelectorAll(`i[data-id="${id}"]`).forEach(icon => {
         icon.classList.add('hidden')
       })
     }
