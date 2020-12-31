@@ -363,7 +363,7 @@ div.userMessage {
 	margin: 0 auto;
 	/* min-width: 98vw; */
 	/* width: 100vw; */
-	overflow: scroll;
+	overflow: auto;
   display: flex;
   flex-direction: row-reverse;
 }
