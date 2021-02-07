@@ -8,13 +8,10 @@ const cookieParser = require('cookie-parser')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users.router')
 const cors = require('cors')
-
-const playerRouter = require('./routes/playerRouter')
-const songList = require('./routes/songList')
-const songGet = require('./routes/songGet')
+var compression = require('compression')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
-var compression = require('compression')
+
 const app = express()
 app.use(cors())
 app.use(compression())
@@ -23,6 +20,10 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
+const playerRouter = require('./routes/playerRouter')
+const songList = require('./routes/songList')
+const songGet = require('./routes/songGet')
+const deleted = require('./routes/deleted')
 // app.enable('trust proxy')
 const store = new MongoStore({
   url: process.env.MONGO_URL,
@@ -42,13 +43,14 @@ app.use(
     secret: 'secret'
   })
 )
-app.use(express.static(path.join(__dirname, 'public')))
-app.use('/', indexRouter)
 app.use('/public', express.static(path.join(__dirname, '/public')))
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/deleted', deleted)
 app.use('/users', usersRouter)
 app.use('/player', playerRouter)
 app.use('/songList', songList)
 app.use('/songGet', songGet)
+app.use('/', indexRouter)
 // app.use('/playlist', playlistRouter)
 
 // catch 404 and forward to error handler

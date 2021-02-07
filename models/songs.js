@@ -31,7 +31,7 @@ fs.readdir(path.join(__dirname, '../public/downloads'))
           throw err
         }
         if (!doc.length) {
-          console.log(doc.length)
+          logger.log(doc.length)
           logger.log('creating')
           fs.stat(path.join(__dirname, '../public/downloads', file))
             .then(data => {

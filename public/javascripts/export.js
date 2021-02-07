@@ -71,7 +71,9 @@ var exp = (function () {
     })
   }
   const currentSong = function () {
-    current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2]
+    if (current) {
+      current.innerHTML = document.getElementById('audio-element').getAttribute('src').split('/')[2]
+    }
   }
   function elementInViewport2 (el) {
     var top = el.offsetTop
