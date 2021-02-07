@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', event => {
   const exp = window.exp
   const getId = document.querySelector.bind(document)
-  let myId = getId('#nickname')
+  let myId = document.getElementById('#nickname')
   const socket = window.io()
   const alertify = window.alertify
   let user
@@ -13,9 +13,10 @@ document.addEventListener('DOMContentLoaded', event => {
   const playerToggleButton = document.getElementsByClassName('fa-music')[0]
   const chatToggleButton = document.getElementsByClassName('fa-comments')[0]
   const musicRoom = document.getElementsByClassName('player')[0]
+  let time = document.getElementsByClassName('time')
   const icons = (name, id) =>
-  // <i data-name="${name}"data-id="${id}"class="hidden fas fa-download downloadIcon" title="download song"></i>
-  `<i data-name="${name}"data-id="${id}"class="hidden fas fa-pen editIcon" title="edit title"></i>
+    // <i data-name="${name}"data-id="${id}"class="hidden fas fa-download downloadIcon" title="download song"></i>
+    `<i data-name="${name}"data-id="${id}"class="hidden fas fa-pen editIcon" title="edit title"></i>
     <i data-name="${name}"data-id="${id}"class="add_song hidden fas fa-plus"></i>
     <i data-name="${name}"data-id="${id}"class="add_song hidden fas fa-share"></i>
     <i data-name="${name}"data-id="${id}"class="fas hidden fa-trash-alt"></i>`
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const gobtn = getId('#gobtn')
   const searchContent = getId('#searchContent')
   const backward = getId('#backward')
-  const setname = getId('#setname')
+  const setname = document.getElementById('#setname')
   const forward = getId('#forward')
   const $playbutton = getId('#play')
   const renameInput = document.getElementById('rename')
@@ -58,7 +59,9 @@ document.addEventListener('DOMContentLoaded', event => {
       })
     }
   })
-  $messages.scrollTop = $messages.scrollHeight
+  if ($messages) {
+    $messages.scrollTop = $messages.scrollHeight
+  }
 
   document.addEventListener('mouseover', e => {
     if (e.target.hasAttribute('data-id')) {
@@ -78,8 +81,11 @@ document.addEventListener('DOMContentLoaded', event => {
   })
   socket.on('playlist', data => {
     myPlayList = data
-    console.log(data)
-    favoritesPlayList.innerHTML = ''
+    // console.log(data)
+    if (favoritesPlayList) {
+
+      favoritesPlayList.innerHTML = ''
+    }
     myPlayList.forEach(song => {
       const card = document.createElement('DIV')
       const title = document.createElement('P')
@@ -128,6 +134,20 @@ document.addEventListener('DOMContentLoaded', event => {
       console.log('download!')
       console.log(node.getAttribute('data-name'))
       window.fetch(`/download/${node.getAttribute('data-name')}`)
+    }
+    if (node.classList.contains('fa-ban')) {
+      const song = node.getAttribute('data-name')
+      const id = node.getAttribute('data-id')
+
+      socket.emit('permDelete',{song, id} )
+
+    }
+    if (node.classList.contains('fa-save')) {
+      const song = node.getAttribute('data-name')
+      const id = node.getAttribute('data-id')
+
+      socket.emit('restore',{song, id} )
+
     }
     if (node.classList.contains('fa-trash-alt')) {
       const song = node.getAttribute('data-name')
@@ -185,23 +205,25 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   })
 
-  if (!downloading) {
+  if (!downloading && gobtn !== null) {
     gobtn.innerText = 'find song!'
   }
-  ytlink.onkeyup = e => {
-    const songs = document.querySelectorAll('.song')
-    var txtValue, song
-    for (let i = 0; i < songs.length; i++) {
-      song = songs[i].getElementsByTagName('p')[0]
-      txtValue = song.textContent || song.innerText
-      if (txtValue.toUpperCase().indexOf(e.target.value.toUpperCase()) < 0) {
-        songs[i].style.display = 'none'
-      } else {
-        songs[i].style.display = 'block'
+
+  if (ytlink) {
+    ytlink.onkeyup = e => {
+      const songs = document.querySelectorAll('.song')
+      var txtValue, song
+      for (let i = 0; i < songs.length; i++) {
+        song = songs[i].getElementsByTagName('p')[0]
+        txtValue = song.textContent || song.innerText
+        if (txtValue.toUpperCase().indexOf(e.target.value.toUpperCase()) < 0) {
+          songs[i].style.display = 'none'
+        } else {
+          songs[i].style.display = 'block'
+        }
       }
     }
   }
-
   socket.on('renamed', data => {
     console.log('socket on renamed')
     console.log(data)
@@ -222,16 +244,24 @@ document.addEventListener('DOMContentLoaded', event => {
     $playbutton.children[0].classList.remove('fa-stop')
   }
   myPlayer.onplay = () => {
-    $playbutton.children[0].classList.add('fa-stop')
-    $playbutton.children[0].classList.remove('fa-play')
-  }
-  myPlayer.ontimeupdate = () => {
-    if (Math.floor(myPlayer.duration - myPlayer.currentTime) === isNaN) {
-      document.getElementsByClassName('time')[0].innerText = '___'
-    } else {
-      document.getElementsByClassName('time')[0].innerText =
-        Math.floor(myPlayer.duration - myPlayer.currentTime) + ' s'
+    if ($playbutton) {
+
+      $playbutton.children[0].classList.add('fa-stop')
+      $playbutton.children[0].classList.remove('fa-play')
     }
+  }
+
+  myPlayer.ontimeupdate = () => {
+    if (time[0]) {
+      if (Math.floor(myPlayer.duration - myPlayer.currentTime) === isNaN) {
+
+        time[0].innerText = '___'
+      } else {
+        time[0].innerText =
+          Math.floor(myPlayer.duration - myPlayer.currentTime) + ' s'
+      }
+    }
+    return
   }
 
   myPlayer.onended = () => {
@@ -287,7 +317,7 @@ document.addEventListener('DOMContentLoaded', event => {
     //  ## Prepend newly downloaded song
     $songList.insertAdjacentHTML(
       'afterbegin',
-`      <div data-name='${songTitle}' data-id='${id}' class='song card'><p data-id='${id}' data-name='${songTitle}'class='inline'>${songTitle}</p> ${icons(songTitle, id)}<div>`)
+      `      <div data-name='${songTitle}' data-id='${id}' class='song card'><p data-id='${id}' data-name='${songTitle}'class='inline'>${songTitle}</p> ${icons(songTitle, id)}<div>`)
     downloading = false
     ytlink.disabled = false
     ytlink.placeholder = 'enter another link'
@@ -299,7 +329,7 @@ document.addEventListener('DOMContentLoaded', event => {
   socket.on('userList', data => {
     if (!data.clients && window.username) {
       $list.innerHTML +=
-      '<li class="button is-flex" data-socketID="' + data.id + '">' + data.name + '</li>'
+        '<li class="button is-flex" data-socketID="' + data.id + '">' + data.name + '</li>'
     } else {
       for (var key in data.clients) {
         if (
@@ -307,8 +337,11 @@ document.addEventListener('DOMContentLoaded', event => {
           key === socket.id
         ) {
           console.log(data)
-          $list.innerHTML +=
-            '<li class="user is-flex button" data-socketID="' + key + '">' + data.clients[key] + '</li>'
+          if ($list) {
+
+            $list.innerHTML +=
+              '<li class="user is-flex button" data-socketID="' + key + '">' + data.clients[key] + '</li>'
+          }
         } else {
           $list.innerHTML +=
             '<li class="is-flex button" data-socketID="' +
@@ -323,7 +356,7 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   })
   socket.on('userLeft', data => {
-    function removeUserFromList (elm) {
+    function removeUserFromList(elm) {
       elm.remove()
       console.log('BYEBYEBYE')
     }
@@ -352,9 +385,11 @@ document.addEventListener('DOMContentLoaded', event => {
       ' <span style="color:red"> started playing <span style="color:black"> ' +
       data.data.song +
       '</span> </div>'
+    if ($messages) {
 
-    $messages.append(frag.content)
-    $messages.scrollTop = $messages.scrollHeight
+      $messages.append(frag.content)
+      $messages.scrollTop = $messages.scrollHeight
+    }
 
     exp.play()
   })
@@ -399,37 +434,47 @@ document.addEventListener('DOMContentLoaded', event => {
 
     user = data.name
     color = data.color
-    $nameform.style.display = 'none'
-  })
-  $send.onclick = () => {
-    if ($message.value === '') {
-      alertify.logPosition('bottom-left')
-      alertify.log('enter text')
-      return
-    }
-    var data = {
-      name: user,
-      color: color,
-      id: socket.nickname,
-      message: $message.value,
-      type: 'userMessage'
-    }
-    socket.send(JSON.stringify(data))
-    $message.value = ''
-  }
+    if ($nameform) {
 
-  $playbutton.onclick = () => {
-    if (myPlayer.paused) {
-      exp.play()
-    } else {
-      myPlayer.pause()
+      $nameform.style.display = 'none'
+    }
+  })
+  if ($send) {
+    $send.onclick = () => {
+      if ($message.value === '') {
+        alertify.logPosition('bottom-left')
+        alertify.log('enter text')
+        return
+      }
+      var data = {
+        name: user,
+        color: color,
+        id: socket.nickname,
+        message: $message.value,
+        type: 'userMessage'
+      }
+      socket.send(JSON.stringify(data))
+      $message.value = ''
     }
   }
-  forward.onclick = () => {
-    myPlayer.currentTime += 15.0
+  if ($playbutton) {
+    $playbutton.onclick = () => {
+      if (myPlayer.paused) {
+        exp.play()
+      } else {
+        myPlayer.pause()
+      }
+    }
   }
-  backward.onclick = () => {
-    myPlayer.currentTime -= 15.0
+  if (forward) {
+    forward.onclick = () => {
+      myPlayer.currentTime += 15.0
+    }
+  }
+  if (backward) {
+    backward.onclick = () => {
+      myPlayer.currentTime -= 15.0
+    }
   }
 
   // window.addEventListener('keyup', function () {
@@ -506,59 +551,73 @@ document.addEventListener('DOMContentLoaded', event => {
     window.alertify.logPosition('top left')
     window.alertify.log(' This song has already been downloaded')
   })
-  gobtn.onclick = () => {
-    if (ytlink.value.length === 0) {
-      alertify.logPosition('top left')
-      alertify.log('enter a YouTube link!')
-      return
-    } else if (downloading === true) {
-      alertify.log('Please wait for the current download to finish')
-      return
-    }
-    downloading = true
-    alertify.log('Starting Download')
+  if (gobtn) {
+    gobtn.onclick = () => {
+      if (ytlink.value.length === 0) {
+        alertify.logPosition('top left')
+        alertify.log('enter a YouTube link!')
+        return
+      } else if (downloading === true) {
+        alertify.log('Please wait for the current download to finish')
+        return
+      }
+      downloading = true
+      alertify.log('Starting Download')
 
-    var song = ytlink.value
-    ytlink.disabled = true
-    socket.emit('getsong', { song, user })
-    ytlink.value = ''
-  }
-  myId.focus()
-  setname.onclick = () => {
-    if (!myId.value) {
-      alertify.log('enter text')
-      console.log('enter text')
-      return
-    }
-    myId = myId.value.toLowerCase()
-    console.log(myId)
-    window.fetch(`/users/set_name/${myId}`)
-
-    const myColor = exp.getColor(myId)
-
-    ytlink.focus()
-
-    socket.emit('set_name', {
-      name: myId,
-      color: myColor
-    })
-  }
-  myId.onkeypress = function (e) {
-    if (e.which === 13) {
-      setname.click()
-    }
-  }
-  ytlink.onkeypress = function (e) {
-    if (e.which === 13) {
-      gobtn.click()
-    }
-  }
-  $message.onkeypress = function (e) {
-    if (e.which === 13) {
-      $send.click()
+      var song = ytlink.value
+      ytlink.disabled = true
+      socket.emit('getsong', { song, user })
+      ytlink.value = ''
     }
   }
 
+  myId?.focus()
+
+  console.log(setname)
+  if (setname) {
+
+    setname.onclick = () => {
+      if (!myId.value) {
+        alertify.log('enter text')
+        console.log('enter text')
+        return
+      }
+      myId = myId.value.toLowerCase()
+      console.log(myId)
+      window.fetch(`/users/set_name/${myId}`)
+
+      const myColor = exp.getColor(myId)
+
+      ytlink.focus()
+
+      socket.emit('set_name', {
+        name: myId,
+        color: myColor
+      })
+    }
+  }
+  if (myId) {
+
+    myId.onkeypress = function (e) {
+      if (e.which === 13) {
+        setname.click()
+      }
+    }
+  } if (ytlink) {
+    ytlink.onkeypress = function (e) {
+      if (e.which === 13) {
+        gobtn.click()
+      }
+    }
+  }
+  if ($message) {
+
+    $message.onkeypress = function (e) {
+      if (e.which === 13) {
+        $send.click()
+      }
+    }
+  }
   socket.on('error', error => {
     console.log('socket on error')
 

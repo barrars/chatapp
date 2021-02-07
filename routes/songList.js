@@ -8,7 +8,7 @@ router.get('/', async function (req, res) {
   logger.log('hit songList API route ')
   const songList = await songs.find({})
   if (songList) {
-    console.log('got JSON')
+    logger.log('got JSON')
     res.json(songList)
   } else {
     res.json({ err: 'something isnt right' })

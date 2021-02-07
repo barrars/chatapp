@@ -3,6 +3,11 @@ const chatModel = require('../models/chatModel')
 const search = require('./search').search
 const songs = require('../models/songs')
 const users = require('../models/users')
+// const { fsync } = require('fs-extra')
+const fs = require('fs')
+
+const path = require('path')
+
 const io = require('socket.io')()
 require('./ip').uniqeVisits()
 exports.io = function () {
@@ -54,7 +59,7 @@ io.on('connection', function (socket) {
         throw new Error()
       }
       // data.doc = doc
-      console.log(doc)
+      logger.log(doc)
       logger.log('deleted ', data)
       socket.broadcast.emit('deleted', data)
       socket.emit('deleted', data)
@@ -73,6 +78,20 @@ io.on('connection', function (socket) {
     //   }
     // )
   })
+  socket.on('permDelete', async data => {
+    logger.log(__dirname)
+    const track = await songs.findOne({ fileSlug: data.id })
+    fs.unlink(path.join(__dirname, '../public/downloads/', track.fileName), (data) => {
+      logger.log(data)
+      logger.log(`${track.fileName} deleted!`)
+    })
+    songs.deleteOne({ fileSlug: data.id }, () => logger.log('removed from mongo'))
+  })
+  socket.on('restore', async data => {
+    songs.findOneAndUpdate({ fileSlug: data.id }, { deleted: false })
+      .then(data => logger.log(data))
+    logger.log(data)
+  })
   socket.on('rename', data => {
     logger.log('socket on rename')
 
@@ -80,7 +99,7 @@ io.on('connection', function (socket) {
     songs.findOneAndUpdate({ fileSlug: data.id }, { title: data.newName }, { new: true, useFindAndModify: false }, (err, doc) => {
       if (err) {
         logger.error(err)
-        throw new Error()
+        throw new Error(err)
       }
       socket.broadcast.emit('renamed', doc)
       socket.emit('renamed', doc)
@@ -141,7 +160,7 @@ io.on('connection', function (socket) {
       $addToSet: { favorites: data.slug }
     }, { upsert: true, new: true })
       .then(doc => logger.log(doc))
-      .catch(err => console.error(err))
+      .catch(err => logger.error(err))
 
     // .populate('playlist')
     // .exec(function (err, songs) {
