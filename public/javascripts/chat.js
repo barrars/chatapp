@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', event => {
   const exp = window.exp
   const getId = document.querySelector.bind(document)
-  let myId = document.getElementById('#nickname')
+  let myId = getId('#nickname')
   const socket = window.io()
   const alertify = window.alertify
   let user
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const playerToggleButton = document.getElementsByClassName('fa-music')[0]
   const chatToggleButton = document.getElementsByClassName('fa-comments')[0]
   const musicRoom = document.getElementsByClassName('player')[0]
-  let time = document.getElementsByClassName('time')
+  const time = document.getElementsByClassName('time')
   const icons = (name, id) =>
     // <i data-name="${name}"data-id="${id}"class="hidden fas fa-download downloadIcon" title="download song"></i>
     `<i data-name="${name}"data-id="${id}"class="hidden fas fa-pen editIcon" title="edit title"></i>
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const gobtn = getId('#gobtn')
   const searchContent = getId('#searchContent')
   const backward = getId('#backward')
-  const setname = document.getElementById('#setname')
+  const setname = getId('#setname')
   const forward = getId('#forward')
   const $playbutton = getId('#play')
   const renameInput = document.getElementById('rename')
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', event => {
     console.log(data)
     socket.emit('rename', data)
   }
-  const $find = getId('#find')
+  // const $find = getId('#find')
   const $songList = getId('#songList')
   const $repeat = getId('#repeat')
   const $messages = getId('#messages')
@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', event => {
     myPlayList = data
     // console.log(data)
     if (favoritesPlayList) {
-
       favoritesPlayList.innerHTML = ''
     }
     myPlayList.forEach(song => {
@@ -139,15 +138,13 @@ document.addEventListener('DOMContentLoaded', event => {
       const song = node.getAttribute('data-name')
       const id = node.getAttribute('data-id')
 
-      socket.emit('permDelete',{song, id} )
-
+      socket.emit('permDelete', { song, id })
     }
     if (node.classList.contains('fa-save')) {
       const song = node.getAttribute('data-name')
       const id = node.getAttribute('data-id')
 
-      socket.emit('restore',{song, id} )
-
+      socket.emit('restore', { song, id })
     }
     if (node.classList.contains('fa-trash-alt')) {
       const song = node.getAttribute('data-name')
@@ -245,7 +242,6 @@ document.addEventListener('DOMContentLoaded', event => {
   }
   myPlayer.onplay = () => {
     if ($playbutton) {
-
       $playbutton.children[0].classList.add('fa-stop')
       $playbutton.children[0].classList.remove('fa-play')
     }
@@ -254,14 +250,12 @@ document.addEventListener('DOMContentLoaded', event => {
   myPlayer.ontimeupdate = () => {
     if (time[0]) {
       if (Math.floor(myPlayer.duration - myPlayer.currentTime) === isNaN) {
-
         time[0].innerText = '___'
       } else {
         time[0].innerText =
           Math.floor(myPlayer.duration - myPlayer.currentTime) + ' s'
       }
     }
-    return
   }
 
   myPlayer.onended = () => {
@@ -338,7 +332,6 @@ document.addEventListener('DOMContentLoaded', event => {
         ) {
           console.log(data)
           if ($list) {
-
             $list.innerHTML +=
               '<li class="user is-flex button" data-socketID="' + key + '">' + data.clients[key] + '</li>'
           }
@@ -356,7 +349,7 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   })
   socket.on('userLeft', data => {
-    function removeUserFromList(elm) {
+    function removeUserFromList (elm) {
       elm.remove()
       console.log('BYEBYEBYE')
     }
@@ -386,7 +379,6 @@ document.addEventListener('DOMContentLoaded', event => {
       data.data.song +
       '</span> </div>'
     if ($messages) {
-
       $messages.append(frag.content)
       $messages.scrollTop = $messages.scrollHeight
     }
@@ -435,7 +427,6 @@ document.addEventListener('DOMContentLoaded', event => {
     user = data.name
     color = data.color
     if ($nameform) {
-
       $nameform.style.display = 'none'
     }
   })
@@ -573,9 +564,7 @@ document.addEventListener('DOMContentLoaded', event => {
 
   myId?.focus()
 
-  console.log(setname)
   if (setname) {
-
     setname.onclick = () => {
       if (!myId.value) {
         alertify.log('enter text')
@@ -597,7 +586,6 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   }
   if (myId) {
-
     myId.onkeypress = function (e) {
       if (e.which === 13) {
         setname.click()
@@ -611,7 +599,6 @@ document.addEventListener('DOMContentLoaded', event => {
     }
   }
   if ($message) {
-
     $message.onkeypress = function (e) {
       if (e.which === 13) {
         $send.click()
