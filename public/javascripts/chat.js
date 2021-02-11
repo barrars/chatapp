@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', event => {
   const $send = getId('#send')
   const $nameform = getId('#nameform')
   let downloading = false
+  myId?.focus()
   // ##### must be first function
   window.fetch('/users/is_name_set').then(async resp => {
     resp = await resp.text()
@@ -209,7 +210,7 @@ document.addEventListener('DOMContentLoaded', event => {
   if (ytlink) {
     ytlink.onkeyup = e => {
       const songs = document.querySelectorAll('.song')
-      var txtValue, song
+      let txtValue, song
       for (let i = 0; i < songs.length; i++) {
         song = songs[i].getElementsByTagName('p')[0]
         txtValue = song.textContent || song.innerText
@@ -545,8 +546,7 @@ document.addEventListener('DOMContentLoaded', event => {
   if (gobtn) {
     gobtn.onclick = () => {
       if (ytlink.value.length === 0) {
-        alertify.logPosition('top left')
-        alertify.log('enter a YouTube link!')
+        alertify.logPosition('top left').log('enter a YouTube link!')
         return
       } else if (downloading === true) {
         alertify.log('Please wait for the current download to finish')
@@ -556,19 +556,18 @@ document.addEventListener('DOMContentLoaded', event => {
       alertify.log('Starting Download')
 
       var song = ytlink.value
-      ytlink.disabled = true
+      // ytlink.disabled = true
       socket.emit('getsong', { song, user })
       ytlink.value = ''
     }
   }
 
-  myId?.focus()
+
 
   if (setname) {
     setname.onclick = () => {
       if (!myId.value) {
         alertify.log('enter text')
-        console.log('enter text')
         return
       }
       myId = myId.value.toLowerCase()
