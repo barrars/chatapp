@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', event => {
   })
 
   if (!downloading && gobtn !== null) {
-    gobtn.innerText = 'find song!'
+    gobtn.innerText = 'find song!!'
   }
 
   if (ytlink) {
@@ -561,8 +561,6 @@ document.addEventListener('DOMContentLoaded', event => {
       ytlink.value = ''
     }
   }
-
-
 
   if (setname) {
     setname.onclick = () => {
