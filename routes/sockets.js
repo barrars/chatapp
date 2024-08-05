@@ -195,7 +195,8 @@ io.on('connection', function (socket) {
     if (message.type === 'userMessage') {
       socket.nickname = message.username
       logger.log(message, socket.id)
-      socket.broadcast.send(JSON.stringify(message))
+      // socket.broadcast.send(JSON.stringify(message))
+      socket.broadcast.emit('message', JSON.stringify(message))
       socket.send(JSON.stringify(message))
       // message.type = 'myMessage'
     }

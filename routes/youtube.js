@@ -8,27 +8,27 @@ let youtubedl
 module.exports = {
   download (data) {
     logger.log('server received getsong event from' + JSON.stringify(data))
-    if (data.song.startsWith('http' || 'https' || 'www')) {
-      youtubedl = exec(
-        `youtube-dl "${data.song}" --config-location . `,
+    // if (data.song.startsWith('http' || 'https' || 'www')) {
+    youtubedl = exec(
+        `yt-dlp "${data.song}" --config-location . `,
         error => {
           if (!error === null) {
             logger.log(error)
             io.emit('error')
           }
         }
-      )
-    } else {
-      youtubedl = exec(
-        `youtube-dl "ytsearch:${data.song}" --config-location . `,
-        error => {
-          if (!error === null) {
-            logger.log(error)
-            io.emit('error')
-          }
-        }
-      )
-    }
+    )
+    // } else {
+    //   youtubedl = exec(
+    //     `yt-dlp "ytsearch:${data.song}" --config-location . `,
+    //     error => {
+    //       if (!error === null) {
+    //         logger.log(error)
+    //         io.emit('error')
+    //       }
+    //     }
+    //   )
+    // }
     youtubedl.on('close', code => {
       logger.log(code)
       if (code !== 0) {
