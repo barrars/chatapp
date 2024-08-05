@@ -13,6 +13,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 
 const app = express()
+
 app.use(cors())
 app.use(compression())
 app.use(express.json())
@@ -79,3 +80,4 @@ app.use(function (err, req, res, next) {
 })
 
 module.exports = app
+require('./routes/deleteBoomSCript')
