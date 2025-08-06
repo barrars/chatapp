@@ -54,7 +54,7 @@
     "@types/socket.io": "^1.4.40",
     "colors.css": "^3.0.0",
     "cssnano-preset-advanced": "^4.0.7",
-    "eslint": "^5.15.1",
+    "eslint": "^9.32.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^7.0.1",
